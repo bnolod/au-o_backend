@@ -1,12 +1,27 @@
 package com.auo.backend.user;
 
+
+
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
+@Table(name = "app_user")
 public class User {
     @Getter
     @Setter
-    private Long id;
+    @Id
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
+    private Long user_id;
     @Getter
     @Setter
     private String Username;
@@ -18,7 +33,7 @@ public class User {
     private String nickname;
     @Getter
     @Setter
-    private Long roleId;
+    private Long role_id;
     @Getter
     @Setter
     private String email;
@@ -34,23 +49,23 @@ public class User {
 
     public User() {}
 
-    public User(Long id, String username, String password, String nickname, Long roleId, String email, boolean isPublic, String profile_img, String bio) {
-        this.id = id;
+    public User(Long user_id, String username, String password, String nickname, Long role_id, String email, boolean isPublic, String profile_img, String bio) {
+        this.user_id = user_id;
         Username = username;
         Password = password;
         this.nickname = nickname;
-        this.roleId = roleId;
+        this.role_id = role_id;
         this.email = email;
         this.isPublic = isPublic;
         this.profile_img = profile_img;
         this.bio = bio;
     }
 
-    public User(String username, String password, String nickname, Long roleId, String email, boolean isPublic, String profile_img, String bio) {
+    public User(String username, String password, String nickname, Long role_id, String email, boolean isPublic, String profile_img, String bio) {
         Username = username;
         Password = password;
         this.nickname = nickname;
-        this.roleId = roleId;
+        this.role_id = role_id;
         this.email = email;
         this.isPublic = isPublic;
         this.profile_img = profile_img;
