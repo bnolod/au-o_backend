@@ -33,7 +33,7 @@ public class User {
     private String nickname;
     @Getter
     @Setter
-    private Long role_id;
+    private Integer role_id;
     @Getter
     @Setter
     private String email;
@@ -49,7 +49,7 @@ public class User {
 
     public User() {}
 
-    public User(Long user_id, String username, String password, String nickname, Long role_id, String email, boolean isPublic, String profile_img, String bio) {
+    public User(Long user_id, String username, String password, String nickname, Integer role_id, String email, boolean isPublic, String profile_img, String bio) {
         this.user_id = user_id;
         Username = username;
         Password = password;
@@ -61,7 +61,7 @@ public class User {
         this.bio = bio;
     }
 
-    public User(String username, String password, String nickname, Long role_id, String email, boolean isPublic, String profile_img, String bio) {
+    public User(String username, String password, String nickname, Integer role_id, String email, boolean isPublic, String profile_img, String bio) {
         Username = username;
         Password = password;
         this.nickname = nickname;

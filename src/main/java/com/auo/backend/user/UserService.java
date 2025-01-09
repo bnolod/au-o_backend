@@ -12,7 +12,7 @@ public class UserService {
                 "felh1",
                 "nick",
                 "jelszo",
-                3L,
+                3,
                 "user@email.com",
                 true,
                 "imgsrc",
