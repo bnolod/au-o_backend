@@ -28,4 +28,8 @@ public class UserService {
         Optional<User> user = userRepository.findById(userId);
         return user.orElse(null);
     }
+
+    public User deleteUserById(Long userId) {
+return null;
+    }
 }
