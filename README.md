@@ -23,7 +23,7 @@
 
 Az api tesztelése [Postman](https://www.postman.com/)-en keresztül történik.
 
-A collection [itt]() található meg.
+A collection [itt](https://github.com/bnolod/au-o_backend/blob/main/Au_o%20backend.postman_collection.json) található meg.
 
 Ez megfelel az API dokumentálásának és használati útmutatójának is.
 
