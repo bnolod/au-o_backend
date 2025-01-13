@@ -1,15 +1,12 @@
 package com.auo.backend.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/user")
+@RequestMapping(path = "api/v1/users")
 public class UserController {
 
     private final UserService userService;
@@ -19,13 +16,21 @@ public class UserController {
         this.userService = userService;
     };
 
-    @GetMapping
+    @GetMapping("/all")
     public List<User> getUsers() {
         return userService.getUsers();
     }
 
-    @PostMapping
-    public User postUser() {
-
+    @GetMapping("/user/{userId}")
+    public User getUserById(@PathVariable Long userId) {
+        return userService.getUserById(userId);
     }
+
+
+    @PostMapping("/user")
+    public User postUser(@RequestBody User user) {
+        return userService.postUser(user);
+    }
+
+
 }

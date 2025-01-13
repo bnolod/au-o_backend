@@ -24,10 +24,10 @@ public class User {
     private Long user_id;
     @Getter
     @Setter
-    private String Username;
+    private String username;
     @Getter
     @Setter
-    private String Password;
+    private String password;
     @Getter
     @Setter
     private String nickname;
@@ -51,8 +51,8 @@ public class User {
 
     public User(Long user_id, String username, String password, String nickname, Integer role_id, String email, boolean isPublic, String profile_img, String bio) {
         this.user_id = user_id;
-        Username = username;
-        Password = password;
+        this.username = username;
+        this.password = password;
         this.nickname = nickname;
         this.role_id = role_id;
         this.email = email;
@@ -62,8 +62,8 @@ public class User {
     }
 
     public User(String username, String password, String nickname, Integer role_id, String email, boolean isPublic, String profile_img, String bio) {
-        Username = username;
-        Password = password;
+        this.username = username;
+        this.password = password;
         this.nickname = nickname;
         this.role_id = role_id;
         this.email = email;
