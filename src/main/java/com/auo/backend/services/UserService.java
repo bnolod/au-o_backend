@@ -1,5 +1,6 @@
 package com.auo.backend.services;
 
+import com.auo.backend.dto.UpdateUserDto;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +46,28 @@ public class UserService {
             throw new IllegalStateException("User with id " + userId + " does not exist");
         }
         userRepository.deleteById(userId);
+    }
+
+    public void updateUserById(Long userId, UpdateUserDto updateUserDto) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (!optionalUser.isPresent()) {
+            throw new IllegalStateException("User with id " + userId + " does not exist");
+        }
+        User user = optionalUser.get();
+
+        if (updateUserDto.getNickname() != null) {
+            user.setNickname(updateUserDto.getNickname());
+        }
+
+        if (updateUserDto.getBio() != null) {
+            user.setBio(updateUserDto.getBio());
+        }
+
+        if (updateUserDto.getDate_of_birth() != null) {
+            user.setDate_of_birth(updateUserDto.getDate_of_birth());
+        }
+
+        userRepository.save(user);
+
     }
 }

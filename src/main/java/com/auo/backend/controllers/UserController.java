@@ -1,5 +1,6 @@
 package com.auo.backend.controllers;
 
+import com.auo.backend.dto.UpdateUserDto;
 import com.auo.backend.services.UserService;
 import com.auo.backend.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,4 +42,8 @@ public class UserController {
         userService.deleteUserById(userId);
     }
 
+    @PutMapping("/user/{userId}")
+    public void updateUserById(@PathVariable Long userId, @RequestBody UpdateUserDto updateUserDto) {
+        userService.updateUserById(userId, updateUserDto);
+    }
 }
