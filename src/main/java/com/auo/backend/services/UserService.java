@@ -31,6 +31,7 @@ public class UserService {
         if (userByUsername.isPresent()) {
             throw new IllegalStateException("Username taken");
         }
+        System.out.println(user.getDate_of_signup());
         userRepository.save(user);
     }
 

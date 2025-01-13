@@ -18,10 +18,12 @@ public class UserController {
         this.userService = userService;
     };
 
+//    Releasen ez semmilyen esetben nem lesz itt.
     @GetMapping("/all")
     public List<User> getUsers() {
         return userService.getUsers();
     }
+//    Ne felejtsem el
 
     @GetMapping("/user/{userId}")
     public User getUserById(@PathVariable Long userId) {
