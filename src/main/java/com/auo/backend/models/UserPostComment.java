@@ -1,4 +1,4 @@
-package com.auo.backend.user.posts.comments;
+package com.auo.backend.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

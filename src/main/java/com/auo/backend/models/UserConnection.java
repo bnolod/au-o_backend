@@ -1,4 +1,4 @@
-package com.auo.backend.user.connections;
+package com.auo.backend.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

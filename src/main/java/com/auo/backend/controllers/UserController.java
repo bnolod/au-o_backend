@@ -1,5 +1,7 @@
-package com.auo.backend.user;
+package com.auo.backend.controllers;
 
+import com.auo.backend.services.UserService;
+import com.auo.backend.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,13 +30,13 @@ public class UserController {
 
 
     @PostMapping("/user")
-    public User postUser(@RequestBody User user) {
-        return userService.postUser(user);
+    public void createUser(@RequestBody User user) {
+        userService.createUser(user);
     }
 
     @DeleteMapping("/user/{userId}")
-    public User deleteUserById(@PathVariable Long userId) {
-        return null;
+    public void deleteUserById(@PathVariable Long userId) {
+
     }
 
 }

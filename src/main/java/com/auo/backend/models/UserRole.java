@@ -1,4 +1,4 @@
-package com.auo.backend.user.roles;
+package com.auo.backend.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;

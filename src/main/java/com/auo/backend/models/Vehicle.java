@@ -1,4 +1,4 @@
-package com.auo.backend.user.vehicles;
+package com.auo.backend.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

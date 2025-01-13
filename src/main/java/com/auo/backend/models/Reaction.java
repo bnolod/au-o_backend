@@ -1,4 +1,4 @@
-package com.auo.backend.global.reactions;
+package com.auo.backend.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
