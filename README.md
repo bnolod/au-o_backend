@@ -1,15 +1,29 @@
-# au-o_backend
+# Au-ó Backend Repository
 
-Szükséges:
-jdk 17
+# Szükséges:
 
-Docker: postgres:17.2-alpine3.21
+- [jdk 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 
-port 32769
+- [Docker Hub](https://hub.docker.com/)
 
-POSTGRES_PASSWORD : password
+- Docker image: [postgres:17.2-alpine3.21](https://github.com/docker-library/postgres/blob/17818f21dca10ccf02711476e138c219bd31b456/17/alpine3.21/Dockerfile)
 
-POSTGRES_USER : postgres
+> Docker beállítások
+> 
+> port: 32769
+> 
+> Enviroment variables?
+> 
+> POSTGRES_USER : postgres
+> 
+> POSTGRES_PASSWORD : password
+     
 
-pgadmin4 ha el szeretnénk érni // Inkább intellij database tab
+# API
+
+Az api tesztelése [Postman](https://www.postman.com/)-en keresztül történik.
+
+A collection [itt]() található meg.
+
+Ez megfelel az API dokumentálásának és használati útmutatójának is.
 
