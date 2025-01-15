@@ -53,7 +53,6 @@ public class User {
 
     @Getter
     @Setter
-    @NotNull
     private boolean is_public;
 
     @Getter
