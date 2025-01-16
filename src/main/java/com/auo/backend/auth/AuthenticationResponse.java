@@ -1,5 +1,6 @@
-package com.auo.backend.dto;
+package com.auo.backend.auth;
 
+import com.auo.backend.dto.UserLoginDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLoginDto {
-    private String usernameOrEmail;
-    private String password;
+public class AuthenticationResponse {
 
+    private String token;
 }
