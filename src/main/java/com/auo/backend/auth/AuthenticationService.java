@@ -5,11 +5,14 @@ import com.auo.backend.dto.UserRegisterDto;
 import com.auo.backend.enums.UserRole;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 
 @Service
@@ -39,6 +42,25 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse login(UserLoginDto userLoginDto) {
-        return null;
+        Optional<User> optionalUser;
+        if (userLoginDto.getUsernameOrEmail().contains("@")) {
+            optionalUser = userRepository.findUserByEmail(userLoginDto.getUsernameOrEmail());
+        }else {
+            optionalUser = userRepository.findUserByUsername(userLoginDto.getUsernameOrEmail());
+        }
+        if (optionalUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        User user = optionalUser.get();
+
+        if (!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        var jwtToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
     }
 }
