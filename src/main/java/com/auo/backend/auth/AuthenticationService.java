@@ -5,6 +5,7 @@ import com.auo.backend.dto.UserRegisterDto;
 import com.auo.backend.enums.UserRole;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
+import com.auo.backend.responses.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +34,7 @@ public class AuthenticationService {
                 .role(UserRole.USER)
                 .date_of_birth(userRegisterDto.getDate_of_birth())
                 .nickname(userRegisterDto.getNickname())
+                .is_public(true)
                 .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -65,16 +67,35 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(String token) {
+        User user = getUserFromToken(token);
+        var newToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(newToken)
+                .build();
+    }
+
+
+    public UserResponse profile(String token) {
+        User user = getUserFromToken(token);
+        return UserResponse.builder()
+                .id(user.getUser_id())
+                .username(user.getUsername())
+                .nickname(user.getNickname())
+                .date_of_signup(user.getDate_of_signup())
+                .bio(user.getBio())
+                .profile_img(user.getProfile_img())
+                .is_public(user.is_public())
+                .build();
+    }
+
+    public User getUserFromToken(String token) {
         String jwt = token.substring(7);
         String username = jwtService.extractUsername(jwt);
         Optional<User> optionalUser = userRepository.findUserByUsername(username);
         if (optionalUser.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-        User user = optionalUser.get();
-        var newToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(newToken)
-                .build();
+        return optionalUser.get();
     }
+
 }

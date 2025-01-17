@@ -3,6 +3,7 @@ package com.auo.backend.auth;
 import com.auo.backend.dto.UserLoginDto;
 import com.auo.backend.dto.UserRegisterDto;
 import com.auo.backend.models.User;
+import com.auo.backend.responses.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,13 @@ public class AuthenticationController {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(token));
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<UserResponse> profile(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+    ) {
+        return ResponseEntity.ok(authenticationService.profile(token));
     }
 
 }
