@@ -4,6 +4,7 @@ import com.auo.backend.dto.UserLoginDto;
 import com.auo.backend.dto.UserRegisterDto;
 import com.auo.backend.models.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +31,11 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.login(userLoginDto));
     }
 
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
+    ) {
+        return ResponseEntity.ok(authenticationService.authenticate(token));
+    }
 
 }

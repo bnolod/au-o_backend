@@ -25,6 +25,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(UserRegisterDto userRegisterDto) {
+
         var user = User.builder()
                 .username(userRegisterDto.getUsername())
                 .password(passwordEncoder.encode(userRegisterDto.getPassword()))
@@ -60,6 +61,20 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .build();
+    }
+
+    public AuthenticationResponse authenticate(String token) {
+        String jwt = token.substring(7);
+        String username = jwtService.extractUsername(jwt);
+        Optional<User> optionalUser = userRepository.findUserByUsername(username);
+        if (optionalUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        User user = optionalUser.get();
+        var newToken = jwtService.generateToken(user);
+        return AuthenticationResponse.builder()
+                .token(newToken)
                 .build();
     }
 }
