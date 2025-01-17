@@ -38,7 +38,6 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
-
     }
 
     public AuthenticationResponse login(UserLoginDto userLoginDto) {
