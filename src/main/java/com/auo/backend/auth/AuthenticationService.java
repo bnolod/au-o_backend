@@ -6,11 +6,13 @@ import com.auo.backend.enums.UserRole;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.UserResponse;
+import com.auo.backend.validationServices.UserValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -24,8 +26,12 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserValidationService userValidationService;
 
     public AuthenticationResponse register(UserRegisterDto userRegisterDto) {
+        if (!userValidationService.IsEmailValid(userRegisterDto.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "invalid_email_format");
+        }
 
         var user = User.builder()
                 .username(userRegisterDto.getUsername())
