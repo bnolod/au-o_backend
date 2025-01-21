@@ -49,7 +49,7 @@ public class UserController {
         userService.updateUserById(userId, updateUserDto);
     }
 
-    @GetMapping("/user/{userId}/following")
+    @GetMapping("/user/{userId}/followers")
     public ArrayList<UserResponse> getFollowersByUserId(@PathVariable Long userId) {
         return userService.getFollowersByUserId(userId);
     }
