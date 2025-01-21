@@ -146,4 +146,8 @@ public class UserService {
         }
     }
 
+    public ArrayList<User> teszt(Long userId) {
+        return userConnectionRepository.findFollowersByUserId(userId);
+    }
+
 }

@@ -67,6 +67,12 @@ public class UserController {
         userService.followUserById(token, userId);
     }
 
+    @GetMapping("teszt")
+    public ArrayList<User> getfollowingusers() {
+        return userService.teszt(1L);
+    }
+
+
 
 
 }
