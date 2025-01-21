@@ -2,21 +2,28 @@ package com.auo.backend.services;
 
 import com.auo.backend.dto.UpdateUserDto;
 import com.auo.backend.models.User;
+import com.auo.backend.models.UserConnection;
+import com.auo.backend.repositories.UserConnectionRepository;
 import com.auo.backend.repositories.UserRepository;
+import com.auo.backend.responses.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserConnectionRepository userConnectionRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserConnectionRepository userConnectionRepository) {
         this.userRepository = userRepository;
+        this.userConnectionRepository = userConnectionRepository;
     }
 
     public List<User> getUsers() {
@@ -68,5 +75,29 @@ public class UserService {
 
         userRepository.save(user);
 
+    }
+
+
+    public ArrayList<UserResponse> getFollowersByUserId(Long userId) {
+        Optional<ArrayList<UserConnection>> userConnectionArrayList = userConnectionRepository.findUserConnectionsByFollowingUserId(userId);
+        if (userConnectionArrayList.isEmpty()) {
+            return null;
+        }
+
+        AtomicReference<User> temp = new AtomicReference<>();
+        ArrayList<UserResponse> responseArrayList = new ArrayList<>();
+        userConnectionArrayList.get().forEach( connection ->
+                {
+                    temp.set(getUserById(connection.getUserId()));
+                responseArrayList.add(
+                        UserResponse
+                                .builder()
+                                .id(temp.get().getId())
+                                .username(temp.get().getUsername())
+                                .nickname(temp.get().getNickname())
+                                .build()
+                );
+            });
+        return responseArrayList;
     }
 }

@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "app_user_connections", uniqueConstraints = {@UniqueConstraint(columnNames={"user_id","following_user_id"})})
 public class UserConnection {
     @Id
-    private Long connection_id;
-    private Long user_id;
-    private Long following_user_id;
+    private Long connectionId;
+    private Long userId;
+    private Long followingUserId;
 
 }
