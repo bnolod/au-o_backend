@@ -7,6 +7,7 @@ import com.auo.backend.repositories.UserConnectionRepository;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
