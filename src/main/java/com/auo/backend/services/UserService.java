@@ -32,7 +32,6 @@ public class UserService {
         if (userByUsername.isPresent()) {
             throw new IllegalStateException("Username taken");
         }
-        System.out.println(user.getDate_of_signup());
         userRepository.save(user);
     }
 
@@ -64,7 +63,7 @@ public class UserService {
         }
 
         if (updateUserDto.getDate_of_birth() != null) {
-            user.setDate_of_birth(updateUserDto.getDate_of_birth());
+            user.setDateOfBirth(updateUserDto.getDate_of_birth());
         }
 
         userRepository.save(user);

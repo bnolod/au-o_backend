@@ -24,7 +24,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue
-    private Integer user_id;
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -39,23 +39,23 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
 
-    private boolean is_public;
+    private boolean isPublic;
 
-    private String profile_img;
+    private String profileImg;
 
     private String bio;
 
     @NotNull
-    private LocalDate date_of_birth;
+    private LocalDate dateOfBirth;
 
     @NotNull
-    private LocalDate date_of_signup;
+    private LocalDate dateOfSignup;
 
 
     @PrePersist
     protected void onCreate() {
-        if (this.date_of_signup == null) {
-            this.date_of_signup = LocalDate.now();
+        if (this.dateOfSignup == null) {
+            this.dateOfSignup = LocalDate.now();
         }
     }
 

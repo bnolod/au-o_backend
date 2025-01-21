@@ -20,24 +20,5 @@ public class Vehicle {
     public Vehicle() {
     }
 
-    public Vehicle(Long user_id, String manufacturer, String model, String type, Integer horsepower, String description, Integer displacement) {
-        this.user_id = user_id;
-        this.manufacturer = manufacturer;
-        this.model = model;
-        this.type = type;
-        this.horsepower = horsepower;
-        this.description = description;
-        this.displacement = displacement;
-    }
 
-    public Vehicle(Long vehicle_id, Long user_id, String manufacturer, String model, String type, Integer horsepower, String description, Integer displacement) {
-        this.vehicle_id = vehicle_id;
-        this.user_id = user_id;
-        this.manufacturer = manufacturer;
-        this.model = model;
-        this.type = type;
-        this.horsepower = horsepower;
-        this.description = description;
-        this.displacement = displacement;
-    }
 }

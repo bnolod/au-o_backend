@@ -38,9 +38,9 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(userRegisterDto.getPassword()))
                 .email(userRegisterDto.getEmail())
                 .role(UserRole.USER)
-                .date_of_birth(userRegisterDto.getDate_of_birth())
+                .dateOfBirth(userRegisterDto.getDate_of_birth())
                 .nickname(userRegisterDto.getNickname())
-                .is_public(true)
+                .isPublic(true)
                 .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -84,13 +84,13 @@ public class AuthenticationService {
     public UserResponse profile(String token) {
         User user = getUserFromToken(token);
         return UserResponse.builder()
-                .id(user.getUser_id())
+                .id(user.getId())
                 .username(user.getUsername())
                 .nickname(user.getNickname())
-                .date_of_signup(user.getDate_of_signup())
+                .date_of_signup(user.getDateOfSignup())
                 .bio(user.getBio())
-                .profile_img(user.getProfile_img())
-                .is_public(user.is_public())
+                .profile_img(user.getProfileImg())
+                .is_public(user.isPublic())
                 .build();
     }
 

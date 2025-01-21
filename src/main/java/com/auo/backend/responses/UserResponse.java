@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UserResponse {
     private String username;
-    private Integer id;
+    private Long id;
     private String nickname;
     private String bio;
     private LocalDate date_of_signup;
