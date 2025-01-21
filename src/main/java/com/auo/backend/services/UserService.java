@@ -1,31 +1,33 @@
 package com.auo.backend.services;
 
+import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.dto.UpdateUserDto;
 import com.auo.backend.models.User;
 import com.auo.backend.models.UserConnection;
 import com.auo.backend.repositories.UserConnectionRepository;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.UserResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.NativeQuery;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final UserConnectionRepository userConnectionRepository;
+    private final AuthenticationService authenticationService;
 
-    @Autowired
-    public UserService(UserRepository userRepository, UserConnectionRepository userConnectionRepository) {
-        this.userRepository = userRepository;
-        this.userConnectionRepository = userConnectionRepository;
-    }
 
     public List<User> getUsers() {
         return userRepository.findAll();
@@ -84,21 +86,64 @@ public class UserService {
         if (userConnectionArrayList.isEmpty()) {
             return null;
         }
-
         AtomicReference<User> temp = new AtomicReference<>();
         ArrayList<UserResponse> responseArrayList = new ArrayList<>();
         userConnectionArrayList.get().forEach( connection ->
-                {
-                    temp.set(getUserById(connection.getUserId()));
-                responseArrayList.add(
-                        UserResponse
-                                .builder()
-                                .id(temp.get().getId())
-                                .username(temp.get().getUsername())
-                                .nickname(temp.get().getNickname())
-                                .build()
-                );
-            });
+        {
+            temp.set(getUserById(connection.getUserId()));
+            responseArrayList.add(
+                    UserResponse
+                            .builder()
+                            .id(temp.get().getId())
+                            .username(temp.get().getUsername())
+                            .nickname(temp.get().getNickname())
+                            .build()
+            );
+        });
         return responseArrayList;
     }
+
+    public ArrayList<UserResponse> getFollowingByUserId(Long userId) {
+        Optional<ArrayList<UserConnection>> userConnectionArrayList = userConnectionRepository.findUserConnectionsByUserId(userId);
+        if (userConnectionArrayList.isEmpty()) {
+            return null;
+        }
+        AtomicReference<User> temp = new AtomicReference<>();
+        ArrayList<UserResponse> responseArrayList = new ArrayList<>();
+        userConnectionArrayList.get().forEach( connection ->
+        {
+            temp.set(getUserById(connection.getFollowingUserId()));
+            responseArrayList.add(
+                    UserResponse
+                            .builder()
+                            .id(temp.get().getId())
+                            .username(temp.get().getUsername())
+                            .nickname(temp.get().getNickname())
+                            .build()
+            );
+        });
+        return responseArrayList;
+    }
+
+    public void followUserById(String token, Long userId) {
+        User user = authenticationService.getUserFromToken(token);
+        if (Objects.equals(user.getId(), userId)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "can_not_follow_self");
+        }
+        if (userRepository.findUserById(userId).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
+        }
+        try {
+            UserConnection userConnection = UserConnection
+                    .builder()
+                    .userId(user.getId())
+                    .followingUserId(userId)
+                    .build();
+            userConnectionRepository.save(userConnection);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "follow_failed");
+        }
+    }
+
 }
