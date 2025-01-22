@@ -68,7 +68,7 @@ public class UserController {
     }
 
     @GetMapping("teszt")
-    public ArrayList<User> getfollowingusers() {
+    public ArrayList<UserResponse> getfollowingusers() {
         return userService.teszt(1L);
     }
 

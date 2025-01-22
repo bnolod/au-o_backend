@@ -146,8 +146,27 @@ public class UserService {
         }
     }
 
-    public ArrayList<User> teszt(Long userId) {
-        return userConnectionRepository.findFollowersByUserId(userId);
+    public ArrayList<UserResponse> teszt(Long userId) {
+        Optional<ArrayList<User>> result = userConnectionRepository.findFollowersByUserId(userId);
+        if (result.isEmpty()) {
+            return null;
+        }
+
+        ArrayList<UserResponse> responseArrayList = new ArrayList<>();
+        result.get().forEach(
+                user -> {
+                    responseArrayList.add(
+                            UserResponse
+                                    .builder()
+                                    .username(user.getUsername())
+                                    .nickname(user.getNickname())
+                                    .id(user.getId())
+                                    .profile_img(user.getProfileImg())
+                                    .build()
+                    );
+                }
+        );
+        return responseArrayList;
     }
 
 }

@@ -16,6 +16,7 @@ public interface UserConnectionRepository extends JpaRepository<UserConnection,L
     Optional<ArrayList<UserConnection>> findUserConnectionsByUserId(Long id);
     Optional<ArrayList<UserConnection>> findUserConnectionsByFollowingUserId(Long id);
 
-    @Query(value = "select u from app_user u join  app_user_connections uc on u.user_id = uc.user_id where uc.following_user_id = ?1 ", nativeQuery = true)
-    ArrayList<User> findFollowersByUserId(Long userId);
+
+    @Query(value = "select u.* from app_user u join  app_user_connections uc on u.id = uc.user_id where uc.following_user_id = ?1 ", nativeQuery = true)
+    Optional<ArrayList<User>> findFollowersByUserId(Long userId);
 }
