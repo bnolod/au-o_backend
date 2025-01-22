@@ -12,6 +12,8 @@ import java.util.UUID;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, UUID> {
-    // csoportbeli posztok + kell szortírozás
-    Optional<ArrayList<Post>> findPostsByPostTypeAndGroupId(PostType postType, Long groupId);
+    // csoportbeli posztok VAGY eventek tipustol fuggoen + post update szerint idorendben
+    Optional<ArrayList<Post>> findPostsByPostTypeAndGroupIdOrderByDateOfUpdateDesc(PostType postType, Long groupId);
+
+
 }

@@ -43,9 +43,13 @@ public class Post {
 
     Long groupId;
 
+    @NotNull
+    Long relevance;
+
     @PrePersist
     protected void onCreate() {
         this.dateOfCreation = LocalDateTime.now();
         this.dateOfUpdate = LocalDateTime.now();
+        this.relevance = 0L;
     }
 }
