@@ -22,29 +22,29 @@ import java.util.UUID;
 public class Post {
     @Id
     @GeneratedValue()
-    UUID post_id;
+    private UUID postId;
 
     @NotNull
-    Long user_id;
+    private Long userId;
 
-    String text;
-
-    @NotNull
-    Long reactionCount;
+    private String text;
 
     @NotNull
-    LocalDateTime dateOfCreation;
+    private Long reactionCount;
 
     @NotNull
-    LocalDateTime dateOfUpdate;
+    private LocalDateTime dateOfCreation;
 
     @NotNull
-    PostType postType;
-
-    Long groupId;
+    private LocalDateTime dateOfUpdate;
 
     @NotNull
-    Long relevance;
+    private PostType postType;
+
+    private Long groupId;
+
+    @NotNull
+    private Long relevance;
 
     @PrePersist
     protected void onCreate() {
