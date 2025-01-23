@@ -1,10 +1,7 @@
 package com.auo.backend.models;
 
 import com.auo.backend.enums.GroupRole;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -36,4 +34,9 @@ public class GroupMember {
 
     @NotNull
     private LocalDateTime joinedDate;
+
+    @PrePersist
+    protected void onCreate() {
+        this.joinedDate = LocalDateTime.now();
+    }
 }

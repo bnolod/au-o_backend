@@ -51,6 +51,8 @@ public class User implements UserDetails {
     @NotNull
     private LocalDate dateOfSignup;
 
+    @ManyToMany()
+    private List<Post> posts;
 
     @PrePersist
     protected void onCreate() {

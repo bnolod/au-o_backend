@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -23,9 +24,6 @@ public class Post {
     @Id
     @GeneratedValue()
     private UUID postId;
-
-    @NotNull
-    private Long userId;
 
     private String text;
 
@@ -45,6 +43,7 @@ public class Post {
 
     @NotNull
     private Long relevance;
+
 
     @PrePersist
     protected void onCreate() {

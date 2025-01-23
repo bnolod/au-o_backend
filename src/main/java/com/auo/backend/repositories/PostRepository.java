@@ -5,6 +5,7 @@ import com.auo.backend.models.Post;
 import com.auo.backend.responses.PostResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -24,10 +25,6 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     // posztok ahol tag a felhasznalo
     //
 
-    @Query(value = "select Post from Post " +
-            "where groupId in (select groupId from GroupMember where userId = ?1 )" +
-            "order by dateOfCreation desc," +
-            "relevance desc")
-    Optional<ArrayList<Post>> findPostsByUserForGroupFeed(Long inputUserId);
+//    Optional<ArrayList<Post>> findPostsByUserForGroupFeed(@Param("userId") Long userId);
 
 }

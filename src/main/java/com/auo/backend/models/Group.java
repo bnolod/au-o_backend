@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -20,7 +21,7 @@ import java.util.UUID;
 public class Group {
     @Id
     @GeneratedValue
-    private UUID groupId;
+    private UUID uuid;
 
     private String groupName;
 
