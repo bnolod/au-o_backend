@@ -24,9 +24,11 @@ public class GroupMember {
     private Long id;
 
     @NotNull
+    @Column(name="group_id")
     private UUID groupId;
 
     @NotNull
+    @Column(name = "user_id")
     private Long userId;
 
     @NotNull
@@ -34,6 +36,10 @@ public class GroupMember {
 
     @NotNull
     private LocalDateTime joinedDate;
+
+    @ManyToMany
+    @JoinTable
+    private List<Post> posts;
 
     @PrePersist
     protected void onCreate() {

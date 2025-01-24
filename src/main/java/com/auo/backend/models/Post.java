@@ -39,7 +39,7 @@ public class Post {
     @NotNull
     private PostType postType;
 
-    private Long groupId;
+//    private Long groupId;
 
     @NotNull
     private Long relevance;

@@ -37,6 +37,11 @@ public class Group {
 
     private String groupAlias;
 
+    @ManyToMany
+    @JoinTable(name = "app_group_members",
+        joinColumns = @JoinColumn(name = "group_id")
+    )
+    private List<GroupMember> groupMembers;
 
     @PrePersist
     protected void onCreate() {

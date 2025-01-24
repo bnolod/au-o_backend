@@ -19,7 +19,7 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     // csoportbeli posztok VAGY eventek tipustol fuggoen + post creation, relevance csokkeno
     // timestamp
 
-    Optional<ArrayList<Post>> findPostsByPostTypeAndGroupIdAndDateOfCreationBeforeOrderByDateOfCreationDescRelevanceDesc(PostType postType, Long groupId, LocalDateTime dateTime );
+//    Optional<ArrayList<Post>> findPostsByPostTypeAndGroupIdAndDateOfCreationBeforeOrderByDateOfCreationDescRelevanceDesc(PostType postType, Long groupId, LocalDateTime dateTime );
 
     // group tab feed funkcio:
     // posztok ahol tag a felhasznalo
