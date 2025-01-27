@@ -41,6 +41,16 @@ public class GroupMember {
     @JoinTable
     private List<Post> posts;
 
+    public void removePost(Post post) {
+        this.posts.remove(post);
+        post.getGroupMembers().remove(this);
+    }
+
+    public void addPost(Post post) {
+        this.posts.add(post);
+        post.getGroupMembers().add(this);
+    }
+
     @PrePersist
     protected void onCreate() {
         this.joinedDate = LocalDateTime.now();

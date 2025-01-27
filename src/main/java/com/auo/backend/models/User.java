@@ -68,7 +68,15 @@ public class User implements UserDetails {
     }
 
 
+    public void addPost(Post post) {
+        this.posts.add(post);
+        post.getUsers().add(this);
+    }
 
+    public void removePost(Post post) {
+        this.posts.remove(post);
+        post.getUsers().remove(this);
+    }
 
 
     @Override

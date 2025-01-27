@@ -3,13 +3,11 @@ package com.auo.backend.models;
 import com.auo.backend.enums.PostType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jdk.jfr.Relational;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -39,10 +37,21 @@ public class Post {
     @NotNull
     private PostType postType;
 
+    @ManyToMany
+    @JoinTable(name = "app_post_images",
+    joinColumns = @JoinColumn(name = "post_id"))
+    private List<PostImages> images;
+
 //    private Long groupId;
 
     @NotNull
     private Long relevance;
+
+    @ManyToMany(mappedBy = "posts")
+    private List<User> users;
+
+    @ManyToMany(mappedBy = "posts")
+    private List<GroupMember> groupMembers;
 
 
     @PrePersist
