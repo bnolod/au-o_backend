@@ -56,8 +56,9 @@ public class User implements UserDetails {
 
     @ManyToMany()
     @JoinTable(name = "app_group_members",
-    joinColumns = @JoinColumn(name = "user_id"))
+            joinColumns = @JoinColumn(name = "user_id"))
     private List<GroupMember> groupMembers;
+
 
     @PrePersist
     protected void onCreate() {
