@@ -11,4 +11,5 @@ import java.util.UUID;
 public class CreatePostDto {
     private String text;
     private List<PostImages> postImages;
+    private String location;
 }

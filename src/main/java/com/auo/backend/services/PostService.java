@@ -30,6 +30,7 @@ public class PostService {
             .postType(PostType.USERPOST)
             .text(createPostDto.getText())
             .user(user)
+            .location(createPostDto.getLocation())
             .build();
         postRepository.save(tempPost);
 
