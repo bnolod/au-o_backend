@@ -18,9 +18,13 @@ public class UserConnection {
     @Id
     @GeneratedValue
     private Long connectionId;
+
     @NotNull
+    @Column(name = "user_id")
     private Long userId;
+
     @NotNull
+    @Column(name = "following_user_id")
     private Long followingUserId;
 
 }

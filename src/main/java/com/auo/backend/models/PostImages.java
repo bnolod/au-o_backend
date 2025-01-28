@@ -3,6 +3,7 @@ package com.auo.backend.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,16 +14,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
 @Table(name = "app_post_images")
 public class PostImages {
     @Id
     @GeneratedValue
     private Long id;
-
-    @NotNull
-    @Column(name = "post_id")
-    @ManyToMany(mappedBy = "images")
-    private List<Post> posts;
 
     @NotNull
     private String url;

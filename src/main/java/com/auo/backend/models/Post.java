@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,12 +22,13 @@ import java.util.UUID;
 public class Post {
     @Id
     @GeneratedValue()
+    @Column(name = "post_id")
     private UUID postId;
 
     private String text;
 
     @NotNull
-    private Long reactionCount;
+    private int reactionCount;
 
     @NotNull
     private LocalDateTime dateOfCreation;
@@ -36,28 +38,38 @@ public class Post {
 
     @NotNull
     private PostType postType;
-
-    @ManyToMany
-    @JoinTable(name = "app_post_images",
-    joinColumns = @JoinColumn(name = "post_id"))
+//
+    @OneToMany
+//    @JoinTable(name = "app_post_images",
+//    joinColumns = @JoinColumn(name = "post_id"))
     private List<PostImages> images;
+
+    private String location;
 
 //    private Long groupId;
 
     @NotNull
-    private Long relevance;
+    private int relevance;
 
-    @ManyToMany(mappedBy = "posts")
-    private List<User> users;
+    @ManyToOne
+//    @JoinTable(name = "app_user_posts",
+//    joinColumns = @JoinColumn(name = "user_id"))
+    private User user;
 
-    @ManyToMany(mappedBy = "posts")
-    private List<GroupMember> groupMembers;
+    @ManyToOne
+    private GroupMember groupMember;
 
 
     @PrePersist
     protected void onCreate() {
         this.dateOfCreation = LocalDateTime.now();
         this.dateOfUpdate = LocalDateTime.now();
-        this.relevance = 0L;
+        this.relevance = 1;
+        this.reactionCount = 0;
+        this.images = new ArrayList<>();
+
     }
+
+
+
 }

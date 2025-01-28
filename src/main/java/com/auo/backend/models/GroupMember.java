@@ -37,19 +37,17 @@ public class GroupMember {
     @NotNull
     private LocalDateTime joinedDate;
 
-    @ManyToMany
-    @JoinTable
-    private List<Post> posts;
+//    @OneToMany
+////    @JoinTable
+//    private List<Post> posts;
 
-    public void removePost(Post post) {
-        this.posts.remove(post);
-        post.getGroupMembers().remove(this);
-    }
-
-    public void addPost(Post post) {
-        this.posts.add(post);
-        post.getGroupMembers().add(this);
-    }
+//    public void removePost(Post post) {
+//        this.posts.remove(post);
+//    }
+//
+//    public void addPost(Post post) {
+//        this.posts.add(post);
+//    }
 
     @PrePersist
     protected void onCreate() {
