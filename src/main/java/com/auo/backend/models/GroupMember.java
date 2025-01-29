@@ -1,6 +1,7 @@
 package com.auo.backend.models;
 
 import com.auo.backend.enums.GroupRole;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -37,9 +38,8 @@ public class GroupMember {
     @NotNull
     private LocalDateTime joinedDate;
 
-//    @OneToMany
-////    @JoinTable
-//    private List<Post> posts;
+    @OneToMany
+    private List<Post> posts;
 
 //    public void removePost(Post post) {
 //        this.posts.remove(post);

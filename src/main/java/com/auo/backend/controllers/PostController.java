@@ -4,9 +4,11 @@ package com.auo.backend.controllers;
 import com.auo.backend.dto.CreatePostDto;
 import com.auo.backend.models.Post;
 import com.auo.backend.repositories.PostRepository;
+import com.auo.backend.responses.PostResponse;
 import com.auo.backend.services.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +21,10 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/post/user")
-    public Post publishPostToProfile(@RequestBody CreatePostDto createPostDto,
-                                     @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<PostResponse> publishPostToProfile(@RequestBody CreatePostDto createPostDto,
+                                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("hali");
-        return this.postService.publishPostToProfile(createPostDto,token);
+        return ResponseEntity.ok(this.postService.publishPostToProfile(createPostDto,token));
     }
 
 }

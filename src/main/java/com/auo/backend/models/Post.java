@@ -1,6 +1,8 @@
 package com.auo.backend.models;
 
 import com.auo.backend.enums.PostType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -22,8 +24,8 @@ import java.util.UUID;
 public class Post {
     @Id
     @GeneratedValue()
-    @Column(name = "post_id")
-    private UUID postId;
+    @Column(name = "id")
+    private UUID id;
 
     private String text;
 
@@ -39,25 +41,24 @@ public class Post {
     @NotNull
     private PostType postType;
 //
-    @OneToMany
-//    @JoinTable(name = "app_post_images",
-//    joinColumns = @JoinColumn(name = "post_id"))
+    @OneToMany(mappedBy = "post")
+    @JsonManagedReference
     private List<PostImages> images;
 
     private String location;
-
-//    private Long groupId;
 
     @NotNull
     private int relevance;
 
     @ManyToOne
-//    @JoinTable(name = "app_user_posts",
-//    joinColumns = @JoinColumn(name = "user_id"))
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "group_member_id")
     private GroupMember groupMember;
+
+
 
 
     @PrePersist

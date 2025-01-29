@@ -3,6 +3,7 @@ package com.auo.backend.models;
 
 
 import com.auo.backend.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -60,6 +61,7 @@ public class User implements UserDetails {
     @ManyToMany()
     @JoinTable(name = "app_group_members",
             joinColumns = @JoinColumn(name = "user_id"))
+
     private List<GroupMember> groupMembers;
 
 

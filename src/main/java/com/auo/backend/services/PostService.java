@@ -6,9 +6,11 @@ import com.auo.backend.enums.PostType;
 import com.auo.backend.models.Post;
 import com.auo.backend.models.PostImages;
 import com.auo.backend.models.User;
+import com.auo.backend.repositories.PostImageRepository;
 import com.auo.backend.repositories.PostRepository;
 //import com.auo.backend.repositories.UserPostRepository;
 import com.auo.backend.repositories.UserRepository;
+import com.auo.backend.responses.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +23,9 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final AuthenticationService authenticationService;
+    private final PostImageRepository postImageRepository;
 
-    public Post publishPostToProfile(CreatePostDto createPostDto, String token) {
+    public PostResponse publishPostToProfile(CreatePostDto createPostDto, String token) {
         User user = authenticationService.getUserFromToken(token);
 
         Post tempPost = Post.builder()
@@ -39,14 +42,20 @@ public class PostService {
                     .index(createPostDto.getPostImages().indexOf(postImage))
                     .url(postImage.getUrl())
                     .deleteHash(postImage.getDeleteHash())
+                    .post(tempPost)
                     .build();
             tempPost.getImages().add(tempImage);
+            postImageRepository.save(tempImage);
         });
 //
-        return tempPost;
+        postRepository.save(tempPost);
+        return new PostResponse(tempPost);
+
     }
 
     public void publishPostToGroup() {
-
+    //to be implemented
     }
+
+
 }

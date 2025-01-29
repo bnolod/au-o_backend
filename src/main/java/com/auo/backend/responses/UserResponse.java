@@ -1,6 +1,7 @@
 package com.auo.backend.responses;
 
 
+import com.auo.backend.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +21,14 @@ public class UserResponse {
     private LocalDate date_of_signup;
     private String profile_img;
     private boolean is_public;
+
+    public UserResponse (User user) {
+        this.username = user.getUsername();
+        this.id = user.getId();
+        this.nickname = user.getNickname();
+        this.bio = user.getBio();
+        this.date_of_signup = user.getDateOfSignup();
+        this.profile_img = user.getProfileImg();
+        this.is_public = user.isPublic();
+    }
 }
