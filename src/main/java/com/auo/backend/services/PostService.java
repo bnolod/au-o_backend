@@ -19,7 +19,6 @@ import java.util.List;
 @Service
 public class PostService {
     private final PostRepository postRepository;
-//    private final UserPostRepository userPostRepository;
     private final UserRepository userRepository;
     private final AuthenticationService authenticationService;
 
@@ -39,6 +38,7 @@ public class PostService {
                     .builder()
                     .index(createPostDto.getPostImages().indexOf(postImage))
                     .url(postImage.getUrl())
+                    .deleteHash(postImage.getDeleteHash())
                     .build();
             tempPost.getImages().add(tempImage);
         });

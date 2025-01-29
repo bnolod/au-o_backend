@@ -4,6 +4,7 @@ package com.auo.backend.models;
 
 import com.auo.backend.enums.UserRole;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

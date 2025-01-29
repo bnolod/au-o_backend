@@ -26,4 +26,7 @@ public class PostImages {
 
     @NotNull
     private int index;
+
+    @NotNull
+    private String deleteHash;
 }
