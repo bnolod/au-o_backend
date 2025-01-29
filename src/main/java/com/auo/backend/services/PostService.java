@@ -3,6 +3,7 @@ package com.auo.backend.services;
 import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.dto.CreatePostDto;
 import com.auo.backend.enums.PostType;
+import com.auo.backend.models.Comment;
 import com.auo.backend.models.Post;
 import com.auo.backend.models.PostImages;
 import com.auo.backend.models.User;
@@ -12,10 +13,16 @@ import com.auo.backend.repositories.PostRepository;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.PostResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -65,6 +72,25 @@ public class PostService {
         });
 
         return postResponseList;
+    }
+
+
+    public void addCommentToPost(String commentText, String token, UUID postId) {
+        User user = authenticationService.getUserFromToken(token);
+        Optional<Post> optionalPost = postRepository.findPostById(postId);
+        if (optionalPost.isEmpty()) {
+            throw new IllegalStateException("post_not_found");
+
+        }
+        Post post = optionalPost.get();
+
+        Comment tempComment = Comment.builder()
+                .text(commentText)
+                .user(user)
+                .post(post)
+                .build();
+
+
     }
 
 

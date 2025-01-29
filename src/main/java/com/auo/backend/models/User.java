@@ -68,6 +68,9 @@ public class User implements UserDetails {
     private List<GroupMember> groupMembers;
 
 
+    @OneToMany(mappedBy = "user")
+    private List<CommentReply> replies;
+
     @PrePersist
     protected void onCreate() {
         if (this.dateOfSignup == null) {

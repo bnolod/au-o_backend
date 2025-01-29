@@ -7,32 +7,26 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "app_comments")
-public class Comment {
+@Table(name = "app_comment_replies")
+public class CommentReply {
     @Id
     @GeneratedValue
     private Long id;
 
     @NotNull
     @ManyToOne
+    @JoinColumn(name = "comment_id")
+    private Comment parent;
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
-
-    @NotNull
     private String text;
 
-    @OneToMany(mappedBy = "parent")
-    private List<CommentReply> replies;
 }
