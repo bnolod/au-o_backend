@@ -40,7 +40,7 @@ public class Post {
 
     @NotNull
     private PostType postType;
-//
+
     @OneToMany(mappedBy = "post")
     @JsonManagedReference
     private List<PostImages> images;
@@ -49,8 +49,7 @@ public class Post {
 
     @NotNull
     private int relevance;
-
-
+    
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
@@ -63,8 +62,6 @@ public class Post {
     private GroupMember groupMember;
 
 
-
-
     @PrePersist
     protected void onCreate() {
         this.dateOfCreation = LocalDateTime.now();
@@ -74,7 +71,6 @@ public class Post {
         this.images = new ArrayList<>();
 
     }
-
 
 
 }
