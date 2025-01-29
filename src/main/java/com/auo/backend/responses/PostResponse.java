@@ -26,6 +26,7 @@ public class PostResponse {
     LocalDateTime date_of_update;
     PostType post_type;
     UserResponse user;
+    String location;
     Group group;
     List<PostImages> images;
 
@@ -37,6 +38,7 @@ public class PostResponse {
         this.date_of_update = post.getDateOfUpdate();
         this.post_type = post.getPostType();
         this.user = new UserResponse(post.getUser());
+        this.location = post.getLocation();
 //        this.group = post.getGroupMember().getGroup()
         this.images = post.getImages();
     }
