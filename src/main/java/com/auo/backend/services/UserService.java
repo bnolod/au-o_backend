@@ -33,6 +33,28 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public UserResponse updateSelf(UpdateUserDto updateUserDto, String token) {
+        User user = authenticationService.getUserFromToken(token);
+        System.out.println(user);
+        if (updateUserDto.getNickname() != null) {
+            user.setNickname(updateUserDto.getNickname());
+        }
+        if (updateUserDto.getBio() != null) {
+            user.setBio(updateUserDto.getBio());
+        }
+        if (updateUserDto.getDate_of_birth() != null) {
+            user.setDateOfBirth(updateUserDto.getDate_of_birth());
+        }
+        if (updateUserDto.getProfile_img() != null) {
+            user.setProfileImg(updateUserDto.getProfile_img());
+        }
+        userRepository.save(user);
+        System.out.println(updateUserDto);
+        System.out.println(user);
+        return new UserResponse(user);
+
+    }
+
     public void createUser(User user) {
         Optional<User> userByEmail = userRepository.findUserByEmail(user.getEmail());
         if (userByEmail.isPresent()) {

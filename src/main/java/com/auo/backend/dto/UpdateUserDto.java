@@ -9,4 +9,5 @@ public class UpdateUserDto {
     private String nickname;
     private LocalDate date_of_birth;
     private String bio;
+    private String profile_img;
 }

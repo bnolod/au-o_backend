@@ -49,9 +49,14 @@ public class UserController {
         userService.deleteUserById(userId);
     }
 
-    @PutMapping("/user/{userId}")
+    @PutMapping("/user/update/{userId}")
     public void updateUserById(@PathVariable Long userId, @RequestBody UpdateUserDto updateUserDto) {
         userService.updateUserById(userId, updateUserDto);
+    }
+
+    @PutMapping("/user/update")
+    public ResponseEntity<UserResponse> updateSelf(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,@RequestBody UpdateUserDto updateUserDto ) {
+        return ResponseEntity.ok(userService.updateSelf(updateUserDto,token));
     }
 
     @GetMapping("/user/{userId}/followers")
