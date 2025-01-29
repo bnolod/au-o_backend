@@ -58,6 +58,9 @@ public class User implements UserDetails {
 //    joinColumns = @JoinColumn (name = "post_id"))
     private List<Post> posts;
 
+    @OneToMany()
+    private List<Comment> comments;
+
     @ManyToMany()
     @JoinTable(name = "app_group_members",
             joinColumns = @JoinColumn(name = "user_id"))

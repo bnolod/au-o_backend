@@ -50,6 +50,9 @@ public class Post {
     @NotNull
     private int relevance;
 
+    @OneToMany
+    private List<Comment> comments;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
