@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "api/v1/posts")
@@ -25,6 +27,11 @@ public class PostController {
                                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("hali");
         return ResponseEntity.ok(this.postService.publishPostToProfile(createPostDto,token));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<PostResponse>> getAllPosts() {
+        return ResponseEntity.ok(this.postService.getAllPosts());
     }
 
 }

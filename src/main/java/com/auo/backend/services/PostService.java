@@ -57,5 +57,15 @@ public class PostService {
     //to be implemented
     }
 
+    public List<PostResponse> getAllPosts() {
+        List<PostResponse> postResponseList = new ArrayList<>();
+        List<Post> allPosts = this.postRepository.findAll();
+        allPosts.forEach(post -> {
+            postResponseList.add(new PostResponse(post));
+        });
+
+        return postResponseList;
+    }
+
 
 }
