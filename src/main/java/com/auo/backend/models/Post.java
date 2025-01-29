@@ -50,7 +50,8 @@ public class Post {
     @NotNull
     private int relevance;
 
-    @OneToMany
+
+    @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
     @ManyToOne

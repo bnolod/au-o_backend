@@ -58,7 +58,7 @@ public class User implements UserDetails {
 //    joinColumns = @JoinColumn (name = "post_id"))
     private List<Post> posts;
 
-    @OneToMany()
+    @OneToMany(mappedBy = "user")
     private List<Comment> comments;
 
     @ManyToMany()
