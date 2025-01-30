@@ -1,6 +1,7 @@
 package com.auo.backend.services;
 
 import com.auo.backend.auth.AuthenticationService;
+import com.auo.backend.auth.OwnershipCheckerService;
 import com.auo.backend.dto.CreatePostDto;
 import com.auo.backend.dto.UpdatePostDto;
 import com.auo.backend.enums.PostType;
@@ -34,6 +35,7 @@ public class PostService {
     private final AuthenticationService authenticationService;
     private final PostImageRepository postImageRepository;
     private final CommentRepository commentRepository;
+    private final OwnershipCheckerService<User,Post> postOwnershipCheckerService;
 
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto, String token) {
@@ -119,7 +121,7 @@ public class PostService {
 
         Post post = optionalPost.get();
 
-        if (!Objects.equals(post.getUser().getId(), user.getId())) {
+        if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
@@ -134,6 +136,21 @@ public class PostService {
 
         postRepository.save(post);
 
+        return new PostResponse(post);
+    }
+
+    public PostResponse deletePostOfUserById(Long postId, String token) {
+        User user = authenticationService.getUserFromToken(token);
+        Optional<Post> optionalPost = postRepository.findPostById(postId);
+        if (optionalPost.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        Post post = optionalPost.get();
+        if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+
+        }
+        postRepository.delete(post);
         return new PostResponse(post);
     }
 }

@@ -40,7 +40,7 @@ public class Post {
     @NotNull
     private PostType postType;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Image> images;
 
@@ -49,7 +49,7 @@ public class Post {
 //    @NotNull
 //    private int relevance;
     
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     @ManyToOne
@@ -60,7 +60,7 @@ public class Post {
     @JoinColumn(name = "group_member_id")
     private GroupMember groupMember;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Reaction> reactions;
 
 

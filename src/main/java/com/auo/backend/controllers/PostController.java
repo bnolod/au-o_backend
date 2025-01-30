@@ -45,4 +45,10 @@ public class PostController {
         return ResponseEntity.ok(this.postService.updatePostOfUserById(postId,token,updatePostDto));
     }
 
+    @DeleteMapping("/post/{postId}")
+    public ResponseEntity<PostResponse> deletePostOfUserById(@PathVariable Long postId,
+                                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return ResponseEntity.ok(this.postService.deletePostOfUserById(postId,token));
+    }
+
 }
