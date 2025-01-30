@@ -1,7 +1,6 @@
 package com.auo.backend.models;
 
 import com.auo.backend.enums.PostType;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -14,13 +13,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "app_post")
+@Table(name = "app_posts")
 public class Post {
     @Id
     @GeneratedValue()
@@ -29,8 +29,8 @@ public class Post {
 
     private String text;
 
-    @NotNull
-    private int reactionCount;
+//    @NotNull
+//    private int reactionCount;
 
     @NotNull
     private LocalDateTime dateOfCreation;
@@ -43,12 +43,12 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     @JsonManagedReference
-    private List<PostImages> images;
+    private List<Image> images;
 
     private String location;
 
-    @NotNull
-    private int relevance;
+//    @NotNull
+//    private int relevance;
     
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
@@ -61,16 +61,26 @@ public class Post {
     @JoinColumn(name = "group_member_id")
     private GroupMember groupMember;
 
+    @OneToMany
+    private List<Reaction> reactions;
+
 
     @PrePersist
     protected void onCreate() {
         this.dateOfCreation = LocalDateTime.now();
         this.dateOfUpdate = LocalDateTime.now();
-        this.relevance = 1;
-        this.reactionCount = 0;
+//        this.relevance = 1;
+//        this.reactionCount = 0;
         this.images = new ArrayList<>();
 
     }
 
-
+    public Integer getRelevance(LocalDateTime time) {
+        AtomicInteger relevance = new AtomicInteger();
+        this.comments.forEach(comment -> {
+            relevance.addAndGet(1+
+                    comment.getReplies().size());
+        });
+        return relevance.get();
+    }
 }

@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -35,4 +37,14 @@ public class Comment {
 
     @OneToMany(mappedBy = "parent")
     private List<CommentReply> replies;
+
+    private LocalDateTime time;
+
+    @OneToMany
+    private List<Reaction> reactions;
+
+    @PrePersist
+    protected void onCreate() {
+        this.time =  LocalDateTime.now();
+    }
 }

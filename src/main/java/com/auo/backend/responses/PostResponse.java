@@ -3,8 +3,7 @@ package com.auo.backend.responses;
 import com.auo.backend.enums.PostType;
 import com.auo.backend.models.Group;
 import com.auo.backend.models.Post;
-import com.auo.backend.models.PostImages;
-import jakarta.validation.constraints.NotNull;
+import com.auo.backend.models.Image;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,12 +27,13 @@ public class PostResponse {
     UserResponse user;
     String location;
     Group group;
-    List<PostImages> images;
+    Integer relevance;
+    List<Image> images;
 
     public PostResponse(Post post) {
         this.post_id = post.getId();
         this.text = post.getText();
-        this.reaction_count = post.getReactionCount();
+//        this.reaction_count = post.getReactionCount();
         this.date_of_creation = post.getDateOfCreation();
         this.date_of_update = post.getDateOfUpdate();
         this.post_type = post.getPostType();

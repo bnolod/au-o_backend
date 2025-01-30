@@ -24,13 +24,11 @@ public class GroupMember {
     @GeneratedValue
     private Long id;
 
-    @NotNull
-    @Column(name="group_id")
-    private UUID groupId;
+    @ManyToOne
+    private Group group;
 
-    @NotNull
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne
+    private User user;
 
     @NotNull
     private GroupRole groupRole;

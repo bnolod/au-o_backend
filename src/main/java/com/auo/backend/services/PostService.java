@@ -5,7 +5,7 @@ import com.auo.backend.dto.CreatePostDto;
 import com.auo.backend.enums.PostType;
 import com.auo.backend.models.Comment;
 import com.auo.backend.models.Post;
-import com.auo.backend.models.PostImages;
+import com.auo.backend.models.Image;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.PostImageRepository;
 import com.auo.backend.repositories.PostRepository;
@@ -13,11 +13,7 @@ import com.auo.backend.repositories.PostRepository;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.PostResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +40,7 @@ public class PostService {
         postRepository.save(tempPost);
 
         createPostDto.getPostImages().forEach(postImage -> {
-            PostImages tempImage = PostImages
+            Image tempImage = Image
                     .builder()
                     .index(createPostDto.getPostImages().indexOf(postImage))
                     .url(postImage.getUrl())
@@ -72,6 +68,15 @@ public class PostService {
         });
 
         return postResponseList;
+    }
+
+    public PostResponse getPostById(UUID postId) {
+        Optional<Post> post = postRepository.findPostById(postId);
+        if (post.isPresent()) {
+            return new PostResponse(post.get());
+        }else {
+            throw new IllegalStateException("post_not_found");
+        }
     }
 
 

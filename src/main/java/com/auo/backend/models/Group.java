@@ -29,7 +29,7 @@ public class Group {
 
     private String bannerImageURL;
 
-    private int memberCount;
+//    private int memberCount;
 
     private LocalDateTime creationDate;
 
@@ -37,16 +37,12 @@ public class Group {
 
     private String groupAlias;
 
-    @ManyToMany
-    @JoinTable(name = "app_group_members",
-        joinColumns = @JoinColumn(name = "group_id")
-    )
+    @OneToMany(mappedBy = "group")
     private List<GroupMember> groupMembers;
 
     @PrePersist
     protected void onCreate() {
         this.creationDate = LocalDateTime.now();
         this.isPublic = true;
-        this.memberCount = 1;
     }
 }

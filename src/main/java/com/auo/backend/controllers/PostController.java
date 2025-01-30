@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,6 +33,11 @@ public class PostController {
     @GetMapping("/all")
     public ResponseEntity<List<PostResponse>> getAllPosts() {
         return ResponseEntity.ok(this.postService.getAllPosts());
+    }
+
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<PostResponse> getOnePostById(@PathVariable UUID postId) {
+        return ResponseEntity.ok(this.postService.getPostById(postId));
     }
 
 }

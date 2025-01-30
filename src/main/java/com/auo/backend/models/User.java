@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "app_user")
+@Table(name = "app_users")
 public class User implements UserDetails {
 
 
@@ -61,10 +61,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Comment> comments;
 
-    @ManyToMany()
-    @JoinTable(name = "app_group_members",
-            joinColumns = @JoinColumn(name = "user_id"))
-
+    @OneToMany(mappedBy = "user")
     private List<GroupMember> groupMembers;
 
 
@@ -78,7 +75,8 @@ public class User implements UserDetails {
         }
     }
 
-
+    @OneToMany(mappedBy = "user")
+    private List<Reaction> reactions;
 
 
     @Override

@@ -1,5 +1,7 @@
 package com.auo.backend.models;
 
+
+import com.auo.backend.enums.ReactionType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,39 +10,38 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Entity
-@Table(name = "app_comment_replies")
-public class CommentReply {
+@Builder
+@Table(name = "app_reactions")
+public class Reaction {
     @Id
     @GeneratedValue
-    private Long id;
+    Long id;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private Comment parent;
+    ReactionType reactionType;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    User user;
 
-    private String text;
-
-    private LocalDateTime time;
-
-    @OneToMany
-    private List<Reaction> reactions;
-
+    @NotNull
+    LocalDateTime time;
 
     @PrePersist
     protected void onCreate() {
-        this.time =  LocalDateTime.now();
+        this.time = LocalDateTime.now();
     }
 
+//    @ManyToOne
+//    Post post;
+//
+//    @ManyToOne
+//    Comment comment;
+//
+//    @ManyToOne()
+//    CommentReply commentReply;
 }

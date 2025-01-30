@@ -8,16 +8,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.UUID;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
 @Builder
-@Table(name = "app_post_images")
-public class PostImages {
+@Table(name = "app_images")
+public class Image {
     @Id
     @GeneratedValue
     @Column(name = "id")
