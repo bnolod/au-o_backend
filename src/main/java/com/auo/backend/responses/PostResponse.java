@@ -18,7 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostResponse {
-    UUID post_id;
+    Long post_id;
     String text;
     int reaction_count;
     LocalDateTime date_of_creation;

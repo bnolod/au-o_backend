@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Data
@@ -25,7 +24,7 @@ public class Post {
     @Id
     @GeneratedValue()
     @Column(name = "id")
-    private UUID id;
+    private Long id;
 
     private String text;
 

@@ -70,7 +70,7 @@ public class PostService {
         return postResponseList;
     }
 
-    public PostResponse getPostById(UUID postId) {
+    public PostResponse getPostById(Long postId) {
         Optional<Post> post = postRepository.findPostById(postId);
         if (post.isPresent()) {
             return new PostResponse(post.get());
@@ -80,7 +80,7 @@ public class PostService {
     }
 
 
-    public void addCommentToPost(String commentText, String token, UUID postId) {
+    public void addCommentToPost(String commentText, String token, Long postId) {
         User user = authenticationService.getUserFromToken(token);
         Optional<Post> optionalPost = postRepository.findPostById(postId);
         if (optionalPost.isEmpty()) {

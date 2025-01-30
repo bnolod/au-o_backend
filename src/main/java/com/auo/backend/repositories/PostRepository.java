@@ -17,7 +17,7 @@ import java.util.UUID;
 @Repository
 public interface PostRepository extends JpaRepository<Post, UUID> {
 
-    Optional<Post> findPostById(UUID uuid);
+    Optional<Post> findPostById(Long id);
 
 
     // csoportbeli posztok VAGY eventek tipustol fuggoen + post creation, relevance csokkeno

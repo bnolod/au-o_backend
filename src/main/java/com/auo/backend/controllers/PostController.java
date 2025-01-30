@@ -36,7 +36,7 @@ public class PostController {
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<PostResponse> getOnePostById(@PathVariable UUID postId) {
+    public ResponseEntity<PostResponse> getOnePostById(@PathVariable Long postId) {
         return ResponseEntity.ok(this.postService.getPostById(postId));
     }
 
