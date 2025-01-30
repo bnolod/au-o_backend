@@ -15,11 +15,15 @@ import com.auo.backend.repositories.PostRepository;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.PostResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -65,13 +69,13 @@ public class PostService {
     }
 
     public List<PostResponse> getAllPosts() {
-        List<PostResponse> postResponseList = new ArrayList<>();
-        List<Post> allPosts = this.postRepository.findAll();
-        allPosts.forEach(post -> {
-            postResponseList.add(new PostResponse(post));
-        });
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Post> allPosts = this.postRepository.findAll(pageable);
+        //        allPosts.forEach(post -> {
+//            postResponseList.add(new PostResponse(post));
+//        });
 
-        return postResponseList;
+        return allPosts.stream().map(PostResponse::new).toList();
     }
 
     public PostResponse getPostById(Long postId) {
@@ -121,10 +125,13 @@ public class PostService {
 
         if (!updatePostDto.getText().isEmpty()) {
             post.setText(updatePostDto.getText());
+            post.setDateOfUpdate(LocalDateTime.now());
         }
         if (!updatePostDto.getLocation().isEmpty()) {
             post.setLocation(updatePostDto.getLocation());
+            post.setDateOfUpdate(LocalDateTime.now());
         }
+
         postRepository.save(post);
 
         return new PostResponse(post);

@@ -3,6 +3,8 @@ package com.auo.backend.repositories;
 import com.auo.backend.enums.PostType;
 import com.auo.backend.models.Post;
 import com.auo.backend.responses.PostResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +20,9 @@ import java.util.UUID;
 public interface PostRepository extends JpaRepository<Post, UUID> {
 
     Optional<Post> findPostById(Long id);
+
+    Page<Post> findAll(Pageable pageable);
+
 
 
     // csoportbeli posztok VAGY eventek tipustol fuggoen + post creation, relevance csokkeno
