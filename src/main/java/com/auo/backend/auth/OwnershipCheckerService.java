@@ -5,13 +5,22 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 
+/**
+* @param <U> -> user class
+* @param <T> -> target class, (ami valószínű tartalmazza az U classt).
+*           <p>
+*
+* ha valami hiba van ezzel a szarral azonnal szolni nekem
+*/
 @Service
 public class OwnershipCheckerService<U,T> {
-    // U -> user class
-    // T -> target class, ami tartalmazza az U classt.
-    // Valószínű csak akkor működik, ha egy U típusú fieldje van a T-nek DE ha ilyen történik akkor amúgy is hatalmas baj van a kóddal
-    // ha valami hiba van ezzel a szarral azonnal szolni nekem
 
+    /**
+     *
+     * @param user a felhasználó, aki küldi a requestet
+     * @param target egy felhasználó által generált bármilyen típusú osztály, TARTALMAZNIA KELL PONTOSAN EGY U típusú fieldet
+     * @return true/false
+     */
     public boolean isOwnerOf(U user, T target) {
         if (user == null || target == null) {
             throw new NullPointerException();
