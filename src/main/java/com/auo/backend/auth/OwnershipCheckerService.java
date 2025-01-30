@@ -19,7 +19,7 @@ public class OwnershipCheckerService<U,T> {
      *
      * @param user a felhasználó, aki küldi a requestet
      * @param target egy felhasználó által generált bármilyen típusú osztály, TARTALMAZNIA KELL PONTOSAN EGY U típusú fieldet
-     * @return true/false
+     * @return true/false az alapján, hogy valóban a tulaja az user a szarnak
      */
     public boolean isOwnerOf(U user, T target) {
         if (user == null || target == null) {
