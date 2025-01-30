@@ -2,18 +2,16 @@ package com.auo.backend.controllers;
 
 
 import com.auo.backend.dto.CreatePostDto;
-import com.auo.backend.models.Post;
+import com.auo.backend.dto.UpdatePostDto;
 import com.auo.backend.repositories.PostRepository;
 import com.auo.backend.responses.PostResponse;
 import com.auo.backend.services.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -38,6 +36,13 @@ public class PostController {
     @GetMapping("/post/{postId}")
     public ResponseEntity<PostResponse> getOnePostById(@PathVariable Long postId) {
         return ResponseEntity.ok(this.postService.getPostById(postId));
+    }
+
+    @PutMapping("/post/{postId}")
+    public ResponseEntity<PostResponse> updatePostOfUserById(@PathVariable Long postId,
+                                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                             @RequestBody UpdatePostDto updatePostDto) {
+        return ResponseEntity.ok(this.postService.updatePostOfUserById(postId,token,updatePostDto));
     }
 
 }
