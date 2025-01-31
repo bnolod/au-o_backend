@@ -60,9 +60,13 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User getUserById(Long userId) {
+    public UserResponse getUserById(Long userId) {
         Optional<User> user = userRepository.findById(userId);
-        return user.orElse(null);
+        if (user.isPresent()) {
+            return new UserResponse(user.get());
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
+//        return new UserResponse(user.isPresent() ? user.get() : ).orElse(null);
     }
 
     public void deleteUserById(Long userId) {
