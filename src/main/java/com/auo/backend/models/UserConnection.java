@@ -20,11 +20,20 @@ public class UserConnection {
     private Long connectionId;
 
     @NotNull
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne
+    private User user;
 
     @NotNull
-    @Column(name = "following_user_id")
-    private Long followingUserId;
+    @ManyToOne
+    private User followedUser;
+
+    private Boolean isValid;
+
+    @PrePersist
+    protected void onCreate() {
+        if(this.isValid == null) {
+            this.isValid = true;
+        }
+    }
 
 }

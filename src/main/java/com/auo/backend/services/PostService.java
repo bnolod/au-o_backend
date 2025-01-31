@@ -73,10 +73,6 @@ public class PostService {
     public List<PostResponse> getAllPosts() {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Post> allPosts = this.postRepository.findAll(pageable);
-        //        allPosts.forEach(post -> {
-//            postResponseList.add(new PostResponse(post));
-//        });
-
         return allPosts.stream().map(PostResponse::new).toList();
     }
 

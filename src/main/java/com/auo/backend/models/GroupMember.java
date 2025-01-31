@@ -39,16 +39,14 @@ public class GroupMember {
     @OneToMany
     private List<Post> posts;
 
-//    public void removePost(Post post) {
-//        this.posts.remove(post);
-//    }
-//
-//    public void addPost(Post post) {
-//        this.posts.add(post);
-//    }
+    private Boolean isValid;
+
 
     @PrePersist
     protected void onCreate() {
+        if(this.isValid == null) {
+            this.isValid = true;
+        }
         this.joinedDate = LocalDateTime.now();
     }
 }

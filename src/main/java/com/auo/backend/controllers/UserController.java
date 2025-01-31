@@ -60,12 +60,12 @@ public class UserController {
     }
 
     @GetMapping("/user/{userId}/followers")
-    public ArrayList<UserResponse> getFollowersByUserId(@PathVariable Long userId) {
+    public List<UserResponse> getFollowersByUserId(@PathVariable Long userId) {
         return userService.getFollowersByUserId(userId);
     }
 
     @GetMapping("/user/{userId}/following")
-    public ResponseEntity<ArrayList<UserResponse>> getFollowingByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<UserResponse>> getFollowingByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getFollowingByUserId(userId));
     }
 
@@ -74,13 +74,6 @@ public class UserController {
         @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         userService.followUserById(token, userId);
     }
-
-    @GetMapping("teszt")
-    public ArrayList<UserResponse> getfollowingusers() {
-        return userService.teszt(1L);
-    }
-
-
 
 
 }

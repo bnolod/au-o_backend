@@ -78,6 +78,14 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Reaction> reactions;
 
+    @OneToMany
+//    @JoinTable(name = "app_user_connections")
+    private List<User> following;
+
+    @OneToMany
+//    @JoinTable(name = "app_user_connections",
+//    joinColumns = @JoinColumn(name = "followedUser"))
+    private List<User> followers;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

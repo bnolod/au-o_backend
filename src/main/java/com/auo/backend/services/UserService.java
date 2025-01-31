@@ -3,8 +3,6 @@ package com.auo.backend.services;
 import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.dto.UpdateUserDto;
 import com.auo.backend.models.User;
-import com.auo.backend.models.UserConnection;
-import com.auo.backend.repositories.UserConnectionRepository;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.UserResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,18 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserConnectionRepository userConnectionRepository;
     private final AuthenticationService authenticationService;
 
 
@@ -79,7 +74,7 @@ public class UserService {
 
     public void updateUserById(Long userId, UpdateUserDto updateUserDto) {
         Optional<User> optionalUser = userRepository.findById(userId);
-        if (!optionalUser.isPresent()) {
+        if (optionalUser.isEmpty()) {
             throw new IllegalStateException("User with id " + userId + " does not exist");
         }
         User user = optionalUser.get();
@@ -101,92 +96,37 @@ public class UserService {
     }
 
 
-    public ArrayList<UserResponse> getFollowersByUserId(Long userId) {
-        Optional<ArrayList<UserConnection>> userConnectionArrayList = userConnectionRepository.findUserConnectionsByFollowingUserId(userId);
-        if (userConnectionArrayList.isEmpty()) {
-            return null;
-        }
-        AtomicReference<User> temp = new AtomicReference<>();
-        ArrayList<UserResponse> responseArrayList = new ArrayList<>();
-        userConnectionArrayList.get().forEach( connection ->
-        {
-            temp.set(getUserById(connection.getUserId()));
-            responseArrayList.add(
-                    UserResponse
-                            .builder()
-                            .id(temp.get().getId())
-                            .username(temp.get().getUsername())
-                            .nickname(temp.get().getNickname())
-                            .build()
-            );
-        });
-        return responseArrayList;
+    public List<UserResponse> getFollowersByUserId(Long userId) {
+        Optional<User> optionalUser = userRepository.findUserById(userId);
+        return optionalUser.map(user -> user.getFollowers().stream().map(UserResponse::new).toList()).orElse(null);
+
     }
 
-    public ArrayList<UserResponse> getFollowingByUserId(Long userId) {
-        Optional<ArrayList<UserConnection>> userConnectionArrayList = userConnectionRepository.findUserConnectionsByUserId(userId);
-        if (userConnectionArrayList.isEmpty()) {
-            return null;
-        }
-        AtomicReference<User> temp = new AtomicReference<>();
-        ArrayList<UserResponse> responseArrayList = new ArrayList<>();
-        userConnectionArrayList.get().forEach( connection ->
-        {
-            temp.set(getUserById(connection.getFollowingUserId()));
-            responseArrayList.add(
-                    UserResponse
-                            .builder()
-                            .id(temp.get().getId())
-                            .username(temp.get().getUsername())
-                            .nickname(temp.get().getNickname())
-                            .build()
-            );
-        });
-        return responseArrayList;
+    public List<UserResponse> getFollowingByUserId(Long userId) {
+        Optional<User> optionalUser = userRepository.findUserById(userId);
+        return optionalUser.map(user -> user.getFollowing().stream().map(UserResponse::new).toList()).orElse(null);
     }
 
     public void followUserById(String token, Long userId) {
         User user = authenticationService.getUserFromToken(token);
-        if (Objects.equals(user.getId(), userId)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "can_not_follow_self");
-        }
-        if (userRepository.findUserById(userId).isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
-        }
-        try {
-            UserConnection userConnection = UserConnection
-                    .builder()
-                    .userId(user.getId())
-                    .followingUserId(userId)
-                    .build();
-            userConnectionRepository.save(userConnection);
+            if (Objects.equals(user.getId(), userId)) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "can_not_follow_self");
+            }
+        Optional<User> optionalUserToFollow = userRepository.findUserById(userId);
+            if (optionalUserToFollow.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
+            }
+        User userToFollow = optionalUserToFollow.get();
+            if (user.getFollowing().contains(userToFollow)) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "already_followed");
+            }
+        user.getFollowing().add(userToFollow);
+        userRepository.save(user);
 
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "follow_failed");
-        }
+        userToFollow.getFollowers().add(user);
+        userRepository.save(userToFollow);
     }
 
-    public ArrayList<UserResponse> teszt(Long userId) {
-        Optional<ArrayList<User>> result = userConnectionRepository.findFollowersByUserId(userId);
-        if (result.isEmpty()) {
-            return null;
-        }
 
-        ArrayList<UserResponse> responseArrayList = new ArrayList<>();
-        result.get().forEach(
-                user -> {
-                    responseArrayList.add(
-                            UserResponse
-                                    .builder()
-                                    .username(user.getUsername())
-                                    .nickname(user.getNickname())
-                                    .id(user.getId())
-                                    .profile_img(user.getProfileImg())
-                                    .build()
-                    );
-                }
-        );
-        return responseArrayList;
-    }
 
 }
