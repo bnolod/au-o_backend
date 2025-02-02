@@ -119,7 +119,7 @@ public class PostService {
             commentRepository.delete(comment);
         } else if (postOwnershipCheckerService.isOwnerOf(user,comment.getPost())) {
             commentRepository.delete(comment);
-        }
+        } else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
 
     }
 
