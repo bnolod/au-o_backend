@@ -5,10 +5,7 @@ import com.auo.backend.auth.OwnershipCheckerService;
 import com.auo.backend.dto.CreatePostDto;
 import com.auo.backend.dto.UpdatePostDto;
 import com.auo.backend.enums.PostType;
-import com.auo.backend.models.Comment;
-import com.auo.backend.models.Post;
-import com.auo.backend.models.Image;
-import com.auo.backend.models.User;
+import com.auo.backend.models.*;
 import com.auo.backend.repositories.CommentRepository;
 import com.auo.backend.repositories.PostImageRepository;
 import com.auo.backend.repositories.PostRepository;
@@ -36,6 +33,7 @@ public class PostService {
     private final PostImageRepository postImageRepository;
     private final CommentRepository commentRepository;
     private final OwnershipCheckerService<User,Post> postOwnershipCheckerService;
+    private final OwnershipCheckerService<User,Comment> commentOwnershipCheckerService;
 
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto, String token) {
@@ -102,8 +100,26 @@ public class PostService {
                 .build();
 
         commentRepository.save(tempComment);
-//        post.getComments().add(tempComment);
-//        postRepository.save(post);
+    }
+
+    /**
+     * Úgy terveztem ezt a szart hogy a saját kommentet, vagy a saját posztod alatti összes kommentet ki tudd törölni
+     * talán működik, talán nem, majd teszt hétfőn
+     *
+     *
+     */
+    public void removeCommentFromPost(String token, Long commentId) {
+        User user = authenticationService.getUserFromToken(token);
+        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+        if (optionalComment.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "comment_not_found");
+        }
+        Comment comment = optionalComment.get();
+        if (commentOwnershipCheckerService.isOwnerOf(user,comment)) {
+            commentRepository.delete(comment);
+        } else if (postOwnershipCheckerService.isOwnerOf(user,comment.getPost())) {
+            commentRepository.delete(comment);
+        }
 
     }
 

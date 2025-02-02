@@ -111,6 +111,32 @@ public class UserService {
         return optionalUser.map(user -> user.getFollowing().stream().map(UserResponse::new).toList()).orElse(null);
     }
 
+    public void removeFollowerFromSelf(String token, Long userFollowerId) {
+        User user = authenticationService.getUserFromToken(token);
+        Optional<User> optionalFollowerUser = userRepository.findUserById(userFollowerId);
+        if (optionalFollowerUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
+        }
+        if (!user.getFollowers().contains(optionalFollowerUser.get())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
+        }
+        user.getFollowers().remove(optionalFollowerUser.get());
+        userRepository.save(user);
+    }
+
+    public void unfollowUser(String token, Long followedUserId) {
+        User user = authenticationService.getUserFromToken(token);
+        Optional<User> optionalFollowedUser = userRepository.findUserById(followedUserId);
+        if (optionalFollowedUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
+        }
+        if (!user.getFollowing().contains(optionalFollowedUser.get())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
+        }
+        user.getFollowing().remove(optionalFollowedUser.get());
+        userRepository.save(user);
+    }
+
     public void followUserById(String token, Long userId) {
         User user = authenticationService.getUserFromToken(token);
             if (Objects.equals(user.getId(), userId)) {
