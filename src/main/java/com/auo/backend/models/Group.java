@@ -37,7 +37,8 @@ public class Group {
 
     private String groupAlias;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group",
+            orphanRemoval=true)
     private List<GroupMember> groupMembers;
 
     @PrePersist

@@ -36,7 +36,8 @@ public class GroupMember {
     @NotNull
     private LocalDateTime joinedDate;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL,
+            orphanRemoval=true)
     private List<Post> posts;
 
     private Boolean isValid;

@@ -36,7 +36,8 @@ public class Comment {
     @NotNull
     private String text;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL,
+            orphanRemoval=true)
     private List<CommentReply> replies;
 
     private LocalDateTime time;

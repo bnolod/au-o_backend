@@ -53,19 +53,21 @@ public class User implements UserDetails {
     @NotNull
     private LocalDate dateOfSignup;
 
-    @OneToMany()
-//    @JoinTable(name = "app_user_posts",
-//    joinColumns = @JoinColumn (name = "post_id"))
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
+            orphanRemoval=true)
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
+            orphanRemoval=true)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
+            orphanRemoval=true)
     private List<GroupMember> groupMembers;
 
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
+            orphanRemoval=true)
     private List<CommentReply> replies;
 
     @PrePersist
@@ -75,10 +77,12 @@ public class User implements UserDetails {
         }
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
+            orphanRemoval=true)
     private List<Reaction> reactions;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL,
+            orphanRemoval=true)
 //    @JoinTable(name = "app_user_connections")
     private List<User> following;
 

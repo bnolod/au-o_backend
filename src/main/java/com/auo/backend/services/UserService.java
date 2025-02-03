@@ -8,6 +8,7 @@ import com.auo.backend.responses.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -69,6 +70,7 @@ public class UserService {
 //        return new UserResponse(user.isPresent() ? user.get() : ).orElse(null);
     }
 
+    @Transactional
     public void deleteUserById(Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new IllegalStateException("User with id " + userId + " does not exist");
