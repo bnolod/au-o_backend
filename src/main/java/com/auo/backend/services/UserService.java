@@ -78,6 +78,13 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    public void flagSelfForDeletion(String token) {
+        User user = authenticationService.getUserFromToken(token);
+        user.setDeleted(true);
+        userRepository.save(user);
+    }
+
+
     public void updateUserById(Long userId, UpdateUserDto updateUserDto) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {

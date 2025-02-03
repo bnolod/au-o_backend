@@ -21,8 +21,10 @@ public class UserResponse {
     private LocalDate date_of_signup;
     private String profile_img;
     private boolean is_public;
+    private boolean isDeleted;
 
     public UserResponse (User user) {
+    if (!user.isDeleted()) {
         this.username = user.getUsername();
         this.id = user.getId();
         this.nickname = user.getNickname();
@@ -30,5 +32,9 @@ public class UserResponse {
         this.date_of_signup = user.getDateOfSignup();
         this.profile_img = user.getProfileImg();
         this.is_public = user.isPublic();
+        this.isDeleted = false;
+    }
+    this.isDeleted = true;
+
     }
 }

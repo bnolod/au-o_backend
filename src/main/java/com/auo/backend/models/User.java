@@ -3,9 +3,7 @@ package com.auo.backend.models;
 
 
 import com.auo.backend.enums.UserRole;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -70,21 +68,28 @@ public class User implements UserDetails {
             orphanRemoval=true)
     private List<CommentReply> replies;
 
-    @PrePersist
-    protected void onCreate() {
-        if (this.dateOfSignup == null) {
-            this.dateOfSignup = LocalDate.now();
-        }
-    }
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
             orphanRemoval=true)
     private List<Reaction> reactions;
 
     @OneToMany(cascade = CascadeType.ALL,
             orphanRemoval=true)
-//    @JoinTable(name = "app_user_connections")
     private List<User> following;
+
+
+    @NotNull
+    private boolean isDeleted;
+
+
+
+
+    @PrePersist
+    protected void onCreate() {
+        this.isDeleted = false;
+        this.dateOfSignup = LocalDate.now();
+    }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
