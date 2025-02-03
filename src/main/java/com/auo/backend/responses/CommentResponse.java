@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentResponse {
+    private Long id;
     private UserResponse user;
     private String text;
 

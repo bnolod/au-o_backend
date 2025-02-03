@@ -2,6 +2,7 @@ package com.auo.backend.services;
 
 import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.OwnershipCheckerService;
+import com.auo.backend.dto.AddCommentDto;
 import com.auo.backend.dto.CreatePostDto;
 import com.auo.backend.dto.UpdatePostDto;
 import com.auo.backend.enums.PostType;
@@ -11,7 +12,9 @@ import com.auo.backend.repositories.PostImageRepository;
 import com.auo.backend.repositories.PostRepository;
 //import com.auo.backend.repositories.UserPostRepository;
 import com.auo.backend.repositories.UserRepository;
+import com.auo.backend.responses.CommentResponse;
 import com.auo.backend.responses.PostResponse;
+import com.auo.backend.responses.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -84,7 +87,7 @@ public class PostService {
     }
 
 
-    public void addCommentToPost(String commentText, String token, Long postId) {
+    public CommentResponse addCommentToPost(String token, Long postId, AddCommentDto commentText) {
         User user = authenticationService.getUserFromToken(token);
 
         Optional<Post> optionalPost = postRepository.findPostById(postId);
@@ -94,12 +97,17 @@ public class PostService {
         Post post = optionalPost.get();
 
         Comment tempComment = Comment.builder()
-                .text(commentText)
+                .text(commentText.getText())
                 .user(user)
                 .post(post)
                 .build();
 
         commentRepository.save(tempComment);
+        return CommentResponse.builder()
+                .id(tempComment.getId())
+                .text(commentText.getText())
+                .user(new UserResponse(user))
+                .build();
     }
 
     /**

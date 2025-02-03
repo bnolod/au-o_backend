@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "app_user_connections", uniqueConstraints = {@UniqueConstraint(columnNames={"user_id","following_user_id"})})
+@Table(name = "app_user_connections")
 public class UserConnection {
     @Id
     @GeneratedValue

@@ -1,9 +1,11 @@
 package com.auo.backend.controllers;
 
 
+import com.auo.backend.dto.AddCommentDto;
 import com.auo.backend.dto.CreatePostDto;
 import com.auo.backend.dto.UpdatePostDto;
 import com.auo.backend.repositories.PostRepository;
+import com.auo.backend.responses.CommentResponse;
 import com.auo.backend.responses.PostResponse;
 import com.auo.backend.services.PostService;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +52,19 @@ public class PostController {
                                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         return ResponseEntity.ok(this.postService.deletePostOfUserById(postId,token));
     }
+
+    @DeleteMapping("/post/comment/{commentId}")
+    public void deleteCommentFromPost(@PathVariable Long commentId,
+                                      @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        postService.removeCommentFromPost(token,commentId);
+    }
+
+    @PostMapping("/post/{postId}/comment")
+    public ResponseEntity<CommentResponse> commentToPost(@PathVariable Long postId,
+                                                         @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                         @RequestBody AddCommentDto text) {
+        return ResponseEntity.ok(postService.addCommentToPost(token,postId,text));
+    }
+
 
 }
