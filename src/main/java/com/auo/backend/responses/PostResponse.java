@@ -1,6 +1,7 @@
 package com.auo.backend.responses;
 
 import com.auo.backend.enums.PostType;
+import com.auo.backend.models.Comment;
 import com.auo.backend.models.Group;
 import com.auo.backend.models.Post;
 import com.auo.backend.models.Image;
@@ -29,6 +30,7 @@ public class PostResponse {
     Group group;
     Integer relevance;
     List<Image> images;
+    List<CommentResponse> comments;
 
     public PostResponse(Post post) {
         this.post_id = post.getId();
@@ -41,6 +43,8 @@ public class PostResponse {
         this.location = post.getLocation();
 //        this.group = post.getGroupMember().getGroup()
         this.images = post.getImages();
+        if (post.getComments() != null)
+            this.comments = post.getComments().stream().map(CommentResponse::new).toList();
     }
 
 }

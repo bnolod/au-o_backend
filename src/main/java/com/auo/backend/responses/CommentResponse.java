@@ -19,4 +19,11 @@ public class CommentResponse {
     private UserResponse user;
     private String text;
 
+    public CommentResponse(Comment comment) {
+        this.id = comment.getId();
+        this.time = comment.getTime();
+        this.user = new UserResponse(comment.getUser());
+        this.text = comment.getText();
+    }
+
 }
