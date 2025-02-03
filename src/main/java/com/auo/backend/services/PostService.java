@@ -107,6 +107,7 @@ public class PostService {
                 .id(tempComment.getId())
                 .text(commentText.getText())
                 .user(new UserResponse(user))
+                .time(tempComment.getTime())
                 .build();
     }
 
