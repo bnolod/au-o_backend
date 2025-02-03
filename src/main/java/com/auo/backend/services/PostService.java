@@ -8,15 +8,9 @@ import com.auo.backend.dto.UpdatePostDto;
 import com.auo.backend.enums.PostType;
 import com.auo.backend.enums.ReactionType;
 import com.auo.backend.models.*;
-import com.auo.backend.repositories.CommentRepository;
-import com.auo.backend.repositories.PostImageRepository;
-import com.auo.backend.repositories.PostRepository;
+import com.auo.backend.repositories.*;
 //import com.auo.backend.repositories.UserPostRepository;
-import com.auo.backend.repositories.UserRepository;
-import com.auo.backend.responses.AddOrRemoveReactionResponse;
-import com.auo.backend.responses.CommentResponse;
-import com.auo.backend.responses.PostResponse;
-import com.auo.backend.responses.UserResponse;
+import com.auo.backend.responses.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +34,7 @@ public class PostService {
     private final OwnershipCheckerService<User,Post> postOwnershipCheckerService;
     private final OwnershipCheckerService<User,Comment> commentOwnershipCheckerService;
     private final GenericReactionService<Post> postReactionService;
+    private final CommentReplyRepository commentReplyRepository;
 
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto, String token) {
@@ -190,5 +185,23 @@ public class PostService {
                 .message(reactionMessage)
                 .reactionType(reactionType)
                 .build();
+    }
+
+    public CommentReplyResponse replyToComment(Long commentId, String token, String text) {
+        User user = authenticationService.getUserFromToken(token);
+        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+        if (optionalComment.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "comment_not_found");
+        }
+        Comment parent = optionalComment.get();
+        CommentReply reply = CommentReply.builder()
+                .parent(parent)
+                .user(user)
+                .text(text)
+                .build();
+
+        commentReplyRepository.save(reply);
+
+        return new CommentReplyResponse(reply);
     }
 }
