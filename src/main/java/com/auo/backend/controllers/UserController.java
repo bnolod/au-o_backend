@@ -75,5 +75,16 @@ public class UserController {
         userService.followUserById(token, userId);
     }
 
+    @DeleteMapping("user/{userId}/unfollow")
+    public void unfollowUser(@PathVariable Long userId,
+                                 @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        userService.unfollowUser(token,userId);
+    }
+
+    @DeleteMapping("user/{userId}/remove_follower")
+    public void removeFollowerFromSelf(@PathVariable Long userId,
+                                        @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        userService.removeFollowerFromSelf(token,userId);
+    }
 
 }

@@ -102,7 +102,11 @@ public class UserService {
 
     public List<UserResponse> getFollowersByUserId(Long userId) {
         Optional<User> optionalUser = userRepository.findUserById(userId);
-        return optionalUser.map(user -> user.getFollowers().stream().map(UserResponse::new).toList()).orElse(null);
+        if (optionalUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_fouond");
+        }
+        Optional<List<User>> followers = userRepository.findUsersByFollowingContains(optionalUser.get());
+        return followers.map(users -> users.stream().map(UserResponse::new).toList()).orElse(null);
 
     }
 
@@ -117,10 +121,10 @@ public class UserService {
         if (optionalFollowerUser.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
         }
-        if (!user.getFollowers().contains(optionalFollowerUser.get())) {
+        if (!optionalFollowerUser.get().getFollowing().contains(user)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
         }
-        user.getFollowers().remove(optionalFollowerUser.get());
+        optionalFollowerUser.get().getFollowing().remove(user);
         userRepository.save(user);
     }
 
@@ -153,8 +157,6 @@ public class UserService {
         user.getFollowing().add(userToFollow);
         userRepository.save(user);
 
-        userToFollow.getFollowers().add(user);
-        userRepository.save(userToFollow);
     }
 
 
