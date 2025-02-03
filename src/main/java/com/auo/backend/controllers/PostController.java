@@ -82,5 +82,10 @@ public class PostController {
                                                                @RequestBody AddCommentDto addCommentDto) {
         return ResponseEntity.ok(postService.replyToComment(commentId,token,addCommentDto.getText()));
     }
+    @DeleteMapping("post/comment/reply/{replyId}")
+    public ResponseEntity<CommentReplyResponse> deleteReplyFromComment(@PathVariable Long replyId,
+                                                                       @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return ResponseEntity.ok(postService.deleteReplyFromComment(replyId,token));
+    }
 
 }

@@ -1,7 +1,7 @@
 package com.auo.backend.services;
 
 import com.auo.backend.auth.AuthenticationService;
-import com.auo.backend.auth.OwnershipCheckerService;
+import com.auo.backend.auth.GenericOwnershipCheckerService;
 import com.auo.backend.dto.AddCommentDto;
 import com.auo.backend.dto.CreatePostDto;
 import com.auo.backend.dto.UpdatePostDto;
@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -31,8 +30,9 @@ public class PostService {
     private final AuthenticationService authenticationService;
     private final PostImageRepository postImageRepository;
     private final CommentRepository commentRepository;
-    private final OwnershipCheckerService<User,Post> postOwnershipCheckerService;
-    private final OwnershipCheckerService<User,Comment> commentOwnershipCheckerService;
+    private final GenericOwnershipCheckerService<User,Post> postOwnershipCheckerService;
+    private final GenericOwnershipCheckerService<User,Comment> commentOwnershipCheckerService;
+    private final GenericOwnershipCheckerService<User,CommentReply> commentReplyOwnershipCheckerService;
     private final GenericReactionService<Post> postReactionService;
     private final CommentReplyRepository commentReplyRepository;
 
@@ -203,5 +203,19 @@ public class PostService {
         commentReplyRepository.save(reply);
 
         return new CommentReplyResponse(reply);
+    }
+
+    public CommentReplyResponse deleteReplyFromComment(Long commentReplyId, String token) {
+        User user = authenticationService.getUserFromToken(token);
+        Optional<CommentReply> optionalCommentReply = commentReplyRepository.findById(commentReplyId);
+        if (optionalCommentReply.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reply_not_found");
+        }
+
+        if(commentReplyOwnershipCheckerService.isNotOwnerOf(user,optionalCommentReply.get())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "no_permission");
+        }
+        commentReplyRepository.delete(optionalCommentReply.get());
+        return new CommentReplyResponse(optionalCommentReply.get());
     }
 }

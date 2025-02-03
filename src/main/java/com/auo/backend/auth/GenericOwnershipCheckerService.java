@@ -1,6 +1,5 @@
 package com.auo.backend.auth;
 
-import com.auo.backend.models.User;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -13,7 +12,7 @@ import java.lang.reflect.Field;
 * ha valami hiba van ezzel a szarral azonnal szolni nekem
 */
 @Service
-public class OwnershipCheckerService<U,T> {
+public class GenericOwnershipCheckerService<U,T> {
 
     /**
      *
