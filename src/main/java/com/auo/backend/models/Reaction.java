@@ -28,13 +28,6 @@ public class Reaction {
     @ManyToOne
     User user;
 
-    @NotNull
-    LocalDateTime time;
-
-    @PrePersist
-    protected void onCreate() {
-        this.time = LocalDateTime.now();
-    }
 
 //    @ManyToOne
 //    Post post;

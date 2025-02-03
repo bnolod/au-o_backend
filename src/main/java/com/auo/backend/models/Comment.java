@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -41,7 +42,7 @@ public class Comment {
     private LocalDateTime time;
 
     @OneToMany
-    private List<Reaction> reactions;
+    private List<Reaction> reactions  = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {

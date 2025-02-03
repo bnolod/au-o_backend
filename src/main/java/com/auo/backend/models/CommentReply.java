@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -35,7 +36,7 @@ public class CommentReply {
     private LocalDateTime time;
 
     @OneToMany
-    private List<Reaction> reactions;
+    private List<Reaction> reactions = new ArrayList<>();
 
 
     @PrePersist

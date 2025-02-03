@@ -6,12 +6,14 @@ import com.auo.backend.dto.AddCommentDto;
 import com.auo.backend.dto.CreatePostDto;
 import com.auo.backend.dto.UpdatePostDto;
 import com.auo.backend.enums.PostType;
+import com.auo.backend.enums.ReactionType;
 import com.auo.backend.models.*;
 import com.auo.backend.repositories.CommentRepository;
 import com.auo.backend.repositories.PostImageRepository;
 import com.auo.backend.repositories.PostRepository;
 //import com.auo.backend.repositories.UserPostRepository;
 import com.auo.backend.repositories.UserRepository;
+import com.auo.backend.responses.AddOrRemoveReactionResponse;
 import com.auo.backend.responses.CommentResponse;
 import com.auo.backend.responses.PostResponse;
 import com.auo.backend.responses.UserResponse;
@@ -37,6 +39,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final OwnershipCheckerService<User,Post> postOwnershipCheckerService;
     private final OwnershipCheckerService<User,Comment> commentOwnershipCheckerService;
+    private final GenericReactionService<Post> postReactionService;
 
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto, String token) {
@@ -173,5 +176,19 @@ public class PostService {
         }
         postRepository.delete(post);
         return new PostResponse(post);
+    }
+
+    public AddOrRemoveReactionResponse addOrRemoveReaction(Long postId, ReactionType reactionType, String token) {
+        Optional<Post> optionalPost = postRepository.findPostById(postId);
+        if (optionalPost.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"post_not_found");
+        Post post = optionalPost.get();
+        String reactionMessage = postReactionService.addOrRemoveReactionToItem(post,reactionType,token);
+
+        postRepository.save(post);
+        return AddOrRemoveReactionResponse.builder()
+                .message(reactionMessage)
+                .reactionType(reactionType)
+                .build();
     }
 }

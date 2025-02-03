@@ -4,7 +4,9 @@ package com.auo.backend.controllers;
 import com.auo.backend.dto.AddCommentDto;
 import com.auo.backend.dto.CreatePostDto;
 import com.auo.backend.dto.UpdatePostDto;
+import com.auo.backend.enums.ReactionType;
 import com.auo.backend.repositories.PostRepository;
+import com.auo.backend.responses.AddOrRemoveReactionResponse;
 import com.auo.backend.responses.CommentResponse;
 import com.auo.backend.responses.PostResponse;
 import com.auo.backend.services.PostService;
@@ -66,5 +68,11 @@ public class PostController {
         return ResponseEntity.ok(postService.addCommentToPost(token,postId,text));
     }
 
+    @PostMapping("post/{postId}/addOrRemoveReaction/{reactionType}")
+    public ResponseEntity<AddOrRemoveReactionResponse> addReactionToPost (@PathVariable Long postId,
+                                                          @PathVariable ReactionType reactionType,
+                                                          @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return ResponseEntity.ok(postService.addOrRemoveReaction(postId,reactionType,token));
+    }
 
 }

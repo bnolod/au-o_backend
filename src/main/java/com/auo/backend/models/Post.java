@@ -61,7 +61,7 @@ public class Post {
     private GroupMember groupMember;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Reaction> reactions;
+    private List<Reaction> reactions = new ArrayList<>();
 
 
     @PrePersist
