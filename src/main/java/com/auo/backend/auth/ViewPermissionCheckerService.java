@@ -28,15 +28,17 @@ public class ViewPermissionCheckerService {
         if (post.getGroupMember().getGroup().isPublic()) {
             return true;
         }
-
         return false;
     }
 
     public boolean isAbleToViewProfile(User user, User target) {
+        if (user.equals(target))
+            return true;
         if (target.isPublic())
             return true;
         if (user.getFollowing().contains(target))
             return true;
+
         return false;
     }
 }

@@ -1,9 +1,11 @@
 package com.auo.backend.services;
 
 import com.auo.backend.auth.AuthenticationService;
+import com.auo.backend.auth.ViewPermissionCheckerService;
 import com.auo.backend.dto.UpdateUserDto;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
+import com.auo.backend.responses.PostResponse;
 import com.auo.backend.responses.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final AuthenticationService authenticationService;
+    private final ViewPermissionCheckerService viewPermissionCheckerService;
 
 
     public List<User> getUsers() {
@@ -165,6 +168,22 @@ public class UserService {
             }
         user.getFollowing().add(userToFollow);
         userRepository.save(user);
+
+    }
+
+    public List<PostResponse> getPostsOfUser(String token, Long targetUserId) {
+        User user = authenticationService.getUserFromToken(token);
+        Optional<User> optionalTargetUser = userRepository.findUserById(targetUserId);
+        if (optionalTargetUser.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
+        }
+        User targetUser = optionalTargetUser.get();
+        if (viewPermissionCheckerService.isAbleToViewProfile(user, targetUser)) {
+            if (targetUser.getPosts().isEmpty())
+                return null;
+            return targetUser.getPosts().stream().map(PostResponse::new).toList();
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
 
     }
 

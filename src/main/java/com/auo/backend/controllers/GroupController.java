@@ -1,11 +1,13 @@
 package com.auo.backend.controllers;
 
+import com.auo.backend.dto.CreateGroupDto;
 import com.auo.backend.models.Group;
+import com.auo.backend.responses.GroupResponse;
 import com.auo.backend.services.GroupService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,13 @@ public class GroupController {
 
     //kell:
     // create group
+
+    @PostMapping("/group")
+    public ResponseEntity<GroupResponse> createGroup(@RequestHeader(HttpHeaders.AUTHORIZATION)String token,
+                                                     @RequestBody CreateGroupDto createGroupDto) {
+        return ResponseEntity.ok(groupService.createGroup(token, createGroupDto));
+    }
+
     //
     // delete group
     //

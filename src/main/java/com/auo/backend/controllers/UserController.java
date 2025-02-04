@@ -1,6 +1,7 @@
 package com.auo.backend.controllers;
 
 import com.auo.backend.dto.UpdateUserDto;
+import com.auo.backend.responses.PostResponse;
 import com.auo.backend.responses.UserResponse;
 import com.auo.backend.services.UserService;
 import com.auo.backend.models.User;
@@ -85,6 +86,12 @@ public class UserController {
     public void removeFollowerFromSelf(@PathVariable Long userId,
                                         @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         userService.removeFollowerFromSelf(token,userId);
+    }
+
+    @GetMapping("user/{userId}/posts")
+    public ResponseEntity<List<PostResponse>> getPostsOfUser(@PathVariable Long userId,
+                                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return ResponseEntity.ok(userService.getPostsOfUser(token,userId));
     }
 
 }

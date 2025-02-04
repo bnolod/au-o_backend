@@ -25,6 +25,7 @@ public class GroupMember {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "group_id", nullable = false)
     private Group group;
 
     @ManyToOne
@@ -49,5 +50,11 @@ public class GroupMember {
             this.isValid = true;
         }
         this.joinedDate = LocalDateTime.now();
+    }
+
+    public GroupMember(User user, Group group) {
+        this.group = group;
+        this.user = user;
+        this.groupRole = GroupRole.MEMBER;
     }
 }

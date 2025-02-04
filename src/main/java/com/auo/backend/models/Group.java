@@ -2,6 +2,7 @@ package com.auo.backend.models;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +23,7 @@ import java.util.UUID;
 public class Group {
     @Id
     @GeneratedValue
-    private UUID uuid;
+    private Long id;
 
     private String groupName;
 
@@ -37,13 +39,18 @@ public class Group {
 
     private String groupAlias;
 
-    @OneToMany(mappedBy = "group",
+    @NotNull
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL,
             orphanRemoval=true)
-    private List<GroupMember> groupMembers;
+    private List<GroupMember> groupMembers = new ArrayList<>();
+
 
     @PrePersist
     protected void onCreate() {
         this.creationDate = LocalDateTime.now();
         this.isPublic = true;
+        if (this.groupMembers == null) {
+            this.groupMembers = new ArrayList<>();
+        }
     }
 }
