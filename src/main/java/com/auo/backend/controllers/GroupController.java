@@ -20,4 +20,24 @@ public class GroupController {
     public List<Group> getAllGroups() {
         return groupService.getAllGroups();
     }
+
+    //kell:
+    // create group
+    //
+    // delete group
+    //
+    // join group
+    //
+    // leave group
+    //
+    // edit group
+    //
+    // modify members roles
+    //
+    // post to group
+    //
+    // event...
+    //
+    //
+
 }
