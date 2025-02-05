@@ -3,6 +3,7 @@ package com.auo.backend;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +20,25 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    User testUser = User.builder()
+            .username("felhnev123")
+            .email("teszt123@email.hu")
+            .password("jelszo")
+            .bio("bio")
+            .nickname("hello")
+            .dateOfBirth(LocalDateTime.now().toLocalDate())
+            .profileImg("a.png")
+            .build();
+
+
     @BeforeEach
     public void setup() {
-        User user = User.builder()
-                .username("felhnev123")
-                .email("teszt123@email.hu")
-                .password("jelszo")
-                .bio("bio")
-                .nickname("hello")
-                .dateOfBirth(LocalDateTime.now().toLocalDate())
-                .profileImg("a.png")
-                .build();
+        userRepository.save(testUser);
+    }
 
-        userRepository.save(user);
+    @AfterEach
+    public void teardown() {
+        userRepository.delete(testUser);
     }
 
 
@@ -48,7 +55,6 @@ public class UserRepositoryTest {
                 .build();
 
         User savedUser = userRepository.save(user);
-
 
         Assertions.assertThat(savedUser).isNotNull();
         Assertions.assertThat(savedUser.getComments()).isNotNull();
@@ -74,5 +80,5 @@ public class UserRepositoryTest {
 
         User savedUser = userRepository.save(user);
     }
-    
+
 }
