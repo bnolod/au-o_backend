@@ -20,7 +20,7 @@ public class ViewPermissionCheckerService {
         }
 
         if (!post.getGroupMember().getGroup().isPublic()) {
-            if (user.getGroupMembers().stream().anyMatch(groupMember ->
+            if (user.getGroups().stream().anyMatch(groupMember ->
                     groupMember.getGroup().equals(post.getGroupMember().getGroup()))) {
                 return true;
             }

@@ -41,14 +41,12 @@ public class GroupMember {
             orphanRemoval=true)
     private List<Post> posts;
 
-    private Boolean isValid;
+    private boolean isValid;
 
 
     @PrePersist
     protected void onCreate() {
-        if(this.isValid == null) {
-            this.isValid = true;
-        }
+        this.isValid = false;
         this.joinedDate = LocalDateTime.now();
     }
 

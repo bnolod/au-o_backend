@@ -61,7 +61,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
             orphanRemoval=true)
-    private List<GroupMember> groupMembers;
+    private List<GroupMember> groups;
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
