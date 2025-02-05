@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -87,6 +88,12 @@ public class User implements UserDetails {
     protected void onCreate() {
         this.isDeleted = false;
         this.dateOfSignup = LocalDate.now();
+        this.following = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.groups = new ArrayList<>();
+        this.reactions = new ArrayList<>();
+        this.posts = new ArrayList<>();
+        this.replies = new ArrayList<>();
     }
 
 

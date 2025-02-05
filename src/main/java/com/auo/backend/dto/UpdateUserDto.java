@@ -1,6 +1,7 @@
 package com.auo.backend.dto;
 
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
