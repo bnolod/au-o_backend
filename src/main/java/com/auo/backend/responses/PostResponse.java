@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostResponse {
-    Long post_id;
+    Long postId;
     String text;
     Map<ReactionType,Long> reactionTypeMap;
     LocalDateTime dateOfCreation;
@@ -32,7 +32,7 @@ public class PostResponse {
     List<CommentResponse> comments;
 
     public PostResponse(Post post) {
-        this.post_id = post.getId();
+        this.postId = post.getId();
         this.text = post.getText();
         if (post.getReactions() != null)
             this.reactionTypeMap = post.getReactions().stream()
