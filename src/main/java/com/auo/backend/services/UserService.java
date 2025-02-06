@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,21 +34,15 @@ public class UserService {
     public UserResponse updateSelf(UpdateUserDto updateUserDto, String token) {
         User user = authenticationService.getUserFromToken(token);
         System.out.println(user);
-        if (updateUserDto.getNickname() != null) {
+        if (updateUserDto.getNickname() != null)
             user.setNickname(updateUserDto.getNickname());
-        }
-        if (updateUserDto.getBio() != null) {
+        if (updateUserDto.getBio() != null)
             user.setBio(updateUserDto.getBio());
-        }
-        if (updateUserDto.getDateOfBirth() != null) {
+        if (updateUserDto.getDateOfBirth() != null)
             user.setDateOfBirth(updateUserDto.getDateOfBirth());
-        }
-        if (updateUserDto.getProfileImg() != null) {
+        if (updateUserDto.getProfileImg() != null)
             user.setProfileImg(updateUserDto.getProfileImg());
-        }
         userRepository.save(user);
-        System.out.println(updateUserDto);
-        System.out.println(user);
         return new UserResponse(user);
 
     }
@@ -64,27 +59,16 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User getUserByIdOrThrow(Long userId) {
-        Optional<User> optionalUser = userRepository.findUserById(userId);
-        if (optionalUser.isPresent()) return optionalUser.get();
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
-    }
+
 
     public UserResponse getUserById(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            return new UserResponse(user.get());
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
-//        return new UserResponse(user.isPresent() ? user.get() : ).orElse(null);
+        return new UserResponse(findUserByIdOrThrow(userId));
     }
 
     @Transactional
+    @Deprecated
     public void deleteUserById(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new IllegalStateException("User with id " + userId + " does not exist");
-        }
-        userRepository.deleteById(userId);
+        userRepository.delete(findUserByIdOrThrow(userId));
     }
 
     public void flagSelfForDeletion(String token) {
@@ -94,12 +78,9 @@ public class UserService {
     }
 
 
+    @Deprecated
     public void updateUserById(Long userId, UpdateUserDto updateUserDto) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isEmpty()) {
-            throw new IllegalStateException("User with id " + userId + " does not exist");
-        }
-        User user = optionalUser.get();
+        User user = findUserByIdOrThrow(userId);
 
         if (updateUserDto.getNickname() != null) {
             user.setNickname(updateUserDto.getNickname());
@@ -119,56 +100,43 @@ public class UserService {
 
 
     public List<UserResponse> getFollowersByUserId(Long userId) {
-        Optional<User> optionalUser = userRepository.findUserById(userId);
-        if (optionalUser.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_fouond");
-        }
-        Optional<List<User>> followers = userRepository.findUsersByFollowingContains(optionalUser.get());
+        User user = findUserByIdOrThrow(userId);
+        Optional<List<User>> followers = userRepository.findUsersByFollowingContains(user);
         return followers.map(users -> users.stream().map(UserResponse::new).toList()).orElse(null);
 
     }
 
     public List<UserResponse> getFollowingByUserId(Long userId) {
-        Optional<User> optionalUser = userRepository.findUserById(userId);
-        return optionalUser.map(user -> user.getFollowing().stream().map(UserResponse::new).toList()).orElse(null);
+        User user = findUserByIdOrThrow(userId);
+        return user.getFollowing().stream().map(UserResponse::new).toList();
     }
 
-    public void removeFollowerFromSelf(String token, Long userFollowerId) {
+    public void removeFollowerFromSelf(String token, Long targetUserId) {
         User user = authenticationService.getUserFromToken(token);
-        Optional<User> optionalFollowerUser = userRepository.findUserById(userFollowerId);
-        if (optionalFollowerUser.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
-        }
-        if (!optionalFollowerUser.get().getFollowing().contains(user)) {
+        User targetUser = findUserByIdOrThrow(targetUserId);
+        if (targetUser.getFollowing().contains(user)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
         }
-        optionalFollowerUser.get().getFollowing().remove(user);
+        targetUser.getFollowing().remove(user);
         userRepository.save(user);
     }
 
-    public void unfollowUser(String token, Long followedUserId) {
+    public void unfollowUser(String token, Long targetUserId) {
         User user = authenticationService.getUserFromToken(token);
-        Optional<User> optionalFollowedUser = userRepository.findUserById(followedUserId);
-        if (optionalFollowedUser.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
-        }
-        if (!user.getFollowing().contains(optionalFollowedUser.get())) {
+        User followedUser = findUserByIdOrThrow(targetUserId);
+        if (!user.getFollowing().contains(followedUser)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
         }
-        user.getFollowing().remove(optionalFollowedUser.get());
+        user.getFollowing().remove(followedUser);
         userRepository.save(user);
     }
 
-    public void followUserById(String token, Long userId) {
+    public void followUserById(String token, Long targetUserId) {
         User user = authenticationService.getUserFromToken(token);
-            if (Objects.equals(user.getId(), userId)) {
+            if (Objects.equals(user.getId(), targetUserId)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "can_not_follow_self");
             }
-        Optional<User> optionalUserToFollow = userRepository.findUserById(userId);
-            if (optionalUserToFollow.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
-            }
-        User userToFollow = optionalUserToFollow.get();
+        User userToFollow = findUserByIdOrThrow(targetUserId);
             if (user.getFollowing().contains(userToFollow)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "already_followed");
             }
@@ -179,20 +147,21 @@ public class UserService {
 
     public List<PostResponse> getPostsOfUser(String token, Long targetUserId) {
         User user = authenticationService.getUserFromToken(token);
-        Optional<User> optionalTargetUser = userRepository.findUserById(targetUserId);
-        if (optionalTargetUser.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
-        }
-        User targetUser = optionalTargetUser.get();
+        User targetUser = findUserByIdOrThrow(targetUserId);
+
         if (viewPermissionCheckerService.isAbleToViewProfile(user, targetUser)) {
             if (targetUser.getPosts().isEmpty())
-                return null;
+                return new ArrayList<>();
             return targetUser.getPosts().stream().map(PostResponse::new).toList();
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
-
     }
 
+    public User findUserByIdOrThrow(Long userId) {
+        Optional<User> optionalUser = userRepository.findUserById(userId);
+        if (optionalUser.isPresent()) return optionalUser.get();
+        else throw new ResponseStatusException(HttpStatus.NOT_FOUND,"user_not_found");
+    }
 
 
 }
