@@ -88,8 +88,8 @@ public class AuthenticationService {
                 .nickname(user.getNickname())
                 .dateOfSignup(user.getDateOfSignup())
                 .bio(user.getBio())
-                .profile_img(user.getProfileImg())
-                .is_public(user.isPublic())
+                .profileImg(user.getProfileImg())
+                .isPublic(user.isPublic())
                 .build();
     }
 
