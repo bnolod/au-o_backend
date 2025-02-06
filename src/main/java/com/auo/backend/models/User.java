@@ -79,9 +79,11 @@ public class User implements UserDetails {
             orphanRemoval=true)
     private List<Reaction> reactions;
 
+
     @OneToMany(cascade = CascadeType.ALL,
             orphanRemoval=true)
     private List<User> following;
+
 
     @NotNull
     private boolean isDeleted;

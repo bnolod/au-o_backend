@@ -41,7 +41,6 @@ public class UserRepositoryTest {
         userRepository.delete(testUser);
     }
 
-
     @Test
     public void UserRepositorySaveNewUserShouldNotContainNullValues() {
         User user = User.builder()

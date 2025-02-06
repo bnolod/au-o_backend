@@ -3,10 +3,7 @@ package com.auo.backend.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,9 +29,9 @@ public class Image {
     @Column(name = "delete_hash")
     private String deleteHash;
 
-    @ManyToOne()
-    @JoinColumn(name = "post_id", nullable = false)
-    @JsonBackReference("post-images")
-    private Post post;
+//    @ManyToOne()
+//    @JoinColumn(name = "post_id", nullable = false)
+//    @JsonBackReference
+//    private Post post;
 }
 

@@ -39,23 +39,28 @@ public class PostService {
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto, String token) {
         User user = authenticationService.getUserFromToken(token);
+
+
+        List<Image> imageList =
+                createPostDto.getPostImages().stream().map(postImage -> {
+                    return Image
+                            .builder()
+                            .index(createPostDto.getPostImages().indexOf(postImage))
+                            .url(postImage.getUrl())
+                            .deleteHash(postImage.getDeleteHash())
+                            .build();
+//            tempPost.getImages().add(tempImage);
+                }).toList();
+
         Post tempPost = Post.builder()
-            .postType(PostType.USERPOST)
-            .text(createPostDto.getText())
-            .user(user)
-            .location(createPostDto.getLocation())
-            .build();
+                .postType(PostType.USERPOST)
+                .text(createPostDto.getText())
+                .user(user)
+                .images(imageList)
+                .location(createPostDto.getLocation())
+                .build();
         Post post = postRepository.save(tempPost);
-
-
-        createPostDto.getPostImages().forEach(postImage -> postImageRepository.save(Image
-            .builder()
-            .index(createPostDto.getPostImages().indexOf(postImage))
-            .url(postImage.getUrl())
-            .deleteHash(postImage.getDeleteHash())
-            .post(post)
-            .build())
-        );
+        System.out.println("post.getImages() = " + post.getImages());
 
         return new PostResponse(post);
 

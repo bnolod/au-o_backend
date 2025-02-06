@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,6 +17,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString(exclude = "user")
+@EqualsAndHashCode(exclude = "user")
 @Table(name = "app_posts")
 public class Post {
     @Id
@@ -41,16 +40,13 @@ public class Post {
     @NotNull
     private PostType postType;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,
+    @OneToMany( cascade = CascadeType.ALL,
             orphanRemoval=true)
-    @JsonManagedReference("post-images")
+//    @JsonManagedReference
     private List<Image> images;
 
     private String location;
 
-//    @NotNull
-//    private int relevance;
-    
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,
             orphanRemoval=true)
     private List<Comment> comments;
@@ -77,7 +73,8 @@ public class Post {
         this.dateOfUpdate = LocalDateTime.now();
 //        this.relevance = 1;
 //        this.reactionCount = 0;
-        this.images = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        if (this.images==null) this.images = new ArrayList<>();
 
     }
 

@@ -177,23 +177,26 @@ public class GroupService {
                 getGroupByGroupIdOrThrow(groupId));
         if (!groupMember.isValid()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"unauthorized");
 
-        Post tempPost = Post.builder()
-                .postType(PostType.GROUPPOST)
-                .text(createPostDto.getText())
-                .groupMember(groupMember)
-                .location(createPostDto.getLocation())
-                .build();
 
-        createPostDto.getPostImages().forEach(postImage -> {
-            Image tempImage = Image
+
+        List<Image> imageList =
+        createPostDto.getPostImages().stream().map(postImage -> {
+           return Image
                     .builder()
                     .index(createPostDto.getPostImages().indexOf(postImage))
                     .url(postImage.getUrl())
                     .deleteHash(postImage.getDeleteHash())
-                    .post(tempPost)
                     .build();
-            tempPost.getImages().add(tempImage);
-        });
+//            tempPost.getImages().add(tempImage);
+        }).toList();
+
+        Post tempPost = Post.builder()
+                .postType(PostType.GROUPPOST)
+                .text(createPostDto.getText())
+                .groupMember(groupMember)
+                .images(imageList)
+                .location(createPostDto.getLocation())
+                .build();
         postRepository.save(tempPost);
 
         return new PostResponse(tempPost);
