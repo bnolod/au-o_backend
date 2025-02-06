@@ -26,8 +26,8 @@ public class UserService {
     private final ViewPermissionCheckerService viewPermissionCheckerService;
 
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getUsers() {
+        return userRepository.findAll().stream().map(UserResponse::new).toList();
     }
 
     public UserResponse updateSelf(UpdateUserDto updateUserDto, String token) {

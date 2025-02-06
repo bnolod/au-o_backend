@@ -29,7 +29,7 @@ public class UserController {
 
 //    Releasen ez semmilyen esetben nem lesz itt.
     @GetMapping("/all")
-    public List<User> getUsers() {
+    public List<UserResponse> getUsers() {
         return userService.getUsers();
     }
 //    Ne felejtsem el
