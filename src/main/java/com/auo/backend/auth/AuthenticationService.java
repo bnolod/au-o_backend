@@ -37,7 +37,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(userRegisterDto.getPassword()))
                 .email(userRegisterDto.getEmail())
                 .role(UserRole.USER)
-                .dateOfBirth(userRegisterDto.getDate_of_birth())
+                .dateOfBirth(userRegisterDto.getDateOfBirth())
                 .nickname(userRegisterDto.getNickname())
                 .isPublic(true)
                 .build();

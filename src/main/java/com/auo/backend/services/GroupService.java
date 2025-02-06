@@ -144,11 +144,12 @@ public class GroupService {
     }
 
     public void deleteGroup(String token, Long groupId) {
-
-        User user = authenticationService.getUserFromToken(token);
-        Optional<Group> group = groupRepository.findById(groupId);
-        if (group.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "group_not_found");
-        Optional<GroupMember> groupMember = groupMemberRepository.getByUserAndGroup(user,group.get());
+        GroupMember groupMember = getGroupMemberByUserAndGroup(
+                authenticationService.getUserFromToken(token),
+                getGroupByGroupIdOrThrow(groupId));
+        if (groupMember.getGroupRole().equals(GroupRole.ADMIN)) {
+            groupRepository.delete(groupMember.getGroup());
+        } else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"unauthorized");
     }
 
     public GroupMemberResponse setRoleOfMember(String token, Long groupId, Long targetUserId, GroupRole groupRole) {

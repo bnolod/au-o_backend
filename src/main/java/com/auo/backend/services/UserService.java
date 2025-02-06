@@ -39,11 +39,11 @@ public class UserService {
         if (updateUserDto.getBio() != null) {
             user.setBio(updateUserDto.getBio());
         }
-        if (updateUserDto.getDate_of_birth() != null) {
-            user.setDateOfBirth(updateUserDto.getDate_of_birth());
+        if (updateUserDto.getDateOfBirth() != null) {
+            user.setDateOfBirth(updateUserDto.getDateOfBirth());
         }
-        if (updateUserDto.getProfile_img() != null) {
-            user.setProfileImg(updateUserDto.getProfile_img());
+        if (updateUserDto.getProfileImg() != null) {
+            user.setProfileImg(updateUserDto.getProfileImg());
         }
         userRepository.save(user);
         System.out.println(updateUserDto);
@@ -109,8 +109,8 @@ public class UserService {
             user.setBio(updateUserDto.getBio());
         }
 
-        if (updateUserDto.getDate_of_birth() != null) {
-            user.setDateOfBirth(updateUserDto.getDate_of_birth());
+        if (updateUserDto.getDateOfBirth() != null) {
+            user.setDateOfBirth(updateUserDto.getDateOfBirth());
         }
 
         userRepository.save(user);
