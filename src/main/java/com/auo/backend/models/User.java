@@ -21,6 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString(exclude = {"posts","comments","replies","groups","reactions","following"})
 @Table(name = "app_users")
 public class User implements UserDetails {
 

@@ -15,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@ToString(exclude = "user")
-@EqualsAndHashCode(exclude = "user")
+@ToString(exclude = {"post"})
+//@EqualsAndHashCode(exclude = "user")
 @Table(name = "app_comments")
 public class Comment {
     @Id

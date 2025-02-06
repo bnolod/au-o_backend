@@ -5,10 +5,7 @@ import com.auo.backend.enums.ReactionType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +14,8 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Builder
+@ToString(exclude = {"user"})
+
 @Table(name = "app_reactions")
 public class Reaction {
     @Id
