@@ -34,7 +34,7 @@ public class Image {
 
     @ManyToOne()
     @JoinColumn(name = "post_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("post-images")
     private Post post;
 }
 

@@ -27,7 +27,7 @@ public class Reaction {
     ReactionType reactionType;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("user-reactions")
     User user;
 
 

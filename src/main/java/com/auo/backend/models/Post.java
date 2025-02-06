@@ -43,7 +43,7 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,
             orphanRemoval=true)
-    @JsonManagedReference
+    @JsonManagedReference("post-images")
     private List<Image> images;
 
     private String location;
@@ -56,13 +56,13 @@ public class Post {
     private List<Comment> comments;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("user-posts")
     @JoinColumn(name = "user_id")
     private User user;
 
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("groupmember-posts")
     @JoinColumn(name = "group_member_id")
     private GroupMember groupMember;
 

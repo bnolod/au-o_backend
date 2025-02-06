@@ -47,19 +47,16 @@ public class PostService {
             .build();
         postRepository.save(tempPost);
 
-        createPostDto.getPostImages().forEach(postImage -> {
-            Image tempImage = Image
-                    .builder()
-                    .index(createPostDto.getPostImages().indexOf(postImage))
-                    .url(postImage.getUrl())
-                    .deleteHash(postImage.getDeleteHash())
-                    .post(tempPost)
-                    .build();
-            tempPost.getImages().add(tempImage);
-            postImageRepository.save(tempImage);
-        });
-//
-        postRepository.save(tempPost);
+
+        createPostDto.getPostImages().forEach(postImage -> postImageRepository.save(Image
+            .builder()
+            .index(createPostDto.getPostImages().indexOf(postImage))
+            .url(postImage.getUrl())
+            .deleteHash(postImage.getDeleteHash())
+            .post(tempPost)
+            .build())
+        );
+
         return new PostResponse(tempPost);
 
     }
