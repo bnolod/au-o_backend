@@ -39,7 +39,6 @@ public class PostService {
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto, String token) {
         User user = authenticationService.getUserFromToken(token);
-
         Post tempPost = Post.builder()
             .postType(PostType.USERPOST)
             .text(createPostDto.getText())

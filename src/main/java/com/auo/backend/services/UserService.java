@@ -64,6 +64,12 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public User getUserByIdOrThrow(Long userId) {
+        Optional<User> optionalUser = userRepository.findUserById(userId);
+        if (optionalUser.isPresent()) return optionalUser.get();
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user_not_found");
+    }
+
     public UserResponse getUserById(Long userId) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
