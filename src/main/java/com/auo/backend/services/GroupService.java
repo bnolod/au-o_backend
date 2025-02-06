@@ -119,7 +119,7 @@ public class GroupService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"unauthorized");
         }
 
-        GroupMember targetMember = getGroupMemberByUserAndGroup(userService.getUserByIdOrThrow(targetUserId),group);
+        GroupMember targetMember = getGroupMemberByUserAndGroup(userService.findUserByIdOrThrow(targetUserId),group);
 
         if (targetMember.isValid()) throw new ResponseStatusException(HttpStatus.CONFLICT, "already_in_group");
         if (accepted) {
@@ -155,7 +155,7 @@ public class GroupService {
     public GroupMemberResponse setRoleOfMember(String token, Long groupId, Long targetUserId, GroupRole groupRole) {
         Group group = getGroupByGroupIdOrThrow(groupId);
         GroupMember user = getGroupMemberByUserAndGroup( authenticationService.getUserFromToken(token),group);
-        GroupMember targetUser = getGroupMemberByUserAndGroup(userService.getUserByIdOrThrow(targetUserId),group);
+        GroupMember targetUser = getGroupMemberByUserAndGroup(userService.findUserByIdOrThrow(targetUserId),group);
         if (user.equals(targetUser)) throw new ResponseStatusException(HttpStatus.CONFLICT, "cannot_set_own_role");
         if (user.getGroupRole() != GroupRole.ADMIN) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "admin_role_required");
