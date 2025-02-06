@@ -10,6 +10,7 @@ import com.auo.backend.models.*;
 import com.auo.backend.repositories.GroupMemberRepository;
 import com.auo.backend.repositories.GroupRepository;
 import com.auo.backend.repositories.PostRepository;
+import com.auo.backend.responses.GroupMemberResponse;
 import com.auo.backend.responses.GroupResponse;
 import com.auo.backend.responses.PostResponse;
 import lombok.RequiredArgsConstructor;
@@ -88,7 +89,7 @@ public class GroupService {
         return new GroupResponse(group);
     }
 
-    public void joinGroup(String token, Long groupId) {
+    public GroupMemberResponse joinGroup(String token, Long groupId) {
         User user = authenticationService.getUserFromToken(token);
         Optional<Group> optionalGroup = groupRepository.findById(groupId);
 
@@ -101,8 +102,10 @@ public class GroupService {
 
         GroupMember groupMember = new GroupMember(user,group);
         groupMember.setValid(group.isPublic());
-        group.getGroupMembers().add(groupMember);
-        groupRepository.save(group);
+        groupMember.setGroup(group);
+        groupMemberRepository.save(groupMember);
+
+        return new GroupMemberResponse(groupMember);
     }
 
     public void handleJoinRequest(String token, Long targetUserId, Long groupId, boolean accepted) {
@@ -148,15 +151,19 @@ public class GroupService {
         Optional<GroupMember> groupMember = groupMemberRepository.getByUserAndGroup(user,group.get());
     }
 
-    public void setRoleOfUser(String token, Long groupId, Long targetUserId, GroupRole groupRole) {
+    public GroupMemberResponse setRoleOfMember(String token, Long groupId, Long targetUserId, GroupRole groupRole) {
         Group group = getGroupByGroupIdOrThrow(groupId);
         GroupMember user = getGroupMemberByUserAndGroup( authenticationService.getUserFromToken(token),group);
         GroupMember targetUser = getGroupMemberByUserAndGroup(userService.getUserByIdOrThrow(targetUserId),group);
+        if (user.equals(targetUser)) throw new ResponseStatusException(HttpStatus.CONFLICT, "cannot_set_own_role");
         if (user.getGroupRole() != GroupRole.ADMIN) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "admin role required");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "admin_role_required");
         }
+        if (targetUser.getGroupRole() == groupRole) throw new ResponseStatusException(HttpStatus.CONFLICT,"already_has_role");
         targetUser.setGroupRole(groupRole);
         groupMemberRepository.save(targetUser);
+
+        return new GroupMemberResponse(targetUser);
     }
 
 

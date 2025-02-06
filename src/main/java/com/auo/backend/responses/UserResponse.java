@@ -18,9 +18,9 @@ public class UserResponse {
     private Long id;
     private String nickname;
     private String bio;
-    private LocalDate date_of_signup;
-    private String profile_img;
-    private boolean is_public;
+    private LocalDate dateOfSignup;
+    private String profileImg;
+    private boolean isPublic;
     private boolean isDeleted;
 
     public UserResponse (User user) {
@@ -29,9 +29,9 @@ public class UserResponse {
         this.id = user.getId();
         this.nickname = user.getNickname();
         this.bio = user.getBio();
-        this.date_of_signup = user.getDateOfSignup();
-        this.profile_img = user.getProfileImg();
-        this.is_public = user.isPublic();
+        this.dateOfSignup = user.getDateOfSignup();
+        this.profileImg = user.getProfileImg();
+        this.isPublic = user.isPublic();
         this.isDeleted = false;
     }
     this.isDeleted = true;

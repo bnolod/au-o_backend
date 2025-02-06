@@ -9,10 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Data
@@ -23,9 +21,9 @@ public class PostResponse {
     Long post_id;
     String text;
     Map<ReactionType,Long> reactionTypeMap;
-    LocalDateTime date_of_creation;
-    LocalDateTime date_of_update;
-    PostType post_type;
+    LocalDateTime dateOfCreation;
+    LocalDateTime dateOfUpdate;
+    PostType postType;
     UserResponse user;
     String location;
     Group group;
@@ -39,9 +37,9 @@ public class PostResponse {
         if (post.getReactions() != null)
             this.reactionTypeMap = post.getReactions().stream()
                 .collect(Collectors.groupingBy(Reaction::getReactionType, Collectors.counting()));
-        this.date_of_creation = post.getDateOfCreation();
-        this.date_of_update = post.getDateOfUpdate();
-        this.post_type = post.getPostType();
+        this.dateOfCreation = post.getDateOfCreation();
+        this.dateOfUpdate = post.getDateOfUpdate();
+        this.postType = post.getPostType();
         this.user = new UserResponse(post.getUser());
         this.location = post.getLocation();
 //        this.group = post.getGroupMember().getGroup()

@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -87,7 +86,7 @@ public class AuthenticationService {
                 .id(user.getId())
                 .username(user.getUsername())
                 .nickname(user.getNickname())
-                .date_of_signup(user.getDateOfSignup())
+                .dateOfSignup(user.getDateOfSignup())
                 .bio(user.getBio())
                 .profile_img(user.getProfileImg())
                 .is_public(user.isPublic())
