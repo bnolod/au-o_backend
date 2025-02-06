@@ -99,6 +99,7 @@ public class User implements UserDetails {
         this.reactions = new ArrayList<>();
         this.posts = new ArrayList<>();
         this.replies = new ArrayList<>();
+        this.isDeleted = false;
     }
 
 

@@ -45,7 +45,7 @@ public class PostService {
             .user(user)
             .location(createPostDto.getLocation())
             .build();
-        postRepository.save(tempPost);
+        Post post = postRepository.save(tempPost);
 
 
         createPostDto.getPostImages().forEach(postImage -> postImageRepository.save(Image
@@ -53,11 +53,11 @@ public class PostService {
             .index(createPostDto.getPostImages().indexOf(postImage))
             .url(postImage.getUrl())
             .deleteHash(postImage.getDeleteHash())
-            .post(tempPost)
+            .post(post)
             .build())
         );
 
-        return new PostResponse(tempPost);
+        return new PostResponse(post);
 
     }
 

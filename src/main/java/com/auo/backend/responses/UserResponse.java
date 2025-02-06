@@ -33,8 +33,8 @@ public class UserResponse {
         this.profileImg = user.getProfileImg();
         this.isPublic = user.isPublic();
         this.isDeleted = false;
+    } else {
+        this.isDeleted = true;
     }
-    this.isDeleted = true;
-
     }
 }
