@@ -3,6 +3,7 @@ package com.auo.backend.models;
 
 
 import com.auo.backend.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -52,27 +53,32 @@ public class User implements UserDetails {
     @NotNull
     private LocalDate dateOfSignup;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
             orphanRemoval=true)
     private List<Post> posts;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
             orphanRemoval=true)
     private List<Comment> comments;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
             orphanRemoval=true)
     private List<GroupMember> groups;
 
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
             orphanRemoval=true)
     private List<CommentReply> replies;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
             orphanRemoval=true)
     private List<Reaction> reactions;
 
+    @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL,
             orphanRemoval=true)
     private List<User> following;

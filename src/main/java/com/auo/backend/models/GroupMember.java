@@ -1,6 +1,7 @@
 package com.auo.backend.models;
 
 import com.auo.backend.enums.GroupRole;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -29,6 +30,7 @@ public class GroupMember {
     private Group group;
 
     @ManyToOne
+    @JsonBackReference
     private User user;
 
     @NotNull

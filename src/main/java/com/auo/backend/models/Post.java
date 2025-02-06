@@ -1,6 +1,7 @@
 package com.auo.backend.models;
 
 import com.auo.backend.enums.PostType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -55,10 +56,13 @@ public class Post {
     private List<Comment> comments;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 
+
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "group_member_id")
     private GroupMember groupMember;
 

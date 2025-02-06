@@ -2,6 +2,7 @@ package com.auo.backend.models;
 
 
 import com.auo.backend.enums.ReactionType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class Reaction {
     ReactionType reactionType;
 
     @ManyToOne
+    @JsonBackReference
     User user;
 
 

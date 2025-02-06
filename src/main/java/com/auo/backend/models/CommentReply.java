@@ -1,5 +1,6 @@
 package com.auo.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -25,10 +26,12 @@ public class CommentReply {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "comment_id")
+    @JsonBackReference
     private Comment parent;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     private String text;
