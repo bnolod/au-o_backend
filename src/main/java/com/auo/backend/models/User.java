@@ -81,9 +81,14 @@ public class User implements UserDetails {
     private List<Reaction> reactions;
 
 
-    @OneToMany(cascade = CascadeType.ALL,
-            orphanRemoval=true)
+    @ManyToMany
+    @JoinTable(
+            name = "user_followers",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "following_id")
+    )
     private List<User> following;
+
 
 
     @NotNull

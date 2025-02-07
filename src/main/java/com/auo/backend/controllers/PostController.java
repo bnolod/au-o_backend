@@ -6,16 +6,16 @@ import com.auo.backend.dto.CreatePostDto;
 import com.auo.backend.dto.UpdatePostDto;
 import com.auo.backend.enums.ReactionType;
 import com.auo.backend.repositories.PostRepository;
-import com.auo.backend.responses.AddOrRemoveReactionResponse;
-import com.auo.backend.responses.CommentReplyResponse;
-import com.auo.backend.responses.CommentResponse;
-import com.auo.backend.responses.PostResponse;
+import com.auo.backend.responses.*;
 import com.auo.backend.services.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -36,6 +36,13 @@ public class PostController {
     @GetMapping("/all")
     public ResponseEntity<List<PostResponse>> getAllPosts() {
         return ResponseEntity.ok(this.postService.getAllPosts());
+    }
+
+    @GetMapping("/feed")
+    public ResponseEntity<PageResponse<PostResponse>> getPageForFeed(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                                     @RequestParam int page,
+                                                                     @RequestParam LocalDateTime time) {
+        return ResponseEntity.ok(postService.getPostFeedOfUser(token,page,time));
     }
 
     @GetMapping("/post/{postId}")

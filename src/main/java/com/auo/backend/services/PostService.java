@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -64,6 +66,17 @@ public class PostService {
 
         return new PostResponse(post);
 
+    }
+
+    public PageResponse<PostResponse> getPostFeedOfUser(String token, int page, LocalDateTime time) {
+        User user = authenticationService.getUserFromToken(token);
+
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Post> posts = postRepository.findPostsForUserFeed(pageable,user.getId(),time);
+        System.out.println(posts);
+        if (posts.isEmpty()) return null;
+        System.out.println(PageResponse.of(posts.map(PostResponse::new)));
+        return PageResponse.of(posts.map(PostResponse::new));
     }
 
     public void publishPostToGroup() {
