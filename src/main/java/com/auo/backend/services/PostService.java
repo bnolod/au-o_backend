@@ -216,7 +216,7 @@ public class PostService {
 
         commentReplyRepository.save(reply);
 
-        return new CommentReplyResponse(reply);
+        return new CommentReplyResponse(reply, user);
     }
 
     public CommentReplyResponse deleteReplyFromComment(Long commentReplyId, String token) {
@@ -230,6 +230,6 @@ public class PostService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "no_permission");
         }
         commentReplyRepository.delete(optionalCommentReply.get());
-        return new CommentReplyResponse(optionalCommentReply.get());
+        return new CommentReplyResponse(optionalCommentReply.get(), user);
     }
 }

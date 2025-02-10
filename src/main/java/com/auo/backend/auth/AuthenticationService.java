@@ -6,6 +6,7 @@ import com.auo.backend.enums.UserRole;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.UserResponse;
+import com.auo.backend.services.UserService;
 import com.auo.backend.validationServices.UserValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,10 @@ public class AuthenticationService {
         if (!userValidationService.IsEmailValid(userRegisterDto.getEmail())) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "invalid_email_format");
         }
+        if (userRepository.findUserByUsername(userRegisterDto.getUsername()).isPresent())
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "username_taken");
+        if (userRepository.findUserByEmail(userRegisterDto.getEmail()).isPresent())
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "email_taken");
 
         var user = User.builder()
                 .username(userRegisterDto.getUsername())

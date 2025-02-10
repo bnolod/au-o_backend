@@ -35,30 +35,6 @@ public class PostResponse {
     private List<CommentResponse> comments;
     private ReactionType reactedWith;
 
-//    public PostResponse(Post post) {
-//        this.postId = post.getId();
-//        this.text = post.getText();
-//        if (post.getReactions() != null)
-//            this.reactionTypeMap = post.getReactions().stream()
-//                .collect(Collectors.groupingBy(Reaction::getReactionType, Collectors.counting()));
-//        this.dateOfCreation = post.getDateOfCreation();
-//        this.dateOfUpdate = post.getDateOfUpdate();
-//        this.postType = post.getPostType();
-//        this.location = post.getLocation();
-//        if (post.getGroupMember() != null) {
-//            this.group = post.getGroupMember().getGroup();
-//            this.user = new UserResponse(post.getGroupMember().getUser());
-//        } else {
-//            this.user = new UserResponse(post.getUser());
-//        }
-//        this.images = post.getImages();
-//        if (post.getComments() != null)
-//            this.comments = post.getComments().stream().map(CommentResponse::new).toList();
-//
-////        if (user != null) {
-////            this.reactedWith = post.getReactions().stream()
-////        }
-//    }
 
     public PostResponse(Post post, User currentUser) {
         this.postId = post.getId();
@@ -90,7 +66,7 @@ public class PostResponse {
         this.images = post.getImages();
 
         if (post.getComments() != null) {
-            this.comments = post.getComments().stream().map(CommentResponse::new).toList();
+            this.comments = post.getComments().stream().map(comment -> new CommentResponse(comment,currentUser)).toList();
         }
     }
 
