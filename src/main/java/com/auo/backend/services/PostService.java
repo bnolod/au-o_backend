@@ -94,7 +94,7 @@ public class PostService {
         if (post.isPresent()) {
             return new PostResponse(post.get());
         }else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"post_not_found");
         }
     }
 
