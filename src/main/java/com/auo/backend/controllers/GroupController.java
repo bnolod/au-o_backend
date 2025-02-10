@@ -42,7 +42,7 @@ public class GroupController {
 
 
     // join group
-    @PostMapping("/group/{groupId}")
+    @PostMapping("/group/{groupId}/join")
     public ResponseEntity<GroupMemberResponse> joinGroup(@RequestHeader(HttpHeaders.AUTHORIZATION)String token,
                                                          @PathVariable Long groupId) {
         return ResponseEntity.ok(groupService.joinGroup(token,groupId));
@@ -51,7 +51,7 @@ public class GroupController {
 
     //
     // leave group
-    @PostMapping("/group/{groupId}")
+    @PostMapping("/group/{groupId}/leave")
     public void leaveGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                            @PathVariable Long groupId) {
         this.groupService.leaveGroup(token,groupId);
@@ -73,7 +73,7 @@ public class GroupController {
     
     //
     // post to group
-    @PostMapping("/group/{groupId}")
+    @PostMapping("/group/{groupId}/post")
     public ResponseEntity<PostResponse> publishPostToGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                            @PathVariable Long groupId,
                                                            @RequestBody CreatePostDto createPostDto

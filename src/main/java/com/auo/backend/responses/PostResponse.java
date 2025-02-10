@@ -3,6 +3,8 @@ package com.auo.backend.responses;
 import com.auo.backend.enums.PostType;
 import com.auo.backend.enums.ReactionType;
 import com.auo.backend.models.*;
+import com.auo.backend.services.GenericReactionService;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,18 +20,20 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostResponse {
-    Long postId;
-    String text;
-    Map<ReactionType,Long> reactionTypeMap;
-    LocalDateTime dateOfCreation;
-    LocalDateTime dateOfUpdate;
-    PostType postType;
-    UserResponse user;
-    String location;
-    Group group;
-    Integer relevance;
-    List<Image> images;
-    List<CommentResponse> comments;
+
+    private Long postId;
+    private String text;
+    private Map<ReactionType,Long> reactionTypeMap;
+    private LocalDateTime dateOfCreation;
+    private LocalDateTime dateOfUpdate;
+    private PostType postType;
+    private UserResponse user;
+    private String location;
+    private Group group;
+    private Integer relevance;
+    private List<Image> images;
+    private List<CommentResponse> comments;
+    private ReactionType reactedWith;
 
     public PostResponse(Post post) {
         this.postId = post.getId();
@@ -50,6 +54,12 @@ public class PostResponse {
         this.images = post.getImages();
         if (post.getComments() != null)
             this.comments = post.getComments().stream().map(CommentResponse::new).toList();
+
+//        if (user != null) {
+//            this.reactedWith = post.getReactions().stream()
+//        }
     }
+
+
 
 }
