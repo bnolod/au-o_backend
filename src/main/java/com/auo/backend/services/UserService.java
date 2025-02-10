@@ -152,7 +152,7 @@ public class UserService {
         if (viewPermissionCheckerService.isAbleToViewProfile(user, targetUser)) {
             if (targetUser.getPosts().isEmpty())
                 return new ArrayList<>();
-            return targetUser.getPosts().stream().map(PostResponse::new).toList();
+            return targetUser.getPosts().stream().map(post -> new PostResponse(post,user)).toList();
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
     }

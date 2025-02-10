@@ -64,7 +64,7 @@ public class PostService {
         Post post = postRepository.save(tempPost);
         System.out.println("post.getImages() = " + post.getImages());
 
-        return new PostResponse(post);
+        return new PostResponse(post, user);
 
     }
 
@@ -75,24 +75,24 @@ public class PostService {
         Page<Post> posts = postRepository.findPostsForUserFeed(pageable,user.getId(),time);
         System.out.println(posts);
         if (posts.isEmpty()) return null;
-        System.out.println(PageResponse.of(posts.map(PostResponse::new)));
-        return PageResponse.of(posts.map(PostResponse::new));
+        System.out.println(PageResponse.of(posts.map(post -> new PostResponse(post,user))));
+        return PageResponse.of(posts.map(post -> new PostResponse(post,user)));
     }
 
     public void publishPostToGroup() {
     //to be implemented
     }
 
-    public List<PostResponse> getAllPosts() {
+    public List<PostResponse> getAllPosts(String token) {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Post> allPosts = this.postRepository.findAll(pageable);
-        return allPosts.stream().map(PostResponse::new).toList();
+        return allPosts.stream().map(post -> new PostResponse(post,authenticationService.getUserFromToken(token))).toList();
     }
 
-    public PostResponse getPostById(Long postId) {
+    public PostResponse getPostById(Long postId, String token) {
         Optional<Post> post = postRepository.findPostById(postId);
         if (post.isPresent()) {
-            return new PostResponse(post.get());
+            return new PostResponse(post.get(), authenticationService.getUserFromToken(token));
         }else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"post_not_found");
         }
@@ -169,7 +169,7 @@ public class PostService {
 
         postRepository.save(post);
 
-        return new PostResponse(post);
+        return new PostResponse(post, user);
     }
 
     public PostResponse deletePostOfUserById(Long postId, String token) {
@@ -184,7 +184,7 @@ public class PostService {
 
         }
         postRepository.delete(post);
-        return new PostResponse(post);
+        return new PostResponse(post, user);
     }
 
     public AddOrRemoveReactionResponse addOrRemoveReaction(Long postId, ReactionType reactionType, String token) {

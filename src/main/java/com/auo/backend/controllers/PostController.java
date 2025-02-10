@@ -34,8 +34,8 @@ public class PostController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PostResponse>> getAllPosts() {
-        return ResponseEntity.ok(this.postService.getAllPosts());
+    public ResponseEntity<List<PostResponse>> getAllPosts(@RequestHeader(HttpHeaders.AUTHORIZATION)String token) {
+        return ResponseEntity.ok(this.postService.getAllPosts(token));
     }
 
     @GetMapping("/feed")
@@ -46,8 +46,9 @@ public class PostController {
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<PostResponse> getOnePostById(@PathVariable Long postId) {
-        return ResponseEntity.ok(this.postService.getPostById(postId));
+    public ResponseEntity<PostResponse> getOnePostById(@PathVariable Long postId,
+                                                       @RequestHeader(HttpHeaders.AUTHORIZATION)String token) {
+        return ResponseEntity.ok(this.postService.getPostById(postId, token));
     }
 
     @PutMapping("/post/{postId}")

@@ -199,6 +199,6 @@ public class GroupService {
                 .build();
         postRepository.save(tempPost);
 
-        return new PostResponse(tempPost);
+        return new PostResponse(tempPost,groupMember.getUser());
     }
 }
