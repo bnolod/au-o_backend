@@ -1,10 +1,12 @@
 package com.auo.backend.controllers;
 
 import com.auo.backend.dto.CreateGroupDto;
+import com.auo.backend.dto.CreatePostDto;
 import com.auo.backend.enums.GroupRole;
 import com.auo.backend.models.Group;
 import com.auo.backend.responses.GroupMemberResponse;
 import com.auo.backend.responses.GroupResponse;
+import com.auo.backend.responses.PostResponse;
 import com.auo.backend.services.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +29,6 @@ public class GroupController {
 
     //kell:
     // create group
-
     @PostMapping("/group")
     public ResponseEntity<GroupResponse> createGroup(@RequestHeader(HttpHeaders.AUTHORIZATION)String token,
                                                      @RequestBody CreateGroupDto createGroupDto) {
@@ -37,8 +38,11 @@ public class GroupController {
     //
     // delete group
     //
+
+
+
     // join group
-    @PostMapping("group/{groupId}")
+    @PostMapping("/group/{groupId}")
     public ResponseEntity<GroupMemberResponse> joinGroup(@RequestHeader(HttpHeaders.AUTHORIZATION)String token,
                                                          @PathVariable Long groupId) {
         return ResponseEntity.ok(groupService.joinGroup(token,groupId));
@@ -47,11 +51,18 @@ public class GroupController {
 
     //
     // leave group
+    @PostMapping("/group/{groupId}")
+    public void leaveGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                           @PathVariable Long groupId) {
+        this.groupService.leaveGroup(token,groupId);
+    }
     //
     // edit group
     //
+
+
     // modify members roles
-    @PutMapping("group/{groupId}/{userId}")
+    @PutMapping("/group/{groupId}/{userId}")
     public ResponseEntity<GroupMemberResponse> setRoleOfMember(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                                @PathVariable Long groupId,
                                                                @PathVariable Long userId,
@@ -62,6 +73,13 @@ public class GroupController {
     
     //
     // post to group
+    @PostMapping("/group/{groupId}")
+    public ResponseEntity<PostResponse> publishPostToGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                           @PathVariable Long groupId,
+                                                           @RequestBody CreatePostDto createPostDto
+                                                           ) {
+        return ResponseEntity.ok(groupService.addPostToGroup(token,groupId, createPostDto));
+    }
     //
     // event...
     //

@@ -40,9 +40,13 @@ public class PostResponse {
         this.dateOfCreation = post.getDateOfCreation();
         this.dateOfUpdate = post.getDateOfUpdate();
         this.postType = post.getPostType();
-        this.user = new UserResponse(post.getUser());
         this.location = post.getLocation();
-//        this.group = post.getGroupMember().getGroup()
+        if (post.getGroupMember() != null) {
+            this.group = post.getGroupMember().getGroup();
+            this.user = new UserResponse(post.getGroupMember().getUser());
+        } else {
+            this.user = new UserResponse(post.getUser());
+        }
         this.images = post.getImages();
         if (post.getComments() != null)
             this.comments = post.getComments().stream().map(CommentResponse::new).toList();
