@@ -154,7 +154,7 @@ public class GroupService {
 
     public GroupMemberResponse setRoleOfMember(String token, Long groupId, Long targetUserId, GroupRole groupRole) {
         Group group = getGroupByGroupIdOrThrow(groupId);
-        GroupMember user = getGroupMemberByUserAndGroup( authenticationService.getUserFromToken(token),group);
+        GroupMember user = getGroupMemberByUserAndGroup(authenticationService.getUserFromToken(token),group);
         GroupMember targetUser = getGroupMemberByUserAndGroup(userService.findUserByIdOrThrow(targetUserId),group);
         if (user.equals(targetUser)) throw new ResponseStatusException(HttpStatus.CONFLICT, "cannot_set_own_role");
         if (user.getGroupRole() != GroupRole.ADMIN) {

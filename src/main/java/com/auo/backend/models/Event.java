@@ -1,13 +1,11 @@
 package com.auo.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -18,5 +16,18 @@ import java.util.UUID;
 public class Event {
     @Id
     @GeneratedValue
-    private UUID uuid;
+    private Long id;
+
+    @ManyToOne
+    private GroupMember groupMember;
+
+    private String title;
+
+    private String description;
+
+    private LocalDateTime creationDate;
+
+    private LocalDateTime eventDate;
+
+    
 }

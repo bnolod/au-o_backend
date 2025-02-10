@@ -72,33 +72,5 @@ public class GenericReactionService<T> {
         return null;
     }
 
-    public ReactionType checkReactionOfUserForItem(T item, User user) {
-        try {
-            for (Field field : item.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-
-                if (field.getType().equals(List.class) && field.getName().equals("reactions")) {
-                    Object fieldValue = field.get(item);
-
-                    if (fieldValue instanceof List<?>) {
-                        @SuppressWarnings("unchecked")
-                        List<Reaction> reactions = (List<Reaction>) fieldValue;
-
-                        Optional<Reaction> existingReactionOpt = reactions.stream()
-                                .filter(r -> r.getUser().equals(user))
-                                .findFirst();
-
-                        if (existingReactionOpt.isPresent()) {
-                            Reaction existingReaction = existingReactionOpt.get();
-                            return existingReaction.getReactionType();
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
 
 }
