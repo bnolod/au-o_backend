@@ -103,7 +103,7 @@ public class AuthenticationService {
         String username = jwtService.extractUsername(jwt);
         Optional<User> optionalUser = userRepository.findUserByUsername(username);
         if (optionalUser.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "no");
         }
         return optionalUser.get();
     }
