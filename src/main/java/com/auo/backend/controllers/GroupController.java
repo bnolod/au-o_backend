@@ -40,6 +40,19 @@ public class GroupController {
     //
 
 
+    //get group by id
+    @GetMapping("/group/{groupId}")
+    public ResponseEntity<GroupResponse> getGroupById(@RequestHeader(HttpHeaders.AUTHORIZATION)String token,
+                                                      @PathVariable Long groupId) {
+        return ResponseEntity.ok(groupService.getGroupById(token, groupId));
+    }
+
+    //get groups of user
+    @GetMapping("/own")
+    public ResponseEntity<List<GroupResponse>> getAllGroupsOfUser(@RequestHeader(HttpHeaders.AUTHORIZATION)String token) {
+        return ResponseEntity.ok(groupService.getGroupsOfUser(token));
+    }
+
 
     // join group
     @PostMapping("/group/{groupId}/join")

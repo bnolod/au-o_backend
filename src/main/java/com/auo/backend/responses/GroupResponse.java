@@ -1,6 +1,7 @@
 package com.auo.backend.responses;
 
 import com.auo.backend.models.Group;
+import com.auo.backend.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,8 +21,9 @@ public class GroupResponse {
     private int memberCount;
     private boolean isPublic;
     private LocalDateTime creationDate;
+    private boolean isMember;
 
-    public GroupResponse(Group group) {
+    public GroupResponse(Group group, User user) {
         this.id = group.getId();
         this.name = group.getGroupName();
         this.alias = group.getGroupAlias();
@@ -29,5 +31,6 @@ public class GroupResponse {
         this.memberCount = group.getGroupMembers().size();
         this.isPublic = group.isPublic();
         this.creationDate = group.getCreationDate();
+        this.isMember = group.getGroupMembers().stream().anyMatch(member -> member.getUser().equals(user));
     }
 }

@@ -86,7 +86,7 @@ public class GroupService {
         group.getGroupMembers().add(owner);
 
         groupRepository.save(group);
-        return new GroupResponse(group);
+        return new GroupResponse(group, user);
     }
 
     public GroupMemberResponse joinGroup(String token, Long groupId) {
@@ -189,7 +189,6 @@ public class GroupService {
                     .build();
 //            tempPost.getImages().add(tempImage);
         }).toList();
-
         Post tempPost = Post.builder()
                 .postType(PostType.GROUPPOST)
                 .text(createPostDto.getText())
@@ -201,4 +200,16 @@ public class GroupService {
 
         return new PostResponse(tempPost,groupMember.getUser());
     }
+
+    public GroupResponse getGroupById(String token, Long groupId) {
+        User user = authenticationService.getUserFromToken(token);
+        Group group = getGroupByGroupIdOrThrow(groupId);
+        return new GroupResponse(group,user);
+    }
+
+    public List<GroupResponse> getGroupsOfUser(String token) {
+        User user = authenticationService.getUserFromToken(token);
+
+        return user.getGroups().stream().map(groupMember -> new GroupResponse(groupMember.getGroup(),user)).toList();
+     }
 }
