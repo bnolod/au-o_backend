@@ -31,7 +31,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: yourdockerhub/auo_backend:latest
+          tags: kissbe/auo_backend:latest
 
       - name: Build & Push DB Image
         uses: docker/build-push-action@v4
@@ -39,4 +39,4 @@ jobs:
           context: db
           file: db/Dockerfile
           push: true
-          tags: yourdockerhub/auo_db:latest
+          tags: kissbe/auo_db:latest
