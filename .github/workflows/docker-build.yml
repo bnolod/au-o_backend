@@ -28,10 +28,10 @@ jobs:
       - name: Build & Push Backend Image
         uses: docker/build-push-action@v4
         with:
-          context: backend
+          context: .
           file: Dockerfile
           push: true
-          tags: yourdockerhub/java_app:latest
+          tags: yourdockerhub/auo_backend:latest
 
       - name: Build & Push DB Image
         uses: docker/build-push-action@v4
@@ -39,4 +39,4 @@ jobs:
           context: db
           file: db/Dockerfile
           push: true
-          tags: yourdockerhub/postgres_custom:latest
+          tags: yourdockerhub/auo_db:latest
