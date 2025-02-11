@@ -114,7 +114,7 @@ public class UserService {
     public void removeFollowerFromSelf(String token, Long targetUserId) {
         User user = authenticationService.getUserFromToken(token);
         User targetUser = findUserByIdOrThrow(targetUserId);
-        if (targetUser.getFollowing().contains(user)) {
+        if (!targetUser.getFollowing().contains(user)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
         }
         targetUser.getFollowing().remove(user);
