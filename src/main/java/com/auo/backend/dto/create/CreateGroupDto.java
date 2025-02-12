@@ -1,9 +1,7 @@
-package com.auo.backend.dto;
+package com.auo.backend.dto.create;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Data
 public class CreateGroupDto {

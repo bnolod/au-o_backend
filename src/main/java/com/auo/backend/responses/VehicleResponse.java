@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VehicleResponse {
-    private String id;
+    private Long id;
     private String manufacturer;
     private String model;
     private String type;
@@ -22,6 +22,7 @@ public class VehicleResponse {
     private UserResponse owner;
 
     public VehicleResponse(Vehicle vehicle, User user) {
+        this.id = vehicle.getId();
         this.manufacturer = vehicle.getManufacturer();
         this.model = vehicle.getModel();
         this.type = vehicle.getType();

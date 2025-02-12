@@ -1,16 +1,14 @@
 package com.auo.backend.controllers;
 
 
-import com.auo.backend.dto.AddCommentDto;
-import com.auo.backend.dto.CreatePostDto;
-import com.auo.backend.dto.UpdatePostDto;
+import com.auo.backend.dto.create.AddCommentDto;
+import com.auo.backend.dto.create.CreatePostDto;
+import com.auo.backend.dto.update.UpdatePostDto;
 import com.auo.backend.enums.ReactionType;
 import com.auo.backend.repositories.PostRepository;
 import com.auo.backend.responses.*;
 import com.auo.backend.services.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

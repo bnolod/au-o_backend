@@ -89,6 +89,8 @@ public class User implements UserDetails {
     )
     private List<User> following;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vehicle> vehicles;
 
 
     @NotNull

@@ -1,9 +1,6 @@
 package com.auo.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,8 +15,7 @@ import lombok.NoArgsConstructor;
 public class Vehicle {
     @Id
     @GeneratedValue
-    private Long vehicle_id;
-    private Long user_id;
+    private Long id;
     private String manufacturer;
     private String model;
     private String type;
@@ -27,4 +23,6 @@ public class Vehicle {
     private String description;
     private Integer displacement;
 
+    @ManyToOne
+    User user;
 }

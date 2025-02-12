@@ -1,7 +1,5 @@
 package com.auo.backend.auth;
 
-import com.auo.backend.dto.UserLoginDto;
-import com.auo.backend.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

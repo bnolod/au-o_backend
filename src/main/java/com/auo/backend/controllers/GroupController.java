@@ -1,7 +1,7 @@
 package com.auo.backend.controllers;
 
-import com.auo.backend.dto.CreateGroupDto;
-import com.auo.backend.dto.CreatePostDto;
+import com.auo.backend.dto.create.CreateGroupDto;
+import com.auo.backend.dto.create.CreatePostDto;
 import com.auo.backend.enums.GroupRole;
 import com.auo.backend.models.Group;
 import com.auo.backend.responses.GroupMemberResponse;
@@ -13,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor

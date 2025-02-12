@@ -1,9 +1,9 @@
-package com.auo.backend.dto;
+package com.auo.backend.dto.update;
 
 import lombok.Data;
 
 @Data
-public class CreateVehicleDto {
+public class UpdateVehicleDto {
     private String manufacturer;
     private String model;
     private String type;

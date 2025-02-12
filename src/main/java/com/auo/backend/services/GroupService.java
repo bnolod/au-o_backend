@@ -2,8 +2,8 @@ package com.auo.backend.services;
 
 import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.GenericOwnershipCheckerService;
-import com.auo.backend.dto.CreateGroupDto;
-import com.auo.backend.dto.CreatePostDto;
+import com.auo.backend.dto.create.CreateGroupDto;
+import com.auo.backend.dto.create.CreatePostDto;
 import com.auo.backend.enums.GroupRole;
 import com.auo.backend.enums.PostType;
 import com.auo.backend.models.*;

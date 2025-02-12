@@ -1,5 +1,4 @@
-package com.auo.backend.dto;
-import com.auo.backend.models.Post;
+package com.auo.backend.dto.create;
 import lombok.Data;
 
 @Data

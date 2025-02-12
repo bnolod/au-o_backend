@@ -1,4 +1,4 @@
-package com.auo.backend.dto;
+package com.auo.backend.dto.create;
 
 import lombok.Data;
 
