@@ -21,7 +21,7 @@ public class GroupMemberResponse {
     private boolean isValid;
 
     public GroupMemberResponse(GroupMember groupMember) {
-        this.group = new GroupResponse(groupMember.getGroup());
+        this.group = new GroupResponse(groupMember.getGroup(),groupMember.getUser());
         this.user = new UserResponse(groupMember.getUser());
         this.role = groupMember.getGroupRole();
     }
