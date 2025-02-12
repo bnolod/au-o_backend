@@ -2,7 +2,15 @@ package com.auo.backend.responses;
 
 import com.auo.backend.models.User;
 import com.auo.backend.models.Vehicle;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class VehicleResponse {
     private String id;
     private String manufacturer;
