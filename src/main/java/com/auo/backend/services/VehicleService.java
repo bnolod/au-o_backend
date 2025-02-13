@@ -63,6 +63,12 @@ public class VehicleService {
         return new VehicleResponse(vehicle, vehicle.getUser());
     }
 
+    public void deleteVehicleByIdFromSelf(String token, Long id) {
+        User user = authenticationService.getUserFromToken(token);
+        Vehicle vehicle = findOwnVehicleAndCheckOwnership(user,id);
+        vehicleRepository.delete(vehicle);
+    }
+
 
 
 

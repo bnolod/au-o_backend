@@ -45,4 +45,10 @@ public class VehicleController {
     public ResponseEntity<VehicleResponse> getVehicleById(@PathVariable Long vehicleId) {
         return ResponseEntity.ok(vehicleService.getVehicleById(vehicleId));
     }
+
+    @DeleteMapping("/vehicle/{vehicleId}")
+    public void deleteOwnVehicleById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                     @PathVariable Long vehicleId) {
+        vehicleService.deleteVehicleByIdFromSelf(token, vehicleId);
+    }
 }
