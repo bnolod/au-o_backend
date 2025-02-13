@@ -34,6 +34,7 @@ public class PostResponse {
     private List<Image> images;
     private List<CommentResponse> comments;
     private ReactionType reactedWith;
+    private VehicleResponse vehicle;
 
 
     public PostResponse(Post post, User currentUser) {
@@ -67,6 +68,12 @@ public class PostResponse {
 
         if (post.getComments() != null) {
             this.comments = post.getComments().stream().map(comment -> new CommentResponse(comment,currentUser)).toList();
+        }
+
+        if (post.getVehicle() == null) {
+            this.vehicle = null;
+        } else {
+            this.vehicle = new VehicleResponse(post.getVehicle(),null);
         }
     }
 

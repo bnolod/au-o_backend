@@ -66,13 +66,14 @@ public class Post {
             orphanRemoval=true)
     private List<Reaction> reactions = new ArrayList<>();
 
+    @OneToOne
+    private Vehicle vehicle;
+
 
     @PrePersist
     protected void onCreate() {
         this.dateOfCreation = LocalDateTime.now();
         this.dateOfUpdate = LocalDateTime.now();
-//        this.relevance = 1;
-//        this.reactionCount = 0;
         this.comments = new ArrayList<>();
         if (this.images==null) this.images = new ArrayList<>();
 
