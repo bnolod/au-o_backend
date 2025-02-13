@@ -58,11 +58,15 @@ public class VehicleService {
         return new VehicleResponse(vehicle,user);
     }
 
+    public VehicleResponse getVehicleById(Long id) {
+        Vehicle vehicle = findVehicleByIdOrThrow(id);
+        return new VehicleResponse(vehicle, vehicle.getUser());
+    }
 
 
 
 
-    public Vehicle getVehicleByIdOrThrow(Long id) {
+    public Vehicle findVehicleByIdOrThrow(Long id) {
         Optional<Vehicle> optionalVehicle = vehicleRepository.findById(id);
         if (optionalVehicle.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "vehicle_not_found");
         return optionalVehicle.get();
@@ -76,7 +80,7 @@ public class VehicleService {
     }
 
     public Vehicle findOwnVehicleAndCheckOwnership(User user, Long vehicleId) {
-        Vehicle targetVehicle = getVehicleByIdOrThrow(vehicleId);
+        Vehicle targetVehicle = findVehicleByIdOrThrow(vehicleId);
         if (vehicleOwnershipCheckerService.isNotOwnerOf(user,targetVehicle))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"unauthorized");
         return targetVehicle;

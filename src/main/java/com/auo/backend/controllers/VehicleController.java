@@ -40,4 +40,9 @@ public class VehicleController {
     public ResponseEntity<List<VehicleResponse>> getAllVehiclesOfUserById(@PathVariable Long userId) {
         return ResponseEntity.ok(vehicleService.getVehiclesOfUserByUserId(userId));
     }
+
+    @GetMapping("/vehicle/{vehicleId}")
+    public ResponseEntity<VehicleResponse> getVehicleById(@PathVariable Long vehicleId) {
+        return ResponseEntity.ok(vehicleService.getVehicleById(vehicleId));
+    }
 }
