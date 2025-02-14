@@ -105,6 +105,8 @@ public class VehicleService {
             target.setModel(dto.getModel());
         if (dto.getHorsepower() != null)
             target.setHorsepower(dto.getHorsepower());
+        if (dto.getProductionYear() != null)
+            target.setProductionYear(dto.getProductionYear());
         return target;
     }
 }
