@@ -1,5 +1,6 @@
 package com.auo.backend.controllers;
 
+import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.dto.create.CreateGroupDto;
 import com.auo.backend.dto.create.CreatePostDto;
 import com.auo.backend.enums.GroupRole;
@@ -8,6 +9,7 @@ import com.auo.backend.responses.GroupMemberResponse;
 import com.auo.backend.responses.GroupResponse;
 import com.auo.backend.responses.PostResponse;
 import com.auo.backend.services.GroupService;
+import com.auo.backend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +22,11 @@ import java.util.List;
 @RequestMapping(path = "api/v1/groups")
 public class GroupController {
     private final GroupService groupService;
+    private final AuthenticationService authenticationService;
 
     @GetMapping("/all")
-    public List<Group> getAllGroups() {
-        return groupService.getAllGroups();
+    public List<GroupResponse> getAllGroups(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return groupService.getAllGroups().stream().map(group -> new GroupResponse(group, authenticationService.getUserFromToken(token))).toList();
     }
 
     //kell:
