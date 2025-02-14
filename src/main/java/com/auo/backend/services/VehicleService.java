@@ -22,7 +22,7 @@ public class VehicleService {
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final VehicleRepository vehicleRepository;
-    private final GenericOwnershipCheckerService<User,Vehicle> vehicleOwnershipCheckerService;
+    private final GenericOwnershipCheckerService<User, Vehicle> vehicleOwnershipCheckerService;
 
     public VehicleResponse createVehicle(String token, CreateVehicleDto dto) {
         User user = authenticationService.getUserFromToken(token);
@@ -33,29 +33,30 @@ public class VehicleService {
                 .displacement(dto.getDisplacement())
                 .horsepower(dto.getHorsepower())
                 .manufacturer(dto.getManufacturer())
+                .productionYear(dto.getProductionYear())
                 .user(user)
                 .build());
-        return new VehicleResponse(vehicle,user);
+        return new VehicleResponse(vehicle, user);
     }
 
     public List<VehicleResponse> getOwnVehicles(String token) {
         User user = authenticationService.getUserFromToken(token);
         return findVehiclesByUserId(user.getId()).stream().map(
-                vehicle -> new VehicleResponse(vehicle,user)
+                vehicle -> new VehicleResponse(vehicle, user)
         ).toList();
     }
 
     public List<VehicleResponse> getVehiclesOfUserByUserId(Long userId) {
         User target = userService.findUserByIdOrThrow(userId);
         return findVehiclesByUserId(userId).stream().map(
-                vehicle -> new VehicleResponse(vehicle,target)).toList();
+                vehicle -> new VehicleResponse(vehicle, target)).toList();
     }
 
     public VehicleResponse modifyOwnVehicleById(String token, Long vehicleId, UpdateVehicleDto dto) {
         User user = authenticationService.getUserFromToken(token);
         Vehicle vehicle = findOwnVehicleAndCheckOwnership(user, vehicleId);
         vehicle = vehicleRepository.save(modifyVehicleByDto(vehicle, dto));
-        return new VehicleResponse(vehicle,user);
+        return new VehicleResponse(vehicle, user);
     }
 
     public VehicleResponse getVehicleById(Long id) {
@@ -65,11 +66,9 @@ public class VehicleService {
 
     public void deleteVehicleByIdFromSelf(String token, Long id) {
         User user = authenticationService.getUserFromToken(token);
-        Vehicle vehicle = findOwnVehicleAndCheckOwnership(user,id);
+        Vehicle vehicle = findOwnVehicleAndCheckOwnership(user, id);
         vehicleRepository.delete(vehicle);
     }
-
-
 
 
     public Vehicle findVehicleByIdOrThrow(Long id) {
@@ -81,19 +80,20 @@ public class VehicleService {
     public List<Vehicle> findVehiclesByUserId(Long id) {
         return vehicleRepository.findByUser_Id(id);
     }
+
     public List<Vehicle> findVehiclesByUser(User user) {
         return vehicleRepository.findByUser_Id(user.getId());
     }
 
     public Vehicle findOwnVehicleAndCheckOwnership(User user, Long vehicleId) {
         Vehicle targetVehicle = findVehicleByIdOrThrow(vehicleId);
-        if (vehicleOwnershipCheckerService.isNotOwnerOf(user,targetVehicle))
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"unauthorized");
+        if (vehicleOwnershipCheckerService.isNotOwnerOf(user, targetVehicle))
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
         return targetVehicle;
     }
 
     public Vehicle modifyVehicleByDto(Vehicle target, UpdateVehicleDto dto) {
-        if (dto.getManufacturer() != null )
+        if (dto.getManufacturer() != null)
             target.setManufacturer(dto.getManufacturer());
         if (dto.getDescription() != null)
             target.setDescription(dto.getDescription());

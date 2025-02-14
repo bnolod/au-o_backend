@@ -19,6 +19,7 @@ public class VehicleResponse {
     private Integer horsepower;
     private String description;
     private Integer displacement;
+    private Integer productionYear;
     private UserResponse owner;
 
     public VehicleResponse(Vehicle vehicle, User user) {
@@ -29,6 +30,7 @@ public class VehicleResponse {
         this.horsepower = vehicle.getHorsepower();
         this.description = vehicle.getDescription();
         this.displacement = vehicle.getDisplacement();
+        this.productionYear = vehicle.getProductionYear();
         this.owner = new UserResponse(user);
     }
 }

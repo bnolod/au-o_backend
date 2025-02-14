@@ -73,10 +73,11 @@ public class GroupService {
 
         Group group = Group.builder()
                 .groupName(createGroupDto.getName())
-                .groupAlias(String.valueOf(groupAlias))
+                .groupAlias(Optional.ofNullable(createGroupDto.getAlias()).orElse(String.valueOf(groupAlias)))
                 .groupDescription(createGroupDto.getDescription())
                 .bannerImageURL(createGroupDto.getBannerImage())
                 .groupMembers(new ArrayList<>())
+
                 .build();
 
 

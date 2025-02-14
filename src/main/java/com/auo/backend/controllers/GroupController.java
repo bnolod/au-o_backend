@@ -37,7 +37,10 @@ public class GroupController {
     //
     // delete group
     //
-
+    @DeleteMapping("/group/{groupId}")
+    public void deleteGroup(@RequestHeader(HttpHeaders.AUTHORIZATION)String token, @PathVariable Long groupId) {
+        groupService.deleteGroup(token, groupId);
+    }
 
     //get group by id
     @GetMapping("/group/{groupId}")

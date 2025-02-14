@@ -10,4 +10,5 @@ public class CreateVehicleDto {
     private Integer horsepower;
     private String description;
     private Integer displacement;
+    private Integer productionYear;
 }

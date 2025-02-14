@@ -14,4 +14,6 @@ public class CreateGroupDto {
     @NotNull
     private String bannerImage;
 
+    private String alias;
+
 }

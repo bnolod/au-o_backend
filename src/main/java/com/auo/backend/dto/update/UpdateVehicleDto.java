@@ -10,4 +10,5 @@ public class UpdateVehicleDto {
     private Integer horsepower;
     private String description;
     private Integer displacement;
+    private Integer productionYear;
 }

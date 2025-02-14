@@ -22,6 +22,7 @@ public class Vehicle {
     private Integer horsepower;
     private String description;
     private Integer displacement;
+    private Integer productionYear;
 
     @ManyToOne
     User user;
