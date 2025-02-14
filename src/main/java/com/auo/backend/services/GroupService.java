@@ -77,7 +77,7 @@ public class GroupService {
                 .groupDescription(createGroupDto.getDescription())
                 .bannerImageURL(createGroupDto.getBannerImage())
                 .groupMembers(new ArrayList<>())
-
+                .groupDescription(createGroupDto.getDescription())
                 .build();
 
 

@@ -17,6 +17,7 @@ public class GroupResponse {
     private Long id;
     private String name;
     private String alias;
+    private String description;
     private String bannerImage;
     private int memberCount;
     private boolean isPublic;
@@ -27,6 +28,7 @@ public class GroupResponse {
         this.id = group.getId();
         this.name = group.getGroupName();
         this.alias = group.getGroupAlias();
+        this.description = group.getGroupDescription();
         this.bannerImage = group.getBannerImageURL();
         this.memberCount = group.getGroupMembers().size();
         this.isPublic = group.isPublic();
