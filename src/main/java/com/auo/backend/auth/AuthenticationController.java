@@ -1,15 +1,12 @@
 package com.auo.backend.auth;
 
-import com.auo.backend.dto.UserLoginDto;
-import com.auo.backend.dto.UserRegisterDto;
-import com.auo.backend.models.User;
+import com.auo.backend.dto.auth.UserLoginDto;
+import com.auo.backend.dto.auth.UserRegisterDto;
 import com.auo.backend.responses.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 @RestController
 @RequestMapping("api/v1/auth")

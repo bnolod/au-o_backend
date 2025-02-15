@@ -1,12 +1,11 @@
 package com.auo.backend.auth;
 
-import com.auo.backend.dto.UserLoginDto;
-import com.auo.backend.dto.UserRegisterDto;
+import com.auo.backend.dto.auth.UserLoginDto;
+import com.auo.backend.dto.auth.UserRegisterDto;
 import com.auo.backend.enums.UserRole;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.UserResponse;
-import com.auo.backend.services.UserService;
 import com.auo.backend.validationServices.UserValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -2,7 +2,7 @@ package com.auo.backend.services;
 
 import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.ViewPermissionCheckerService;
-import com.auo.backend.dto.UpdateUserDto;
+import com.auo.backend.dto.update.UpdateUserDto;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.PostResponse;

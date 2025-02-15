@@ -1,24 +1,29 @@
 package com.auo.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "app_user_vehicles")
 public class Vehicle {
     @Id
-    private Long vehicle_id;
-    private Long user_id;
+    @GeneratedValue
+    private Long id;
     private String manufacturer;
     private String model;
     private String type;
     private Integer horsepower;
     private String description;
     private Integer displacement;
+    private Integer productionYear;
 
-    public Vehicle() {
-    }
-
-
+    @ManyToOne
+    User user;
 }

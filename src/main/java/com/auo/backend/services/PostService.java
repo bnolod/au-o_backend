@@ -2,9 +2,9 @@ package com.auo.backend.services;
 
 import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.GenericOwnershipCheckerService;
-import com.auo.backend.dto.AddCommentDto;
-import com.auo.backend.dto.CreatePostDto;
-import com.auo.backend.dto.UpdatePostDto;
+import com.auo.backend.dto.create.AddCommentDto;
+import com.auo.backend.dto.create.CreatePostDto;
+import com.auo.backend.dto.update.UpdatePostDto;
 import com.auo.backend.enums.PostType;
 import com.auo.backend.enums.ReactionType;
 import com.auo.backend.models.*;

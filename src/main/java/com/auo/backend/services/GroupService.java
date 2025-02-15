@@ -2,8 +2,8 @@ package com.auo.backend.services;
 
 import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.GenericOwnershipCheckerService;
-import com.auo.backend.dto.CreateGroupDto;
-import com.auo.backend.dto.CreatePostDto;
+import com.auo.backend.dto.create.CreateGroupDto;
+import com.auo.backend.dto.create.CreatePostDto;
 import com.auo.backend.enums.GroupRole;
 import com.auo.backend.enums.PostType;
 import com.auo.backend.models.*;
@@ -73,10 +73,11 @@ public class GroupService {
 
         Group group = Group.builder()
                 .groupName(createGroupDto.getName())
-                .groupAlias(String.valueOf(groupAlias))
+                .groupAlias(createGroupDto.getAlias().trim().equals("") ? String.valueOf(groupAlias) : createGroupDto.getAlias())
                 .groupDescription(createGroupDto.getDescription())
                 .bannerImageURL(createGroupDto.getBannerImage())
                 .groupMembers(new ArrayList<>())
+                .groupDescription(createGroupDto.getDescription())
                 .build();
 
 
@@ -86,7 +87,7 @@ public class GroupService {
         group.getGroupMembers().add(owner);
 
         groupRepository.save(group);
-        return new GroupResponse(group);
+        return new GroupResponse(group, user);
     }
 
     public GroupMemberResponse joinGroup(String token, Long groupId) {
@@ -189,7 +190,6 @@ public class GroupService {
                     .build();
 //            tempPost.getImages().add(tempImage);
         }).toList();
-
         Post tempPost = Post.builder()
                 .postType(PostType.GROUPPOST)
                 .text(createPostDto.getText())
@@ -201,4 +201,16 @@ public class GroupService {
 
         return new PostResponse(tempPost,groupMember.getUser());
     }
+
+    public GroupResponse getGroupById(String token, Long groupId) {
+        User user = authenticationService.getUserFromToken(token);
+        Group group = getGroupByGroupIdOrThrow(groupId);
+        return new GroupResponse(group,user);
+    }
+
+    public List<GroupResponse> getGroupsOfUser(String token) {
+        User user = authenticationService.getUserFromToken(token);
+
+        return user.getGroups().stream().map(groupMember -> new GroupResponse(groupMember.getGroup(),user)).toList();
+     }
 }
