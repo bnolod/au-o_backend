@@ -66,7 +66,7 @@ public class Post {
             orphanRemoval=true)
     private List<Reaction> reactions = new ArrayList<>();
 
-    @OneToOne
+    @ManyToOne
     private Vehicle vehicle;
 
 

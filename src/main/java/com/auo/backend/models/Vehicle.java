@@ -1,16 +1,14 @@
 package com.auo.backend.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString(exclude = {"user"})
 @Table(name = "app_user_vehicles")
 public class Vehicle {
     @Id
