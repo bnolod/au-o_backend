@@ -27,6 +27,7 @@ public class UserService {
     private final ViewPermissionCheckerService viewPermissionCheckerService;
 
 
+    @Deprecated
     public List<UserResponse> getUsers() {
         return userRepository.findAll().stream().map(UserResponse::new).toList();
     }
@@ -46,6 +47,7 @@ public class UserService {
         return new UserResponse(user);
 
     }
+
 
     public void createUser(User user) {
         Optional<User> userByEmail = userRepository.findUserByEmail(user.getEmail());
@@ -95,7 +97,6 @@ public class UserService {
         }
 
         userRepository.save(user);
-
     }
 
 
@@ -113,21 +114,21 @@ public class UserService {
 
     public void removeFollowerFromSelf(String token, Long targetUserId) {
         User user = authenticationService.getUserFromToken(token);
-        User targetUser = findUserByIdOrThrow(targetUserId);
-        if (!targetUser.getFollowing().contains(user)) {
+        User target = findUserByIdOrThrow(targetUserId);
+        if (!doesUserFollow(user, target)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
         }
-        targetUser.getFollowing().remove(user);
+        target.getFollowing().remove(user);
         userRepository.save(user);
     }
 
     public void unfollowUser(String token, Long targetUserId) {
         User user = authenticationService.getUserFromToken(token);
-        User followedUser = findUserByIdOrThrow(targetUserId);
-        if (!user.getFollowing().contains(followedUser)) {
+        User target = findUserByIdOrThrow(targetUserId);
+        if (!doesUserFollow(user, target)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
         }
-        user.getFollowing().remove(followedUser);
+        user.getFollowing().remove(target);
         userRepository.save(user);
     }
 
@@ -136,11 +137,12 @@ public class UserService {
             if (Objects.equals(user.getId(), targetUserId)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "can_not_follow_self");
             }
-        User userToFollow = findUserByIdOrThrow(targetUserId);
-            if (user.getFollowing().contains(userToFollow)) {
+
+        User target = findUserByIdOrThrow(targetUserId);
+            if (doesUserFollow(user,  target)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "already_followed");
             }
-        user.getFollowing().add(userToFollow);
+        user.getFollowing().add(target);
         userRepository.save(user);
 
     }
@@ -161,6 +163,10 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findUserById(userId);
         if (optionalUser.isPresent()) return optionalUser.get();
         else throw new ResponseStatusException(HttpStatus.NOT_FOUND,"user_not_found");
+    }
+
+    public boolean doesUserFollow(User user, User target) {
+        return user.getFollowing().contains(target);
     }
 
 

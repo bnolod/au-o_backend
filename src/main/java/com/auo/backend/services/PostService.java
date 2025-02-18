@@ -33,13 +33,16 @@ public class PostService {
     private final GenericOwnershipCheckerService<User,Comment> commentOwnershipCheckerService;
     private final GenericOwnershipCheckerService<User,CommentReply> commentReplyOwnershipCheckerService;
     private final GenericReactionService<Post> postReactionService;
+    private final VehicleService vehicleService;
     private final CommentReplyRepository commentReplyRepository;
 
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto, String token) {
         User user = authenticationService.getUserFromToken(token);
-
-
+        Vehicle vehicle = null;
+        if (createPostDto.getVehicleId() != null) {
+            vehicle = vehicleService.findOwnVehicleAndCheckOwnership(user,createPostDto.getVehicleId());
+        }
         List<Image> imageList =
                 createPostDto.getPostImages().stream().map(postImage -> {
                     return Image
@@ -57,6 +60,7 @@ public class PostService {
                 .user(user)
                 .images(imageList)
                 .location(createPostDto.getLocation())
+                .vehicle(vehicle)
                 .build();
         Post post = postRepository.save(tempPost);
         System.out.println("post.getImages() = " + post.getImages());

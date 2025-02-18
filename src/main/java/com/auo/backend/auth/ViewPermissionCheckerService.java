@@ -38,7 +38,6 @@ public class ViewPermissionCheckerService {
             return true;
         if (user.getFollowing().contains(target))
             return true;
-
         return false;
     }
 }

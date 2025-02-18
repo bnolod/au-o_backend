@@ -32,6 +32,7 @@ public class GroupService {
     private final GenericOwnershipCheckerService<User, Group> groupOwnershipCheckerService;
     private final UserService userService;
     private final PostRepository postRepository;
+    private final VehicleService vehicleService;
 
     public List<Group> getAllGroups() {
         return groupRepository.findAll();
@@ -168,16 +169,15 @@ public class GroupService {
         return new GroupMemberResponse(targetUser);
     }
 
-
-
-    /// helló, post controllerbe mennek ezek
-
     public PostResponse addPostToGroup(String token, Long groupId, CreatePostDto createPostDto) {
         GroupMember groupMember = getGroupMemberByUserAndGroup(
                 authenticationService.getUserFromToken(token),
                 getGroupByGroupIdOrThrow(groupId));
         if (!groupMember.isValid()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"unauthorized");
-
+        Vehicle vehicle = null;
+        if (createPostDto.getVehicleId() != null) {
+            vehicle = vehicleService.findOwnVehicleAndCheckOwnership(groupMember.getUser(), createPostDto.getVehicleId());
+        }
 
 
         List<Image> imageList =
@@ -195,6 +195,7 @@ public class GroupService {
                 .text(createPostDto.getText())
                 .groupMember(groupMember)
                 .images(imageList)
+                .vehicle(vehicle)
                 .location(createPostDto.getLocation())
                 .build();
         postRepository.save(tempPost);
@@ -210,7 +211,8 @@ public class GroupService {
 
     public List<GroupResponse> getGroupsOfUser(String token) {
         User user = authenticationService.getUserFromToken(token);
-
         return user.getGroups().stream().map(groupMember -> new GroupResponse(groupMember.getGroup(),user)).toList();
-     }
+    }
+
+
 }
