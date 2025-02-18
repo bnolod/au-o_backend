@@ -31,8 +31,6 @@ public class Group {
 
     private String bannerImageURL;
 
-//    private int memberCount;
-
     private LocalDateTime creationDate;
 
     private boolean isPublic;
@@ -43,7 +41,6 @@ public class Group {
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL,
             orphanRemoval=true)
     private List<GroupMember> groupMembers = new ArrayList<>();
-
 
     @PrePersist
     protected void onCreate() {

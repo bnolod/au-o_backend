@@ -25,5 +25,5 @@ public class Vehicle {
     private Integer productionYear;
 
     @ManyToOne
-    User user;
+    private User user;
 }

@@ -28,10 +28,5 @@ public class Image {
     @NotNull
     @Column(name = "delete_hash")
     private String deleteHash;
-
-//    @ManyToOne()
-//    @JoinColumn(name = "post_id", nullable = false)
-//    @JsonBackReference
-//    private Post post;
 }
 

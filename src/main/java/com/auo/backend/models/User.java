@@ -96,9 +96,6 @@ public class User implements UserDetails {
     @NotNull
     private boolean isDeleted;
 
-
-
-
     @PrePersist
     protected void onCreate() {
         this.isDeleted = false;
@@ -111,8 +108,6 @@ public class User implements UserDetails {
         this.replies = new ArrayList<>();
         this.isDeleted = false;
     }
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

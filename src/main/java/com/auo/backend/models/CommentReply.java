@@ -39,10 +39,8 @@ public class CommentReply {
     @OneToMany
     private List<Reaction> reactions = new ArrayList<>();
 
-
     @PrePersist
     protected void onCreate() {
         this.time =  LocalDateTime.now();
     }
-
 }

@@ -38,12 +38,4 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     Page<Post> findPostsForUserFeed(Pageable pageable, @Param("userId") Long userId, @Param("time") LocalDateTime time);
 
 
-//    Optional<ArrayList<Post>> findPostsByPostTypeAndAndDateOfCreationBeforeOrderByDateOfCreationDescRelevanceDesc(PostType postType, Long groupId, LocalDateTime dateTime );
-
-    // group tab feed funkcio:
-    // posztok ahol tag a felhasznalo
-    //
-
-//    Optional<ArrayList<Post>> findPostsByUserForGroupFeed(@Param("userId") Long userId);
-
 }

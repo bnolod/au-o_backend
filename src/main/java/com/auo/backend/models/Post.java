@@ -78,13 +78,4 @@ public class Post {
         if (this.images==null) this.images = new ArrayList<>();
 
     }
-
-    public Integer getRelevance(LocalDateTime time) {
-        AtomicInteger relevance = new AtomicInteger();
-        this.comments.forEach(comment -> {
-            relevance.addAndGet(1+
-                    comment.getReplies().size());
-        });
-        return relevance.get();
-    }
 }
