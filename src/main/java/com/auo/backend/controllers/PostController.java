@@ -82,6 +82,24 @@ public class PostController {
         return ResponseEntity.ok(postService.addOrRemoveReaction(postId,reactionType,token));
     }
 
+    @PostMapping("comment/{commentId}/addOrRemoveReaction/{reactionType}")
+    public ResponseEntity<AddOrRemoveReactionResponse> addReactionToComment (@PathVariable Long commentId,
+                                                                          @PathVariable ReactionType reactionType,
+                                                                          @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return ResponseEntity.ok(postService.addOrRemoveReactionToComment(commentId,reactionType,token));
+    }
+
+    @PostMapping("reply/{replyId}/addOrRemoveReaction/{reactionType}")
+    public ResponseEntity<AddOrRemoveReactionResponse> addReactionToReply (@PathVariable Long replyId,
+                                                                          @PathVariable ReactionType reactionType,
+                                                                          @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return ResponseEntity.ok(postService.addOrRemoveReactionToReply(replyId,reactionType,token));
+    }
+
+
+
+
+
     @PostMapping("post/comment/{commentId}/reply")
     public ResponseEntity<CommentReplyResponse> replyToComment(@PathVariable Long commentId,
                                                                @RequestHeader(HttpHeaders.AUTHORIZATION) String token,

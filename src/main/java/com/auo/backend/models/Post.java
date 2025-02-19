@@ -66,7 +66,7 @@ public class Post {
             orphanRemoval=true)
     private List<Reaction> reactions = new ArrayList<>();
 
-    @OneToOne
+    @ManyToOne
     private Vehicle vehicle;
 
 
@@ -77,14 +77,5 @@ public class Post {
         this.comments = new ArrayList<>();
         if (this.images==null) this.images = new ArrayList<>();
 
-    }
-
-    public Integer getRelevance(LocalDateTime time) {
-        AtomicInteger relevance = new AtomicInteger();
-        this.comments.forEach(comment -> {
-            relevance.addAndGet(1+
-                    comment.getReplies().size());
-        });
-        return relevance.get();
     }
 }

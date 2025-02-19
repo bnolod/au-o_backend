@@ -14,8 +14,4 @@ import java.util.UUID;
 public interface GroupRepository extends JpaRepository<Group, Long> {
     List<Group> findByGroupDescriptionContainingOrGroupAliasContainingOrGroupNameContaining (String string1, String string2, String string3);
 
-
-    //felhasználó idje alapján csoportok keresése:
-//    List<Group> findByMembers_userId(Long userid);
-
 }

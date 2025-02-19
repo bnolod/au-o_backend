@@ -29,17 +29,23 @@ public class PostService {
     private final AuthenticationService authenticationService;
     private final PostImageRepository postImageRepository;
     private final CommentRepository commentRepository;
-    private final GenericOwnershipCheckerService<User,Post> postOwnershipCheckerService;
-    private final GenericOwnershipCheckerService<User,Comment> commentOwnershipCheckerService;
-    private final GenericOwnershipCheckerService<User,CommentReply> commentReplyOwnershipCheckerService;
+    private final GenericOwnershipCheckerService<User, Post> postOwnershipCheckerService;
+    private final GenericOwnershipCheckerService<User, Comment> commentOwnershipCheckerService;
+    private final GenericOwnershipCheckerService<User, CommentReply> commentReplyOwnershipCheckerService;
     private final GenericReactionService<Post> postReactionService;
+    private final GenericReactionService<Comment> commentReactionService;
+    private final GenericReactionService<CommentReply> commentReplyReactionService;
+
+    private final VehicleService vehicleService;
     private final CommentReplyRepository commentReplyRepository;
 
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto, String token) {
         User user = authenticationService.getUserFromToken(token);
-
-
+        Vehicle vehicle = null;
+        if (createPostDto.getVehicleId() != null) {
+            vehicle = vehicleService.findOwnVehicleAndCheckOwnership(user, createPostDto.getVehicleId());
+        }
         List<Image> imageList =
                 createPostDto.getPostImages().stream().map(postImage -> {
                     return Image
@@ -57,6 +63,7 @@ public class PostService {
                 .user(user)
                 .images(imageList)
                 .location(createPostDto.getLocation())
+                .vehicle(vehicle)
                 .build();
         Post post = postRepository.save(tempPost);
         System.out.println("post.getImages() = " + post.getImages());
@@ -69,29 +76,29 @@ public class PostService {
         User user = authenticationService.getUserFromToken(token);
 
         Pageable pageable = PageRequest.of(page, 10);
-        Page<Post> posts = postRepository.findPostsForUserFeed(pageable,user.getId(),time);
+        Page<Post> posts = postRepository.findPostsForUserFeed(pageable, user.getId(), time);
         System.out.println(posts);
         if (posts.isEmpty()) return null;
-        System.out.println(PageResponse.of(posts.map(post -> new PostResponse(post,user))));
-        return PageResponse.of(posts.map(post -> new PostResponse(post,user)));
+        System.out.println(PageResponse.of(posts.map(post -> new PostResponse(post, user))));
+        return PageResponse.of(posts.map(post -> new PostResponse(post, user)));
     }
 
     public void publishPostToGroup() {
-    //to be implemented
+        //to be implemented
     }
 
     public List<PostResponse> getAllPosts(String token) {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Post> allPosts = this.postRepository.findAll(pageable);
-        return allPosts.stream().map(post -> new PostResponse(post,authenticationService.getUserFromToken(token))).toList();
+        return allPosts.stream().map(post -> new PostResponse(post, authenticationService.getUserFromToken(token))).toList();
     }
 
     public PostResponse getPostById(Long postId, String token) {
         Optional<Post> post = postRepository.findPostById(postId);
         if (post.isPresent()) {
             return new PostResponse(post.get(), authenticationService.getUserFromToken(token));
-        }else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"post_not_found");
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "post_not_found");
         }
     }
 
@@ -100,9 +107,9 @@ public class PostService {
         User user = authenticationService.getUserFromToken(token);
 
         Optional<Post> optionalPost = postRepository.findPostById(postId);
-            if (optionalPost.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            }
+        if (optionalPost.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         Post post = optionalPost.get();
 
         Comment tempComment = Comment.builder()
@@ -123,8 +130,6 @@ public class PostService {
     /**
      * Úgy terveztem ezt a szart hogy a saját kommentet, vagy a saját posztod alatti összes kommentet ki tudd törölni
      * talán működik, talán nem, majd teszt hétfőn
-     *
-     *
      */
     public void removeCommentFromPost(String token, Long commentId) {
         User user = authenticationService.getUserFromToken(token);
@@ -133,9 +138,9 @@ public class PostService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "comment_not_found");
         }
         Comment comment = optionalComment.get();
-        if (commentOwnershipCheckerService.isOwnerOf(user,comment)) {
+        if (commentOwnershipCheckerService.isOwnerOf(user, comment)) {
             commentRepository.delete(comment);
-        } else if (postOwnershipCheckerService.isOwnerOf(user,comment.getPost())) {
+        } else if (postOwnershipCheckerService.isOwnerOf(user, comment.getPost())) {
             commentRepository.delete(comment);
         } else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
 
@@ -144,38 +149,32 @@ public class PostService {
 
     public PostResponse updatePostOfUserById(Long postId, String token, UpdatePostDto updatePostDto) {
         User user = authenticationService.getUserFromToken(token);
-        Optional<Post> optionalPost = postRepository.findPostById(postId);
-        if (optionalPost.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-
-        Post post = optionalPost.get();
+        Post post = findPostByIdOrThrow(postId);
 
         if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        if (!updatePostDto.getText().isEmpty()) {
+        if (updatePostDto.getText() != null) {
             post.setText(updatePostDto.getText());
             post.setDateOfUpdate(LocalDateTime.now());
         }
-        if (!updatePostDto.getLocation().isEmpty()) {
+        if (updatePostDto.getLocation() != null) {
             post.setLocation(updatePostDto.getLocation());
             post.setDateOfUpdate(LocalDateTime.now());
         }
-
-        postRepository.save(post);
+        if (updatePostDto.getVehicleId() != null) {
+            post.setVehicle(vehicleService.findOwnVehicleAndCheckOwnership(user, updatePostDto.getVehicleId()));
+            post.setDateOfUpdate(LocalDateTime.now());
+        } else post.setVehicle(null);
+        post = postRepository.save(post);
 
         return new PostResponse(post, user);
     }
 
     public PostResponse deletePostOfUserById(Long postId, String token) {
         User user = authenticationService.getUserFromToken(token);
-        Optional<Post> optionalPost = postRepository.findPostById(postId);
-        if (optionalPost.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        Post post = optionalPost.get();
+        Post post = findPostByIdOrThrow(postId);
         if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
@@ -185,12 +184,8 @@ public class PostService {
     }
 
     public AddOrRemoveReactionResponse addOrRemoveReaction(Long postId, ReactionType reactionType, String token) {
-        Optional<Post> optionalPost = postRepository.findPostById(postId);
-        if (optionalPost.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"post_not_found");
-        Post post = optionalPost.get();
-        String reactionMessage = postReactionService.addOrRemoveReactionToItem(post,reactionType,token);
-
+        Post post = findPostByIdOrThrow(postId);
+        String reactionMessage = postReactionService.addOrRemoveReactionToItem(post, reactionType, token);
         postRepository.save(post);
         return AddOrRemoveReactionResponse.builder()
                 .message(reactionMessage)
@@ -223,10 +218,50 @@ public class PostService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reply_not_found");
         }
 
-        if(commentReplyOwnershipCheckerService.isNotOwnerOf(user,optionalCommentReply.get())) {
+        if (commentReplyOwnershipCheckerService.isNotOwnerOf(user, optionalCommentReply.get())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "no_permission");
         }
         commentReplyRepository.delete(optionalCommentReply.get());
         return new CommentReplyResponse(optionalCommentReply.get(), user);
+    }
+
+    public AddOrRemoveReactionResponse addOrRemoveReactionToComment(Long commentId, ReactionType reactionType, String token) {
+        Comment comment = findCommentByIdOrThrow(commentId);
+        String reactionMessage = commentReactionService.addOrRemoveReactionToItem(comment, reactionType, token);
+        commentRepository.save(comment);
+        return AddOrRemoveReactionResponse.builder()
+                .message(reactionMessage)
+                .reactionType(reactionType)
+                .build();
+    }
+
+    public AddOrRemoveReactionResponse addOrRemoveReactionToReply(Long replyId, ReactionType reactionType, String token) {
+        CommentReply reply = findCommentReplyByIdOrThrow(replyId);
+        String reactionMessage = commentReplyReactionService.addOrRemoveReactionToItem(reply, reactionType, token);
+        commentReplyRepository.save(reply);
+        return AddOrRemoveReactionResponse.builder()
+                .message(reactionMessage)
+                .reactionType(reactionType)
+                .build();
+    }
+
+
+    public Post findPostByIdOrThrow(Long postId) {
+        Optional<Post> optionalPost = postRepository.findPostById(postId);
+        if (optionalPost.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "post_not_found");
+        return optionalPost.get();
+    }
+
+    public Comment findCommentByIdOrThrow(Long commentId) {
+        Optional<Comment> optionalComment = commentRepository.findById(commentId);
+        if (optionalComment.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "comment_not_found");
+        return optionalComment.get();
+    }
+
+    public CommentReply findCommentReplyByIdOrThrow(Long commentReplyId) {
+        Optional<CommentReply> optionalCommentReply = commentReplyRepository.findById(commentReplyId);
+        if (optionalCommentReply.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reply_not_found");
+        return optionalCommentReply.get();
     }
 }

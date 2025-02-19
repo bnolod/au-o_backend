@@ -31,6 +31,7 @@ public class VehicleResponse {
         this.description = vehicle.getDescription();
         this.displacement = vehicle.getDisplacement();
         this.productionYear = vehicle.getProductionYear();
-        this.owner = new UserResponse(user);
+        if (user != null)
+            this.owner = new UserResponse(user);
     }
 }

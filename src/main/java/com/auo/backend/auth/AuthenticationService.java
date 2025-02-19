@@ -7,6 +7,8 @@ import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.UserResponse;
 import com.auo.backend.validationServices.UserValidationService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,10 +26,9 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
     private final UserValidationService userValidationService;
 
-    public AuthenticationResponse register(UserRegisterDto userRegisterDto) {
+    public AuthenticationResponse register(UserRegisterDto userRegisterDto, HttpServletResponse response) {
         if (!userValidationService.IsEmailValid(userRegisterDto.getEmail())) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "invalid_email_format");
         }
@@ -47,12 +48,13 @@ public class AuthenticationService {
                 .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
+        createTokenCookie(jwtToken,response);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
     }
 
-    public AuthenticationResponse login(UserLoginDto userLoginDto) {
+    public AuthenticationResponse login(UserLoginDto userLoginDto, HttpServletResponse response) {
         Optional<User> optionalUser;
         if (userLoginDto.getUsernameOrEmail().contains("@")) {
             optionalUser = userRepository.findUserByEmail(userLoginDto.getUsernameOrEmail());
@@ -70,14 +72,16 @@ public class AuthenticationService {
         }
 
         var jwtToken = jwtService.generateToken(user);
+        createTokenCookie(jwtToken,response);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
     }
 
-    public AuthenticationResponse authenticate(String token) {
+    public AuthenticationResponse authenticate(String token,HttpServletResponse response) {
         User user = getUserFromToken(token);
         var newToken = jwtService.generateToken(user);
+        createTokenCookie(newToken,response);
         return AuthenticationResponse.builder()
                 .token(newToken)
                 .build();
@@ -105,6 +109,15 @@ public class AuthenticationService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "no");
         }
         return optionalUser.get();
+    }
+
+    public void createTokenCookie(String token, HttpServletResponse response) {
+        Cookie cookie = new Cookie("token",token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false);
+        cookie.setPath("*");
+        cookie.setMaxAge(1000 * 60 * 60 * 24);
+        response.addCookie(cookie);
     }
 
 }

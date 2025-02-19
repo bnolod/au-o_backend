@@ -28,14 +28,4 @@ public class Reaction {
     @ManyToOne
     @JsonBackReference("user-reactions")
     User user;
-
-
-//    @ManyToOne
-//    Post post;
-//
-//    @ManyToOne
-//    Comment comment;
-//
-//    @ManyToOne()
-//    CommentReply commentReply;
 }
