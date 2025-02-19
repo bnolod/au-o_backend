@@ -155,19 +155,19 @@ public class PostService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        if (!updatePostDto.getText().isEmpty()) {
+        if (updatePostDto.getText() != null) {
             post.setText(updatePostDto.getText());
             post.setDateOfUpdate(LocalDateTime.now());
         }
-        if (!updatePostDto.getLocation().isEmpty()) {
+        if (updatePostDto.getLocation() != null) {
             post.setLocation(updatePostDto.getLocation());
             post.setDateOfUpdate(LocalDateTime.now());
         }
-        if (!updatePostDto.getVehicleId().isEmpty()) {
-            post.setVehicle(vehicleService.findOwnVehicleAndCheckOwnership(user, Long.valueOf(updatePostDto.getVehicleId())));
+        if (updatePostDto.getVehicleId() != null) {
+            post.setVehicle(vehicleService.findOwnVehicleAndCheckOwnership(user, updatePostDto.getVehicleId()));
             post.setDateOfUpdate(LocalDateTime.now());
         }
-        postRepository.save(post);
+        post = postRepository.save(post);
 
         return new PostResponse(post, user);
     }

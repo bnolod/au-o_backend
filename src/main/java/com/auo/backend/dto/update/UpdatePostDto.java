@@ -6,5 +6,5 @@ import lombok.Data;
 public class UpdatePostDto {
     String text;
     String location;
-    String vehicleId;
+    Long vehicleId;
 }
