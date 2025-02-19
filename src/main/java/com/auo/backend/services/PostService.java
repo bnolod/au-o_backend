@@ -166,7 +166,7 @@ public class PostService {
         if (updatePostDto.getVehicleId() != null) {
             post.setVehicle(vehicleService.findOwnVehicleAndCheckOwnership(user, updatePostDto.getVehicleId()));
             post.setDateOfUpdate(LocalDateTime.now());
-        }
+        } else post.setVehicle(null);
         post = postRepository.save(post);
 
         return new PostResponse(post, user);
