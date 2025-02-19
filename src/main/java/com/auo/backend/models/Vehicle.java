@@ -24,4 +24,7 @@ public class Vehicle {
 
     @ManyToOne
     private User user;
+
+    @OneToMany
+    private Post post;
 }
