@@ -3,6 +3,8 @@ package com.auo.backend.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,5 +28,5 @@ public class Vehicle {
     private User user;
 
     @OneToMany
-    private Post post;
+    private List<Post> post;
 }
