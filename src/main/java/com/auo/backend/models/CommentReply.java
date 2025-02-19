@@ -36,7 +36,7 @@ public class CommentReply {
 
     private LocalDateTime time;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Reaction> reactions = new ArrayList<>();
 
     @PrePersist

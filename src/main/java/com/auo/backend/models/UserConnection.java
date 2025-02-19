@@ -20,11 +20,11 @@ public class UserConnection {
     private Long connectionId;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User followedUser;
 
     private Boolean isValid;
