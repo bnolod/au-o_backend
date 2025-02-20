@@ -84,6 +84,7 @@ public class GroupService {
 
         GroupMember owner = new GroupMember(user, group);
         owner.setGroupRole(GroupRole.ADMIN);
+        owner.setValid(true);
 
         groupMemberRepository.save(owner);
 

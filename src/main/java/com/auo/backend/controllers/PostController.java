@@ -96,10 +96,6 @@ public class PostController {
         return ResponseEntity.ok(postService.addOrRemoveReactionToReply(replyId,reactionType,token));
     }
 
-
-
-
-
     @PostMapping("post/comment/{commentId}/reply")
     public ResponseEntity<CommentReplyResponse> replyToComment(@PathVariable Long commentId,
                                                                @RequestHeader(HttpHeaders.AUTHORIZATION) String token,

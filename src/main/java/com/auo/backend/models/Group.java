@@ -1,6 +1,7 @@
 package com.auo.backend.models;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -40,6 +41,7 @@ public class Group {
     @NotNull
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL,
             orphanRemoval=true)
+    @JsonManagedReference
     private List<GroupMember> groupMembers = new ArrayList<>();
 
     @PrePersist
