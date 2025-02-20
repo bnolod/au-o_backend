@@ -80,14 +80,13 @@ public class GroupService {
                 .groupMembers(new ArrayList<>())
                 .groupDescription(createGroupDto.getDescription())
                 .build();
-
+        groupRepository.save(group);
 
         GroupMember owner = new GroupMember(user, group);
         owner.setGroupRole(GroupRole.ADMIN);
 
-        group.getGroupMembers().add(owner);
+        groupMemberRepository.save(owner);
 
-        groupRepository.save(group);
         return new GroupResponse(group, user);
     }
 
