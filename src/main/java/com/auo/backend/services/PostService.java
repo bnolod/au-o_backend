@@ -74,22 +74,16 @@ public class PostService {
 
     public PageResponse<PostResponse> getPostFeedOfUser(String token, int page, LocalDateTime time) {
         User user = authenticationService.getUserFromToken(token);
-
         Pageable pageable = PageRequest.of(page, 10);
         Page<Post> posts = postRepository.findPostsForUserFeed(pageable, user.getId(), time);
-        System.out.println(posts);
-        if (posts.isEmpty()) return null;
-        System.out.println(PageResponse.of(posts.map(post -> new PostResponse(post, user))));
+//        if (posts.isEmpty()) return null;
         return PageResponse.of(posts.map(post -> new PostResponse(post, user)));
     }
 
-    public void publishPostToGroup() {
-        //to be implemented
-    }
 
+    @Deprecated
     public List<PostResponse> getAllPosts(String token) {
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Post> allPosts = this.postRepository.findAll(pageable);
+        List<Post> allPosts = this.postRepository.findAll();
         return allPosts.stream().map(post -> new PostResponse(post, authenticationService.getUserFromToken(token))).toList();
     }
 

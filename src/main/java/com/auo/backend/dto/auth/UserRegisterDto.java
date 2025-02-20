@@ -11,13 +11,9 @@ import java.time.LocalDate;
 @Data
 public class UserRegisterDto {
     @NotBlank
-    @Min(4)
-    @Max(24)
     private String username;
 
     @NotBlank
-    @Min(4)
-    @Max(48)
     private String nickname;
 
     @NotBlank
@@ -27,7 +23,6 @@ public class UserRegisterDto {
     @Email
     private String email;
 
-    @NotBlank
     private LocalDate dateOfBirth;
 
 }

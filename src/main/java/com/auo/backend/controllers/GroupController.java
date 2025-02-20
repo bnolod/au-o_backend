@@ -11,6 +11,7 @@ import com.auo.backend.responses.PostResponse;
 import com.auo.backend.services.GroupService;
 import com.auo.backend.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class GroupController {
                 description = "Creates a group with the owner being the user that created it. Returns the group.")
     @PostMapping("/group")
     public ResponseEntity<GroupResponse> createGroup(@RequestHeader(HttpHeaders.AUTHORIZATION)String token,
-                                                     @RequestBody CreateGroupDto createGroupDto) {
+                                                     @Valid @RequestBody CreateGroupDto createGroupDto) {
         return ResponseEntity.ok(groupService.createGroup(token, createGroupDto));
     }
 
@@ -82,7 +83,7 @@ public class GroupController {
     public ResponseEntity<GroupMemberResponse> setRoleOfMember(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                                @PathVariable Long groupId,
                                                                @PathVariable Long userId,
-                                                               @RequestBody GroupRole groupRole) {
+                                                               @Valid @RequestBody GroupRole groupRole) {
         return ResponseEntity.ok(groupService.setRoleOfMember(token,userId,groupId,groupRole));
     }
 
@@ -93,7 +94,7 @@ public class GroupController {
     @PostMapping("/group/{groupId}/post")
     public ResponseEntity<PostResponse> publishPostToGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                            @PathVariable Long groupId,
-                                                           @RequestBody CreatePostDto createPostDto
+                                                           @Valid @RequestBody CreatePostDto createPostDto
                                                            ) {
         return ResponseEntity.ok(groupService.addPostToGroup(token,groupId, createPostDto));
     }

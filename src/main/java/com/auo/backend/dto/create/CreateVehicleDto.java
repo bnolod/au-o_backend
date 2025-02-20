@@ -10,15 +10,12 @@ import java.time.LocalDate;
 @Data
 public class CreateVehicleDto {
     @NotBlank
-    @Max(32)
     private String manufacturer;
 
     @NotBlank
-    @Max(32)
     private String model;
 
     @NotBlank
-    @Max(32)
     private String type;
 
     @NotBlank
@@ -27,7 +24,6 @@ public class CreateVehicleDto {
     private Integer horsepower;
 
     @NotBlank
-    @Max(256)
     private String description;
 
     @NotBlank

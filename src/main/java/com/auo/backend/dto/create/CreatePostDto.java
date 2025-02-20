@@ -1,4 +1,5 @@
 package com.auo.backend.dto.create;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -9,12 +10,12 @@ import java.util.List;
 public class CreatePostDto {
     private Long vehicleId;
 
-    @Max(256)
+    @NotBlank
     private String text;
 
-    @NotBlank
+    @Valid
     private List<ImageDto> postImages;
 
-    @Max(32)
+    @NotBlank
     private String location;
 }

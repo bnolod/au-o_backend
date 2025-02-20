@@ -17,6 +17,7 @@ public class PageResponse<T> {
     private int pageNumber;
     private int pageSize;
     private long totalElements;
+    private int totalPages;
 
 
 
@@ -25,7 +26,8 @@ public class PageResponse<T> {
                 page.getContent(),
                 page.getNumber(),
                 page.getSize(),
-                page.getTotalElements()
+                page.getTotalElements(),
+                page.getTotalPages()
         );
     }
 }

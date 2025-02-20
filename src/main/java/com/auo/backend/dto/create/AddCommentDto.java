@@ -7,6 +7,5 @@ import lombok.Data;
 @Data
 public class AddCommentDto {
     @NotBlank
-    @Max(256)
     private String text;
 }

@@ -8,12 +8,9 @@ import lombok.Data;
 @Data
 public class CreateGroupDto {
     @NotNull
-    @Min(4)
-    @Max(48)
     private String name;
 
     @NotNull
-    @Max(256)
     private String description;
 
     @NotNull

@@ -5,9 +5,7 @@ import lombok.Data;
 
 @Data
 public class UpdatePostDto {
-    @Max(256)
     String text;
-    @Max(32)
     String location;
     Long vehicleId;
 }

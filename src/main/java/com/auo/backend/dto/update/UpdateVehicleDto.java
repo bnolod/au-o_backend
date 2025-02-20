@@ -8,20 +8,16 @@ import lombok.Data;
 @Data
 public class UpdateVehicleDto {
 
-    @Max(32)
     private String manufacturer;
 
-    @Max(32)
     private String model;
 
-    @Max(32)
     private String type;
 
     @Max(9998)
     @Min(0)
     private Integer horsepower;
 
-    @Max(256)
     private String description;
 
     @Max(110)
