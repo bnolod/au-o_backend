@@ -81,6 +81,7 @@ public class User implements UserDetails {
     private List<Reaction> reactions;
 
 
+
     @ManyToMany
     @JoinTable(
             name = "user_followers",

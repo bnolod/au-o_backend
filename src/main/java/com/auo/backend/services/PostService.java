@@ -2,6 +2,7 @@ package com.auo.backend.services;
 
 import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.GenericOwnershipCheckerService;
+import com.auo.backend.configs.RateLimitProtection;
 import com.auo.backend.dto.create.AddCommentDto;
 import com.auo.backend.dto.create.CreatePostDto;
 import com.auo.backend.dto.update.UpdatePostDto;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -141,6 +143,7 @@ public class PostService {
     }
 
 
+    @Transactional
     public PostResponse updatePostOfUserById(Long postId, String token, UpdatePostDto updatePostDto) {
         User user = authenticationService.getUserFromToken(token);
         Post post = findPostByIdOrThrow(postId);
@@ -166,6 +169,7 @@ public class PostService {
         return new PostResponse(post, user);
     }
 
+    @Transactional
     public PostResponse deletePostOfUserById(Long postId, String token) {
         User user = authenticationService.getUserFromToken(token);
         Post post = findPostByIdOrThrow(postId);
@@ -177,6 +181,8 @@ public class PostService {
         return new PostResponse(post, user);
     }
 
+    @Transactional
+    @RateLimitProtection
     public AddOrRemoveReactionResponse addOrRemoveReaction(Long postId, ReactionType reactionType, String token) {
         Post post = findPostByIdOrThrow(postId);
         String reactionMessage = postReactionService.addOrRemoveReactionToItem(post, reactionType, token);
@@ -187,6 +193,7 @@ public class PostService {
                 .build();
     }
 
+    @Transactional
     public CommentReplyResponse replyToComment(Long commentId, String token, String text) {
         User user = authenticationService.getUserFromToken(token);
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
@@ -205,6 +212,7 @@ public class PostService {
         return new CommentReplyResponse(reply, user);
     }
 
+    @Transactional
     public CommentReplyResponse deleteReplyFromComment(Long commentReplyId, String token) {
         User user = authenticationService.getUserFromToken(token);
         Optional<CommentReply> optionalCommentReply = commentReplyRepository.findById(commentReplyId);
@@ -219,6 +227,8 @@ public class PostService {
         return new CommentReplyResponse(optionalCommentReply.get(), user);
     }
 
+    @Transactional
+    @RateLimitProtection
     public AddOrRemoveReactionResponse addOrRemoveReactionToComment(Long commentId, ReactionType reactionType, String token) {
         Comment comment = findCommentByIdOrThrow(commentId);
         String reactionMessage = commentReactionService.addOrRemoveReactionToItem(comment, reactionType, token);
@@ -229,6 +239,8 @@ public class PostService {
                 .build();
     }
 
+    @RateLimitProtection
+    @Transactional
     public AddOrRemoveReactionResponse addOrRemoveReactionToReply(Long replyId, ReactionType reactionType, String token) {
         CommentReply reply = findCommentReplyByIdOrThrow(replyId);
         String reactionMessage = commentReplyReactionService.addOrRemoveReactionToItem(reply, reactionType, token);
