@@ -66,11 +66,11 @@ public class GroupController {
         return ResponseEntity.ok(groupService.joinGroup(token,groupId));
     }
 
-    @PostMapping("/handleJoinRequest")
+    @PostMapping("/handleJoinRequest/{groupId}/{userId}/{accept}")
     public ResponseEntity<Boolean> handleJoinRequest(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                     @RequestBody Long groupId,
-                                                     @RequestBody Long userId,
-                                                     @RequestBody boolean accept) {
+                                                     @PathVariable Long groupId,
+                                                     @PathVariable Long userId,
+                                                     @PathVariable boolean accept) {
         return ResponseEntity.ok(groupService.handleJoinRequest(token,userId,groupId, accept));
     }
 

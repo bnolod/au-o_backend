@@ -16,6 +16,7 @@ import com.auo.backend.responses.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -72,6 +73,7 @@ public class GroupService {
         }
 
 
+        System.out.println(createGroupDto.isPublic());
         Group group = Group.builder()
                 .groupName(createGroupDto.getName())
                 .groupAlias(createGroupDto.getAlias().trim().equals("") ? String.valueOf(groupAlias) : createGroupDto.getAlias())
@@ -111,6 +113,7 @@ public class GroupService {
         return new GroupMemberResponse(groupMember);
     }
 
+    @Transactional
     public boolean handleJoinRequest(String token, Long targetUserId, Long groupId, boolean isAccepted) {
         User user = authenticationService.getUserFromToken(token);
         Group group = getGroupByGroupIdOrThrow(groupId);
@@ -129,7 +132,8 @@ public class GroupService {
             targetMember.setValid(true);
             groupMemberRepository.save(targetMember);
         } else {
-            groupMemberRepository.delete(targetMember);
+            group.getGroupMembers().remove(targetMember);
+            groupRepository.save(group);
         }
         return isAccepted;
     }

@@ -47,7 +47,6 @@ public class Group {
     @PrePersist
     protected void onCreate() {
         this.creationDate = LocalDateTime.now();
-        this.isPublic = true;
         if (this.groupMembers == null) {
             this.groupMembers = new ArrayList<>();
         }
