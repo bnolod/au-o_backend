@@ -66,6 +66,16 @@ public class GroupController {
         return ResponseEntity.ok(groupService.joinGroup(token,groupId));
     }
 
+    @PostMapping("/handleJoinRequest")
+    public ResponseEntity<Boolean> handleJoinRequest(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+                                                     @RequestBody Long groupId,
+                                                     @RequestBody Long userId,
+                                                     @RequestBody boolean accept) {
+        return ResponseEntity.ok(groupService.handleJoinRequest(token,userId,groupId, accept));
+    }
+
+
+
     @Operation(summary = "Leave a group by id", description = "Returns ok if successful")
     @PostMapping("/group/{groupId}/leave")
     public void leaveGroup(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,

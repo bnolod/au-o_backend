@@ -25,7 +25,7 @@ public class Reaction {
     @NotNull
     ReactionType reactionType;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JsonBackReference("user-reactions")
     User user;
 }

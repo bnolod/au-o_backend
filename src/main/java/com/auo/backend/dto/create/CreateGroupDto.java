@@ -18,4 +18,6 @@ public class CreateGroupDto {
 
     private String alias;
 
+    private boolean isPublic;
+
 }

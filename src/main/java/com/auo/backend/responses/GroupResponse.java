@@ -23,6 +23,7 @@ public class GroupResponse {
     private boolean isPublic;
     private LocalDateTime creationDate;
     private boolean isMember;
+    private boolean isValidMember;
 
     public GroupResponse(Group group, User user) {
         this.id = group.getId();
@@ -34,5 +35,6 @@ public class GroupResponse {
         this.isPublic = group.isPublic();
         this.creationDate = group.getCreationDate();
         this.isMember = group.getGroupMembers().stream().anyMatch(member -> member.getUser().equals(user));
+        this.isValidMember = group.getGroupMembers().stream().anyMatch(member -> member.getUser().equals(user) && member.isValid());
     }
 }

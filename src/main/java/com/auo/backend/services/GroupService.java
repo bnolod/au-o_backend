@@ -79,6 +79,7 @@ public class GroupService {
                 .bannerImageURL(createGroupDto.getBannerImage())
                 .groupMembers(new ArrayList<>())
                 .groupDescription(createGroupDto.getDescription())
+                .isPublic(createGroupDto.isPublic())
                 .build();
         groupRepository.save(group);
 
@@ -110,7 +111,7 @@ public class GroupService {
         return new GroupMemberResponse(groupMember);
     }
 
-    public void handleJoinRequest(String token, Long targetUserId, Long groupId, boolean accepted) {
+    public boolean handleJoinRequest(String token, Long targetUserId, Long groupId, boolean isAccepted) {
         User user = authenticationService.getUserFromToken(token);
         Group group = getGroupByGroupIdOrThrow(groupId);
         List<GroupRole> rolesList = new ArrayList<GroupRole>();
@@ -124,12 +125,13 @@ public class GroupService {
         GroupMember targetMember = getGroupMemberByUserAndGroup(userService.findUserByIdOrThrow(targetUserId),group);
 
         if (targetMember.isValid()) throw new ResponseStatusException(HttpStatus.CONFLICT, "already_in_group");
-        if (accepted) {
+        if (isAccepted) {
             targetMember.setValid(true);
             groupMemberRepository.save(targetMember);
         } else {
             groupMemberRepository.delete(targetMember);
         }
+        return isAccepted;
     }
 
     public void leaveGroup(String token, Long groupId) {

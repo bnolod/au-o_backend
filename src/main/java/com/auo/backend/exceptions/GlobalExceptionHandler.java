@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +52,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CustomErrorResponse> handleDtoValidationExceptions(
             ConstraintViolationException ex) {
         CustomErrorResponse errR = new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return new ResponseEntity<>(errR, HttpStatusCode.valueOf(errR.getStatus()));
+    }
+
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<CustomErrorResponse> handleSqlExceptions(SQLException ex) {
+        CustomErrorResponse errR = new CustomErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
         return new ResponseEntity<>(errR, HttpStatusCode.valueOf(errR.getStatus()));
     }
 }
