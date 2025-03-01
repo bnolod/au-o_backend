@@ -32,7 +32,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll() // Public endpoints
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().permitAll() // All other requests must be authenticated
+                        .requestMatchers("/ws").permitAll()
+                        .anyRequest().authenticated() // All other requests must be authenticated
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
