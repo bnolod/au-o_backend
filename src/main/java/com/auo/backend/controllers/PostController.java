@@ -8,6 +8,7 @@ import com.auo.backend.enums.ReactionType;
 import com.auo.backend.repositories.PostRepository;
 import com.auo.backend.responses.*;
 import com.auo.backend.services.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/post/user")
-    public ResponseEntity<PostResponse> publishPostToProfile(@RequestBody CreatePostDto createPostDto,
+    public ResponseEntity<PostResponse> publishPostToProfile(@Valid @RequestBody CreatePostDto createPostDto,
                                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("hali");
         return ResponseEntity.ok(this.postService.publishPostToProfile(createPostDto,token));
@@ -52,7 +53,7 @@ public class PostController {
     @PutMapping("/post/{postId}")
     public ResponseEntity<PostResponse> updatePostOfUserById(@PathVariable Long postId,
                                                              @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                             @RequestBody UpdatePostDto updatePostDto) {
+                                                             @Valid @RequestBody UpdatePostDto updatePostDto) {
         return ResponseEntity.ok(this.postService.updatePostOfUserById(postId,token,updatePostDto));
     }
 
@@ -71,7 +72,7 @@ public class PostController {
     @PostMapping("/post/{postId}/comment")
     public ResponseEntity<CommentResponse> commentToPost(@PathVariable Long postId,
                                                          @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                         @RequestBody AddCommentDto text) {
+                                                         @Valid @RequestBody AddCommentDto text) {
         return ResponseEntity.ok(postService.addCommentToPost(token,postId,text));
     }
 
@@ -96,14 +97,10 @@ public class PostController {
         return ResponseEntity.ok(postService.addOrRemoveReactionToReply(replyId,reactionType,token));
     }
 
-
-
-
-
     @PostMapping("post/comment/{commentId}/reply")
     public ResponseEntity<CommentReplyResponse> replyToComment(@PathVariable Long commentId,
                                                                @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                               @RequestBody AddCommentDto addCommentDto) {
+                                                               @Valid @RequestBody AddCommentDto addCommentDto) {
         return ResponseEntity.ok(postService.replyToComment(commentId,token,addCommentDto.getText()));
     }
     @DeleteMapping("post/comment/reply/{replyId}")

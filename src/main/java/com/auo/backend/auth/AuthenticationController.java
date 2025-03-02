@@ -4,6 +4,7 @@ import com.auo.backend.dto.auth.UserLoginDto;
 import com.auo.backend.dto.auth.UserRegisterDto;
 import com.auo.backend.responses.UserResponse;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register (
-            @RequestBody UserRegisterDto userRegisterDto,
+            @Valid @RequestBody UserRegisterDto userRegisterDto,
             HttpServletResponse response
     ) {
         return ResponseEntity.ok(authenticationService.register(userRegisterDto, response));
@@ -26,7 +27,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login (
-            @RequestBody UserLoginDto userLoginDto,
+            @Valid @RequestBody UserLoginDto userLoginDto,
             HttpServletResponse response
     ) {
         return ResponseEntity.ok(authenticationService.login(userLoginDto, response));

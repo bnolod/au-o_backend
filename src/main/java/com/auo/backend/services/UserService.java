@@ -151,7 +151,7 @@ public class UserService {
         User user = authenticationService.getUserFromToken(token);
         User targetUser = findUserByIdOrThrow(targetUserId);
 
-        if (viewPermissionCheckerService.isAbleToViewProfile(user, targetUser)) {
+        if (ViewPermissionCheckerService.isAbleToViewProfile(user, targetUser)) {
             if (targetUser.getPosts().isEmpty())
                 return new ArrayList<>();
             return targetUser.getPosts().stream().map(post -> new PostResponse(post,user)).toList();

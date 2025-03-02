@@ -43,9 +43,15 @@ public class UserController {
         userService.createUser(user);
     }
 
+    @Deprecated
     @DeleteMapping("/user/{userId}")
     public void deleteUserById(@PathVariable Long userId) {
-        userService.deleteUserById(userId);
+//        userService.flagSelfForDeletion(userId);
+    }
+
+    @DeleteMapping("/user")
+    public void flagSelfForDeletion(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        userService.flagSelfForDeletion(token);
     }
 
     @PutMapping("/user/update/{userId}")

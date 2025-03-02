@@ -7,6 +7,7 @@ import com.auo.backend.models.User;
 import com.auo.backend.repositories.ReactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -27,6 +28,7 @@ public class GenericReactionService<T> {
      * @param token        The authentication token of the user.
      * @return "ADDED", "UPDATED", or "REMOVED" depending on the action taken.
      */
+    @Transactional
     public String addOrRemoveReactionToItem(T item, ReactionType reactionType, String token) {
         User user = authenticationService.getUserFromToken(token);
 

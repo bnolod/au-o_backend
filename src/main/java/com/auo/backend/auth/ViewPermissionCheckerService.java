@@ -14,7 +14,7 @@ public class ViewPermissionCheckerService {
      * @param post bizonyos feltételekkel megtekinthető posta
      * @return true/false
      */
-    public boolean isAbleToViewPost(User user, Post post) {
+    public static boolean isAbleToViewPost(User user, Post post) {
         if (post.getGroupMember() == null) {
             return post.getUser().isPublic();
         }
@@ -25,13 +25,11 @@ public class ViewPermissionCheckerService {
                 return true;
             }
         }
-        if (post.getGroupMember().getGroup().isPublic()) {
-            return true;
-        }
-        return false;
+
+        return post.getGroupMember().getGroup().isPublic();
     }
 
-    public boolean isAbleToViewProfile(User user, User target) {
+    public static boolean isAbleToViewProfile(User user, User target) {
         if (user.equals(target))
             return true;
         if (target.isPublic())

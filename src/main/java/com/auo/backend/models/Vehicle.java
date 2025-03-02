@@ -27,6 +27,6 @@ public class Vehicle {
     @ManyToOne
     private User user;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Post> post;
 }

@@ -25,6 +25,7 @@ public class GroupMember {
 
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
+    @JsonBackReference
     private Group group;
 
     @ManyToOne
@@ -39,6 +40,7 @@ public class GroupMember {
 
     @OneToMany(cascade = CascadeType.ALL,
             orphanRemoval=true)
+    @JsonManagedReference
     private List<Post> posts;
 
     private boolean isValid;
@@ -46,7 +48,6 @@ public class GroupMember {
 
     @PrePersist
     protected void onCreate() {
-        this.isValid = false;
         this.joinedDate = LocalDateTime.now();
     }
 

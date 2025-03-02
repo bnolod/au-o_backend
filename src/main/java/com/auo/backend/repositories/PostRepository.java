@@ -34,6 +34,7 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
             "  OR EXISTS (SELECT 1 FROM GroupMember gm2 " +
             "            WHERE gm2.user.id = :userId AND gm2.group = g AND gm2.isValid = true) " +  // User is in the group
             ") " +
+            "AND u.id != :userId " +
             "ORDER BY p.dateOfCreation DESC")
     Page<Post> findPostsForUserFeed(Pageable pageable, @Param("userId") Long userId, @Param("time") LocalDateTime time);
 

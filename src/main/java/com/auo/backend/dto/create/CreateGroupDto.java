@@ -1,5 +1,7 @@
 package com.auo.backend.dto.create;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -15,5 +17,7 @@ public class CreateGroupDto {
     private String bannerImage;
 
     private String alias;
+
+    private boolean isPublic;
 
 }

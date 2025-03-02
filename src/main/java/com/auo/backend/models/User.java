@@ -81,6 +81,7 @@ public class User implements UserDetails {
     private List<Reaction> reactions;
 
 
+
     @ManyToMany
     @JoinTable(
             name = "user_followers",
@@ -98,7 +99,6 @@ public class User implements UserDetails {
 
     @PrePersist
     protected void onCreate() {
-        this.isDeleted = false;
         this.dateOfSignup = LocalDate.now();
         this.following = new ArrayList<>();
         this.comments = new ArrayList<>();
