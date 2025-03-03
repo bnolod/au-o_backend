@@ -45,6 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         final String username;
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             var tokenCookie = WebUtils.getCookie(request, "token");
+            System.out.println("token cookie"+tokenCookie.getValue());
             if (tokenCookie == null) {
                 var refreshTokenCookie = WebUtils.getCookie(request, "refreshtoken");
                 if (refreshTokenCookie == null) {
@@ -56,8 +57,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             } else {
                 jwt = tokenCookie.getValue();
             }
-
         }
+        System.out.println(authHeader);
         if(jwt == null || jwt.isEmpty()) {
             if (authHeader!= null) {
                 jwt = authHeader.substring(7);
@@ -68,6 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             return;
         }
         System.out.println(jwt);
+
         try{
         username = jwtService.extractUsername(jwt);
         } catch (UsernameNotFoundException e) {

@@ -49,8 +49,7 @@ public class GroupController {
 
     @Operation(summary = "Get a group by id", description = "Returns a group if it exists.")
     @GetMapping("/group/{groupId}")
-    public ResponseEntity<GroupResponse> getGroupById(@RequestHeader(HttpHeaders.AUTHORIZATION)String token,
-                                                      @PathVariable Long groupId) {
+    public ResponseEntity<GroupResponse> getGroupById(@PathVariable Long groupId) {
         return ResponseEntity.ok(groupService.getGroupById(groupId));
     }
 
