@@ -108,4 +108,9 @@ public class GroupController {
     //
     //
 
+    @GetMapping("/group/{groupId}/posts")
+    public ResponseEntity<List<PostResponse>> getPostsByGroupId (@PathVariable Long groupId) {
+        return ResponseEntity.ok(groupService.getPostsByGroupId(groupId));
+    }
+
 }

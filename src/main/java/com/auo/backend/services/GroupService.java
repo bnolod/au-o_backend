@@ -219,5 +219,15 @@ public class GroupService {
         return user.getGroups().stream().map(groupMember -> new GroupResponse(groupMember.getGroup(),user)).toList();
     }
 
+    public List<PostResponse> getPostsByGroupId(Long groupId) {
+        User user = UserUtils.getCurrentUser();
+        Group group = getGroupByGroupIdOrThrow(groupId);
+        if (!isUserInGroup(user,group)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not in group");
+        }
+        return postRepository.findPostsByGroupMember_Group(group).stream().map(post -> new PostResponse(post,user)).toList();
+
+    }
+
 
 }

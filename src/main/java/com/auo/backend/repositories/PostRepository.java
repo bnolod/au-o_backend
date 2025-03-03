@@ -1,5 +1,6 @@
 package com.auo.backend.repositories;
 
+import com.auo.backend.models.Group;
 import com.auo.backend.models.Post;
 import com.auo.backend.models.User;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,5 +40,5 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
             "ORDER BY p.dateOfCreation DESC")
     Page<Post> findPostsForUserFeed(Pageable pageable, @Param("userId") Long userId, @Param("time") LocalDateTime time);
 
-
+    List<Post> findPostsByGroupMember_Group(Group groupMemberGroup);
 }
