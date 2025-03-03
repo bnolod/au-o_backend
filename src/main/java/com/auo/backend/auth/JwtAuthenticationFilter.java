@@ -45,8 +45,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         final String username;
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             var tokenCookie = WebUtils.getCookie(request, "token");
-            System.out.println("token cookie"+tokenCookie.getValue());
-            jwt = tokenCookie.getValue();
+            if (tokenCookie != null) {
+                jwt = tokenCookie.getValue();
+            }
         }
         System.out.println(authHeader);
         if(jwt == null || jwt.isEmpty()) {
