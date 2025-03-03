@@ -46,17 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             var tokenCookie = WebUtils.getCookie(request, "token");
             System.out.println("token cookie"+tokenCookie.getValue());
-            if (tokenCookie == null) {
-                var refreshTokenCookie = WebUtils.getCookie(request, "refreshtoken");
-                if (refreshTokenCookie == null) {
-                    filterChain.doFilter(request,response);
-                    return;
-                } else {
-                    jwt = refreshTokenCookie.getValue();
-                }
-            } else {
-                jwt = tokenCookie.getValue();
-            }
+            jwt = tokenCookie.getValue();
         }
         System.out.println(authHeader);
         if(jwt == null || jwt.isEmpty()) {
