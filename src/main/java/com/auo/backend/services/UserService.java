@@ -7,6 +7,7 @@ import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.PostResponse;
 import com.auo.backend.responses.UserResponse;
+import com.auo.backend.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,8 @@ public class UserService {
     }
 
     public UserResponse updateSelf(UpdateUserDto updateUserDto, String token) {
-        User user = authenticationService.getUserFromToken(token);
-        System.out.println(user);
+//        User user = authenticationService.getUserFromToken(token);
+        User user = UserUtils.getCurrentUser();
         if (updateUserDto.getNickname() != null)
             user.setNickname(updateUserDto.getNickname());
         if (updateUserDto.getBio() != null)

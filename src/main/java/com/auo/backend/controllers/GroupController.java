@@ -35,9 +35,9 @@ public class GroupController {
     @Operation(summary = "Create a group",
                 description = "Creates a group with the owner being the user that created it. Returns the group.")
     @PostMapping("/group")
-    public ResponseEntity<GroupResponse> createGroup(@RequestHeader(HttpHeaders.AUTHORIZATION)String token,
+    public ResponseEntity<GroupResponse> createGroup(
                                                      @Valid @RequestBody CreateGroupDto createGroupDto) {
-        return ResponseEntity.ok(groupService.createGroup(token, createGroupDto));
+        return ResponseEntity.ok(groupService.createGroup( createGroupDto));
     }
 
     @Operation(summary = "Delete group by id", description = "Deletes a group by id if the user has permission.")

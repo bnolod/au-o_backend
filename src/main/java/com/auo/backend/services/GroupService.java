@@ -13,6 +13,7 @@ import com.auo.backend.repositories.PostRepository;
 import com.auo.backend.responses.GroupMemberResponse;
 import com.auo.backend.responses.GroupResponse;
 import com.auo.backend.responses.PostResponse;
+import com.auo.backend.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -60,8 +61,8 @@ public class GroupService {
         return user.getGroups().stream().anyMatch(groupMember -> groupMember.getGroup() == group);
     }
 
-    public GroupResponse createGroup(String token, CreateGroupDto createGroupDto) {
-        User user = authenticationService.getUserFromToken(token);
+    public GroupResponse createGroup( CreateGroupDto createGroupDto) {
+        User user = UserUtils.getCurrentUser();
         StringBuilder groupAlias = new StringBuilder();
         for (Character c : createGroupDto.getName().toCharArray()) {
             if (Character.isUpperCase(c) && groupAlias.length() < 10) {

@@ -1,5 +1,7 @@
 package com.auo.backend.auth;
 
+import com.auo.backend.models.User;
+import com.auo.backend.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,12 +22,14 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.WebUtils;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
     private final JwtService jwtService;
+    private final UserRepository userRepository;
     private final UserDetailsService userDetailsService;
     private final AuthenticationService authService;
 
@@ -70,22 +74,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             filterChain.doFilter(request,response);
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "username not found");
         }
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            if (jwtService.isTokenValid(jwt,userDetails)) {
+        Optional<User> user = userRepository.findUserByUsername(username);
+
+        if (user.isEmpty()) {
+            filterChain.doFilter(request,response);
+            return;
+        }
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (jwtService.isTokenValid(jwt,user.get())) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
+                        user.get(),
                         null,
-                        userDetails.getAuthorities()
+                        user.get().getAuthorities()
                 );
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                var newToken = jwtService.generateToken(userDetails);
+                var newToken = jwtService.generateToken(user.get());
                 authService.createTokenCookie(newToken,response);
             }
-
         }
         filterChain.doFilter(request,response);
     }

@@ -115,8 +115,8 @@ public class AuthenticationService {
         Cookie cookie = new Cookie("token",token);
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
-        cookie.setPath("*");
-        cookie.setMaxAge(1000 * 60 * 60 * 24);
+        cookie.setPath("/");
+        cookie.setMaxAge( 60 * 60 * 24);
         response.addCookie(cookie);
     }
 
