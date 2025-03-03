@@ -26,87 +26,75 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/post/user")
-    public ResponseEntity<PostResponse> publishPostToProfile(@Valid @RequestBody CreatePostDto createPostDto,
-                                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<PostResponse> publishPostToProfile(@Valid @RequestBody CreatePostDto createPostDto) {
         System.out.println("hali");
-        return ResponseEntity.ok(this.postService.publishPostToProfile(createPostDto,token));
+        return ResponseEntity.ok(this.postService.publishPostToProfile(createPostDto));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PostResponse>> getAllPosts(@RequestHeader(HttpHeaders.AUTHORIZATION)String token) {
-        return ResponseEntity.ok(this.postService.getAllPosts(token));
+    public ResponseEntity<List<PostResponse>> getAllPosts() {
+        return ResponseEntity.ok(this.postService.getAllPosts());
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<PageResponse<PostResponse>> getPageForFeed(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                                     @RequestParam int page,
+    public ResponseEntity<PageResponse<PostResponse>> getPageForFeed(@RequestParam int page,
                                                                      @RequestParam LocalDateTime time) {
-        return ResponseEntity.ok(postService.getPostFeedOfUser(token,page,time));
+        return ResponseEntity.ok(postService.getPostFeedOfUser(page,time));
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<PostResponse> getOnePostById(@PathVariable Long postId,
-                                                       @RequestHeader(HttpHeaders.AUTHORIZATION)String token) {
-        return ResponseEntity.ok(this.postService.getPostById(postId, token));
+    public ResponseEntity<PostResponse> getOnePostById(@PathVariable Long postId) {
+        return ResponseEntity.ok(this.postService.getPostById(postId));
     }
 
     @PutMapping("/post/{postId}")
     public ResponseEntity<PostResponse> updatePostOfUserById(@PathVariable Long postId,
-                                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                              @Valid @RequestBody UpdatePostDto updatePostDto) {
-        return ResponseEntity.ok(this.postService.updatePostOfUserById(postId,token,updatePostDto));
+        return ResponseEntity.ok(this.postService.updatePostOfUserById(postId,updatePostDto));
     }
 
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity<PostResponse> deletePostOfUserById(@PathVariable Long postId,
-                                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return ResponseEntity.ok(this.postService.deletePostOfUserById(postId,token));
+    public ResponseEntity<PostResponse> deletePostOfUserById(@PathVariable Long postId) {
+        return ResponseEntity.ok(this.postService.deletePostOfUserById(postId));
     }
 
     @DeleteMapping("/post/comment/{commentId}")
-    public void deleteCommentFromPost(@PathVariable Long commentId,
-                                      @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        postService.removeCommentFromPost(token,commentId);
+    public void deleteCommentFromPost(@PathVariable Long commentId) {
+        postService.removeCommentFromPost(commentId);
     }
 
     @PostMapping("/post/{postId}/comment")
     public ResponseEntity<CommentResponse> commentToPost(@PathVariable Long postId,
-                                                         @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                          @Valid @RequestBody AddCommentDto text) {
-        return ResponseEntity.ok(postService.addCommentToPost(token,postId,text));
+        return ResponseEntity.ok(postService.addCommentToPost(postId,text));
     }
 
     @PostMapping("post/{postId}/addOrRemoveReaction/{reactionType}")
     public ResponseEntity<AddOrRemoveReactionResponse> addReactionToPost (@PathVariable Long postId,
-                                                          @PathVariable ReactionType reactionType,
-                                                          @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return ResponseEntity.ok(postService.addOrRemoveReaction(postId,reactionType,token));
+                                                          @PathVariable ReactionType reactionType) {
+        return ResponseEntity.ok(postService.addOrRemoveReaction(postId,reactionType));
     }
 
     @PostMapping("comment/{commentId}/addOrRemoveReaction/{reactionType}")
     public ResponseEntity<AddOrRemoveReactionResponse> addReactionToComment (@PathVariable Long commentId,
-                                                                          @PathVariable ReactionType reactionType,
-                                                                          @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return ResponseEntity.ok(postService.addOrRemoveReactionToComment(commentId,reactionType,token));
+                                                                          @PathVariable ReactionType reactionType) {
+        return ResponseEntity.ok(postService.addOrRemoveReactionToComment(commentId,reactionType));
     }
 
     @PostMapping("reply/{replyId}/addOrRemoveReaction/{reactionType}")
     public ResponseEntity<AddOrRemoveReactionResponse> addReactionToReply (@PathVariable Long replyId,
-                                                                          @PathVariable ReactionType reactionType,
-                                                                          @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return ResponseEntity.ok(postService.addOrRemoveReactionToReply(replyId,reactionType,token));
+                                                                          @PathVariable ReactionType reactionType) {
+        return ResponseEntity.ok(postService.addOrRemoveReactionToReply(replyId,reactionType));
     }
 
     @PostMapping("post/comment/{commentId}/reply")
     public ResponseEntity<CommentReplyResponse> replyToComment(@PathVariable Long commentId,
-                                                               @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                                                                @Valid @RequestBody AddCommentDto addCommentDto) {
-        return ResponseEntity.ok(postService.replyToComment(commentId,token,addCommentDto.getText()));
+        return ResponseEntity.ok(postService.replyToComment(commentId,addCommentDto.getText()));
     }
     @DeleteMapping("post/comment/reply/{replyId}")
-    public ResponseEntity<CommentReplyResponse> deleteReplyFromComment(@PathVariable Long replyId,
-                                                                       @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return ResponseEntity.ok(postService.deleteReplyFromComment(replyId,token));
+    public ResponseEntity<CommentReplyResponse> deleteReplyFromComment(@PathVariable Long replyId) {
+        return ResponseEntity.ok(postService.deleteReplyFromComment(replyId));
     }
 
 }
