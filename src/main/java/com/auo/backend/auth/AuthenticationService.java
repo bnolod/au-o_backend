@@ -101,6 +101,7 @@ public class AuthenticationService {
                 .build();
     }
 
+    @Deprecated
     public User getUserFromToken(String token) {
         String jwt = token.substring(7);
         String username = jwtService.extractUsername(jwt);
