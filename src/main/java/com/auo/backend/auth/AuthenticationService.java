@@ -6,6 +6,7 @@ import com.auo.backend.enums.UserRole;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.UserResponse;
+import com.auo.backend.utils.UserUtils;
 import com.auo.backend.validationServices.UserValidationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -78,18 +79,17 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticate(String token,HttpServletResponse response) {
-        User user = getUserFromToken(token);
+    public AuthenticationResponse authenticate() {
+        User user = UserUtils.getCurrentUser();
         var newToken = jwtService.generateToken(user);
-        createTokenCookie(newToken,response);
         return AuthenticationResponse.builder()
                 .token(newToken)
                 .build();
     }
 
 
-    public UserResponse profile(String token) {
-        User user = getUserFromToken(token);
+    public UserResponse profile() {
+        User user = UserUtils.getCurrentUser();
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())

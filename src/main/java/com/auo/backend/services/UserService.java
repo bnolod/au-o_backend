@@ -33,8 +33,7 @@ public class UserService {
         return userRepository.findAll().stream().map(UserResponse::new).toList();
     }
 
-    public UserResponse updateSelf(UpdateUserDto updateUserDto, String token) {
-//        User user = authenticationService.getUserFromToken(token);
+    public UserResponse updateSelf(UpdateUserDto updateUserDto) {
         User user = UserUtils.getCurrentUser();
         if (updateUserDto.getNickname() != null)
             user.setNickname(updateUserDto.getNickname());
