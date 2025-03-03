@@ -50,8 +50,8 @@ public class UserController {
     }
 
     @DeleteMapping("/user")
-    public void flagSelfForDeletion(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        userService.flagSelfForDeletion(token);
+    public void flagSelfForDeletion() {
+        userService.flagSelfForDeletion();
     }
 
     @PutMapping("/user/update/{userId}")
@@ -60,8 +60,8 @@ public class UserController {
     }
 
     @PutMapping("/user/update")
-    public ResponseEntity<UserResponse> updateSelf(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,@RequestBody UpdateUserDto updateUserDto ) {
-        return ResponseEntity.ok(userService.updateSelf(updateUserDto,token));
+    public ResponseEntity<UserResponse> updateSelf(@RequestBody UpdateUserDto updateUserDto ) {
+        return ResponseEntity.ok(userService.updateSelf(updateUserDto));
     }
 
     @GetMapping("/user/{userId}/followers")
@@ -75,27 +75,23 @@ public class UserController {
     }
 
     @PostMapping("/user/{userId}/follow")
-    public void followUserById(@PathVariable Long userId,
-        @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        userService.followUserById(token, userId);
+    public void followUserById(@PathVariable Long userId) {
+        userService.followUserById( userId);
     }
 
     @DeleteMapping("user/{userId}/unfollow")
-    public void unfollowUser(@PathVariable Long userId,
-                                 @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        userService.unfollowUser(token,userId);
+    public void unfollowUser(@PathVariable Long userId) {
+        userService.unfollowUser(userId);
     }
 
     @DeleteMapping("user/{userId}/remove_follower")
-    public void removeFollowerFromSelf(@PathVariable Long userId,
-                                        @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        userService.removeFollowerFromSelf(token,userId);
+    public void removeFollowerFromSelf(@PathVariable Long userId) {
+        userService.removeFollowerFromSelf(userId);
     }
 
     @GetMapping("user/{userId}/posts")
-    public ResponseEntity<List<PostResponse>> getPostsOfUser(@PathVariable Long userId,
-                                                             @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return ResponseEntity.ok(userService.getPostsOfUser(token,userId));
+    public ResponseEntity<List<PostResponse>> getPostsOfUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getPostsOfUser(userId));
     }
 
 }

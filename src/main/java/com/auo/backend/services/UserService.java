@@ -73,8 +73,8 @@ public class UserService {
         userRepository.delete(findUserByIdOrThrow(userId));
     }
 
-    public void flagSelfForDeletion(String token) {
-        User user = authenticationService.getUserFromToken(token);
+    public void flagSelfForDeletion() {
+        User user = UserUtils.getCurrentUser();
         user.setDeleted(true);
         userRepository.save(user);
     }
@@ -112,8 +112,8 @@ public class UserService {
         return user.getFollowing().stream().map(UserResponse::new).toList();
     }
 
-    public void removeFollowerFromSelf(String token, Long targetUserId) {
-        User user = authenticationService.getUserFromToken(token);
+    public void removeFollowerFromSelf( Long targetUserId) {
+        User user = UserUtils.getCurrentUser();
         User target = findUserByIdOrThrow(targetUserId);
         if (!doesUserFollow(user, target)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
@@ -122,8 +122,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void unfollowUser(String token, Long targetUserId) {
-        User user = authenticationService.getUserFromToken(token);
+    public void unfollowUser( Long targetUserId) {
+        User user = UserUtils.getCurrentUser();
         User target = findUserByIdOrThrow(targetUserId);
         if (!doesUserFollow(user, target)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
@@ -132,8 +132,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void followUserById(String token, Long targetUserId) {
-        User user = authenticationService.getUserFromToken(token);
+    public void followUserById( Long targetUserId) {
+        User user = UserUtils.getCurrentUser();
             if (Objects.equals(user.getId(), targetUserId)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "can_not_follow_self");
             }
@@ -147,8 +147,8 @@ public class UserService {
 
     }
 
-    public List<PostResponse> getPostsOfUser(String token, Long targetUserId) {
-        User user = authenticationService.getUserFromToken(token);
+    public List<PostResponse> getPostsOfUser( Long targetUserId) {
+        User user = UserUtils.getCurrentUser();
         User targetUser = findUserByIdOrThrow(targetUserId);
 
         if (ViewPermissionCheckerService.isAbleToViewProfile(user, targetUser)) {
