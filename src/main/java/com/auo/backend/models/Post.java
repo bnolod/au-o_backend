@@ -51,13 +51,13 @@ public class Post {
             orphanRemoval=true)
     private List<Comment> comments;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference("user-posts")
     @JoinColumn(name = "user_id")
     private User user;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference("groupmember-posts")
     @JoinColumn(name = "group_member_id")
     private GroupMember groupMember;
@@ -66,7 +66,7 @@ public class Post {
             orphanRemoval=true)
     private List<Reaction> reactions = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Vehicle vehicle;
 
 
