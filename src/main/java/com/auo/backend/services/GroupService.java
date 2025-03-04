@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -58,7 +59,7 @@ public class GroupService {
     }
 
     public boolean isUserInGroup(User user, Group group) {
-        return user.getGroups().stream().anyMatch(groupMember -> groupMember.getGroup() == group);
+        return group.getGroupMembers().stream().anyMatch(groupMember -> Objects.equals(groupMember.getUser().getId(), user.getId()));
     }
 
     public GroupResponse createGroup( CreateGroupDto createGroupDto) {
