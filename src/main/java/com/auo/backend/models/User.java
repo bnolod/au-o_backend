@@ -57,27 +57,27 @@ public class User implements UserDetails {
 
     @JsonManagedReference("user-posts")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
-            orphanRemoval=true)
+            orphanRemoval=true, fetch = FetchType.EAGER)
     private List<Post> posts;
 
     @JsonManagedReference("user-comments")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
-            orphanRemoval=true)
+            orphanRemoval=true, fetch = FetchType.EAGER)
     private List<Comment> comments;
 
     @JsonManagedReference("user-groups")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
-            orphanRemoval=true)
+            orphanRemoval=true, fetch = FetchType.EAGER)
     private List<GroupMember> groups;
 
     @JsonManagedReference("user-replies")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
-            orphanRemoval=true)
+            orphanRemoval=true, fetch = FetchType.EAGER)
     private List<CommentReply> replies;
 
     @JsonManagedReference("user-reactions")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
-            orphanRemoval=true)
+            orphanRemoval=true, fetch = FetchType.EAGER)
     private List<Reaction> reactions;
 
 

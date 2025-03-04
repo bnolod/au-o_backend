@@ -39,12 +39,12 @@ public class Group {
     private String groupAlias;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL,
-            orphanRemoval=true)
+            orphanRemoval=true, fetch = FetchType.EAGER)
     private List<GroupEvent> groupEvents;
 
     @NotNull
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL,
-            orphanRemoval=true)
+            orphanRemoval=true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<GroupMember> groupMembers = new ArrayList<>();
 

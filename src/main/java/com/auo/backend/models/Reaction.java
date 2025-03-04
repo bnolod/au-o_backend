@@ -25,7 +25,7 @@ public class Reaction {
     @NotNull
     ReactionType reactionType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference("user-reactions")
     User user;
 }

@@ -213,10 +213,11 @@ public class GroupService {
         Group group = getGroupByGroupIdOrThrow(groupId);
         return new GroupResponse(group,user);
     }
-
+    @Transactional
     public List<GroupResponse> getGroupsOfUser() {
         User user = UserUtils.getCurrentUser();
-        return user.getGroups().stream().map(groupMember -> new GroupResponse(groupMember.getGroup(),user)).toList();
+        List<GroupMember> groups = user.getGroups();
+        return groups.stream().map(groupMember -> new GroupResponse(groupMember.getGroup(),user)).toList();
     }
 
     public List<PostResponse> getPostsByGroupId(Long groupId) {

@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.WebUtils;
@@ -43,12 +44,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         final String authHeader = request.getHeader("Authorization");
         String jwt = null;
         final String username;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            var tokenCookie = WebUtils.getCookie(request, "token");
-            if (tokenCookie != null) {
-                jwt = tokenCookie.getValue();
-            }
+        var tokenCookie = WebUtils.getCookie(request, "token");
+        if (tokenCookie != null) {
+            jwt = tokenCookie.getValue();
         }
+
         System.out.println(authHeader);
         if(jwt == null || jwt.isEmpty()) {
             if (authHeader!= null) {
