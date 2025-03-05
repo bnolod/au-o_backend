@@ -4,8 +4,7 @@ import com.auo.backend.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
@@ -14,4 +13,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findUserByEmail(String email);
 
     Optional<List<User>> findUsersByFollowingContains(User user);
+
+    List<User> findAllByUsernameIn(Collection<String> usernames);
 }
+
