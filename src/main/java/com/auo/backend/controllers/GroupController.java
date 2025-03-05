@@ -25,12 +25,11 @@ import java.util.List;
 @RequestMapping(path = "api/v1/groups")
 public class GroupController {
     private final GroupService groupService;
-    private final AuthenticationService authenticationService;
-
+    private final UserUtils userUtils;
     @Operation(summary = "Get all groups", description = "dev only.")
     @GetMapping("/all")
     public List<GroupResponse> getAllGroups() {
-        return groupService.getAllGroups().stream().map(group -> new GroupResponse(group, UserUtils.getCurrentUser())).toList();
+        return groupService.getAllGroups().stream().map(group -> new GroupResponse(group, userUtils.getCurrentUser())).toList();
     }
 
     @Operation(summary = "Create a group",

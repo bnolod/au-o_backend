@@ -28,6 +28,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final UserValidationService userValidationService;
+    private final UserUtils userUtils;
 
     public AuthenticationResponse register(UserRegisterDto userRegisterDto, HttpServletResponse response) {
         if (!userValidationService.IsEmailValid(userRegisterDto.getEmail())) {
@@ -80,7 +81,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate() {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         var newToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(newToken)
@@ -89,7 +90,7 @@ public class AuthenticationService {
 
 
     public UserResponse profile() {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())

@@ -12,13 +12,13 @@ import org.springframework.web.server.ResponseStatusException;
 @Component
 @RequiredArgsConstructor
 public class UserUtils {
+    private  final UserRepository userRepository;
 
-
-    public static User getCurrentUser() throws ResponseStatusException {
+    public User getCurrentUser() throws ResponseStatusException {
         try {
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return user;
-        } catch (ClassCastException exception) {
+            return userRepository.findUserById(user.getId()).orElseThrow();
+        } catch (Exception exception) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not signed in");
         }
 

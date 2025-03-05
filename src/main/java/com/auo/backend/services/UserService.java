@@ -1,6 +1,5 @@
 package com.auo.backend.services;
 
-import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.ViewPermissionCheckerService;
 import com.auo.backend.dto.update.UpdateUserDto;
 import com.auo.backend.models.User;
@@ -24,8 +23,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final AuthenticationService authenticationService;
-    private final ViewPermissionCheckerService viewPermissionCheckerService;
+    private final UserUtils userUtils;
 
 
     @Deprecated
@@ -34,7 +32,7 @@ public class UserService {
     }
 
     public UserResponse updateSelf(UpdateUserDto updateUserDto) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         if (updateUserDto.getNickname() != null)
             user.setNickname(updateUserDto.getNickname());
         if (updateUserDto.getBio() != null)
@@ -74,7 +72,7 @@ public class UserService {
     }
 
     public void flagSelfForDeletion() {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         user.setDeleted(true);
         userRepository.save(user);
     }
@@ -113,7 +111,7 @@ public class UserService {
     }
 
     public void removeFollowerFromSelf( Long targetUserId) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         User target = findUserByIdOrThrow(targetUserId);
         if (!doesUserFollow(user, target)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
@@ -123,7 +121,7 @@ public class UserService {
     }
 
     public void unfollowUser( Long targetUserId) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         User target = findUserByIdOrThrow(targetUserId);
         if (!doesUserFollow(user, target)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
@@ -133,7 +131,7 @@ public class UserService {
     }
 
     public void followUserById( Long targetUserId) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
             if (Objects.equals(user.getId(), targetUserId)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "can_not_follow_self");
             }
@@ -148,7 +146,7 @@ public class UserService {
     }
 
     public List<PostResponse> getPostsOfUser( Long targetUserId) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         User targetUser = findUserByIdOrThrow(targetUserId);
 
         if (ViewPermissionCheckerService.isAbleToViewProfile(user, targetUser)) {

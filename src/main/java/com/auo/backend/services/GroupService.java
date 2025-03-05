@@ -1,6 +1,5 @@
 package com.auo.backend.services;
 
-import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.GenericOwnershipCheckerService;
 import com.auo.backend.dto.create.CreateGroupDto;
 import com.auo.backend.dto.create.CreatePostDto;
@@ -30,12 +29,12 @@ import java.util.Optional;
 public class GroupService {
 
     private final GroupRepository groupRepository;
-    private final AuthenticationService authenticationService;
     private final GroupMemberRepository groupMemberRepository;
     private final GenericOwnershipCheckerService<User, Group> groupOwnershipCheckerService;
     private final UserService userService;
     private final PostRepository postRepository;
     private final VehicleService vehicleService;
+    private final UserUtils userUtils;
 
     public List<Group> getAllGroups() {
         return groupRepository.findAll();
@@ -63,7 +62,7 @@ public class GroupService {
     }
 
     public GroupResponse createGroup( CreateGroupDto createGroupDto) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         StringBuilder groupAlias = new StringBuilder();
         for (Character c : createGroupDto.getName().toCharArray()) {
             if (Character.isUpperCase(c) && groupAlias.length() < 10) {
@@ -95,7 +94,7 @@ public class GroupService {
     }
 
     public GroupMemberResponse joinGroup( Long groupId) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
 
         Optional<Group> optionalGroup = groupRepository.findById(groupId);
 
@@ -116,7 +115,7 @@ public class GroupService {
 
     @Transactional
     public boolean handleJoinRequest( Long targetUserId, Long groupId, boolean isAccepted) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
 
         Group group = getGroupByGroupIdOrThrow(groupId);
         List<GroupRole> rolesList = new ArrayList<GroupRole>();
@@ -141,7 +140,7 @@ public class GroupService {
     }
 
     public void leaveGroup(Long groupId) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
 
         Group group = getGroupByGroupIdOrThrow(groupId);
         Optional<GroupMember> groupMember = groupMemberRepository.getByUserAndGroup(user,group);
@@ -156,7 +155,7 @@ public class GroupService {
 
     public void deleteGroup(Long groupId) {
         GroupMember groupMember = getGroupMemberByUserAndGroup(
-                UserUtils.getCurrentUser(),
+                userUtils.getCurrentUser(),
                 getGroupByGroupIdOrThrow(groupId));
         if (groupMember.getGroupRole().equals(GroupRole.ADMIN)) {
             groupRepository.delete(groupMember.getGroup());
@@ -165,7 +164,7 @@ public class GroupService {
 
     public GroupMemberResponse setRoleOfMember(Long groupId, Long targetUserId, GroupRole groupRole) {
         Group group = getGroupByGroupIdOrThrow(groupId);
-        GroupMember user = getGroupMemberByUserAndGroup(UserUtils.getCurrentUser(),group);
+        GroupMember user = getGroupMemberByUserAndGroup(userUtils.getCurrentUser(),group);
         GroupMember targetUser = getGroupMemberByUserAndGroup(userService.findUserByIdOrThrow(targetUserId),group);
         if (user.equals(targetUser)) throw new ResponseStatusException(HttpStatus.CONFLICT, "cannot_set_own_role");
         if (user.getGroupRole() != GroupRole.ADMIN) {
@@ -180,7 +179,7 @@ public class GroupService {
 
     public PostResponse addPostToGroup(Long groupId, CreatePostDto createPostDto) {
         GroupMember groupMember = getGroupMemberByUserAndGroup(
-                UserUtils.getCurrentUser(),
+                userUtils.getCurrentUser(),
                 getGroupByGroupIdOrThrow(groupId));
         if (!groupMember.isValid()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"unauthorized");
         Vehicle vehicle = null;
@@ -210,19 +209,19 @@ public class GroupService {
     }
 
     public GroupResponse getGroupById(Long groupId) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         Group group = getGroupByGroupIdOrThrow(groupId);
         return new GroupResponse(group,user);
     }
     @Transactional
     public List<GroupResponse> getGroupsOfUser() {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         List<GroupMember> groups = user.getGroups();
         return groups.stream().map(groupMember -> new GroupResponse(groupMember.getGroup(),user)).toList();
     }
 
     public List<PostResponse> getPostsByGroupId(Long groupId) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         Group group = getGroupByGroupIdOrThrow(groupId);
         if (!isUserInGroup(user,group)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not in group");

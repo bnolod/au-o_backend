@@ -1,10 +1,8 @@
 package com.auo.backend.services;
 
-import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.enums.ReactionType;
 import com.auo.backend.models.Reaction;
 import com.auo.backend.models.User;
-import com.auo.backend.repositories.ReactionRepository;
 import com.auo.backend.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,9 +16,8 @@ import java.util.Optional;
 @Service
 public class GenericReactionService<T> {
 
-    private final AuthenticationService authenticationService;
-    private final ReactionRepository reactionRepository;
 
+    private final UserUtils userUtils;
     /**
      * Adds, removes, or updates a reaction on an item.
      *
@@ -30,7 +27,7 @@ public class GenericReactionService<T> {
      */
     @Transactional
     public String addOrRemoveReactionToItem(T item, ReactionType reactionType) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
 
         try {
             for (Field field : item.getClass().getDeclaredFields()) {
