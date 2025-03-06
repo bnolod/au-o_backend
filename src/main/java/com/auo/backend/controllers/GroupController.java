@@ -5,9 +5,8 @@ import com.auo.backend.dto.create.CreateGroupDto;
 import com.auo.backend.dto.create.CreatePostDto;
 import com.auo.backend.enums.GroupRole;
 import com.auo.backend.models.Group;
-import com.auo.backend.responses.GroupMemberResponse;
-import com.auo.backend.responses.GroupResponse;
-import com.auo.backend.responses.PostResponse;
+import com.auo.backend.models.User;
+import com.auo.backend.responses.*;
 import com.auo.backend.services.GroupService;
 import com.auo.backend.services.UserService;
 import com.auo.backend.utils.UserUtils;
@@ -110,6 +109,11 @@ public class GroupController {
     @GetMapping("/group/{groupId}/posts")
     public ResponseEntity<List<PostResponse>> getPostsByGroupId (@PathVariable Long groupId) {
         return ResponseEntity.ok(groupService.getPostsByGroupId(groupId));
+    }
+    @GetMapping("/group/{groupId}/members")
+    public ResponseEntity<GroupMemberListResponse> getMembersByGroupId (@PathVariable Long groupId) {
+        User user = userUtils.getCurrentUser();
+        return ResponseEntity.ok(groupService.getGroupMembersByGroupId(user, groupId));
     }
 
 }

@@ -9,9 +9,7 @@ import com.auo.backend.models.*;
 import com.auo.backend.repositories.GroupMemberRepository;
 import com.auo.backend.repositories.GroupRepository;
 import com.auo.backend.repositories.PostRepository;
-import com.auo.backend.responses.GroupMemberResponse;
-import com.auo.backend.responses.GroupResponse;
-import com.auo.backend.responses.PostResponse;
+import com.auo.backend.responses.*;
 import com.auo.backend.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -46,10 +45,21 @@ public class GroupService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "group_not_found");
     }
 
-    public GroupMember getGroupMemberByUserAndGroup(User user,Group group) {
-        Optional<GroupMember> optionalGroupMember= groupMemberRepository.getByUserAndGroup(user,group);
+    public GroupMember getGroupMemberByUserAndGroup(User user, Group group) {
+        Optional<GroupMember> optionalGroupMember = groupMemberRepository.getByUserAndGroup(user, group);
         if (optionalGroupMember.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "not_found");
         return optionalGroupMember.get();
+    }
+
+    public GroupMemberListResponse getGroupMembersByGroupId(User user, Long groupId) {
+        Group group = getGroupByGroupIdOrThrow(groupId);
+
+        Optional<GroupMember> groupMember = groupMemberRepository.getByUserAndGroup(user, group);
+
+        if (groupMember.isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT, "not_in_group");
+
+        List<GroupUserResponse> groupUserResponses = group.getGroupMembers().stream().map(member -> new GroupUserResponse(new GroupMemberResponse(member))).toList();
+        return new GroupMemberListResponse(group, user, groupUserResponses);
     }
 
     public boolean hasRequiredRoleInGroup(User user, Group group, List<GroupRole> requiredGroupRoles) {
@@ -61,7 +71,7 @@ public class GroupService {
         return group.getGroupMembers().stream().anyMatch(groupMember -> Objects.equals(groupMember.getUser().getId(), user.getId()));
     }
 
-    public GroupResponse createGroup( CreateGroupDto createGroupDto) {
+    public GroupResponse createGroup(CreateGroupDto createGroupDto) {
         User user = userUtils.getCurrentUser();
         StringBuilder groupAlias = new StringBuilder();
         for (Character c : createGroupDto.getName().toCharArray()) {
@@ -93,7 +103,7 @@ public class GroupService {
         return new GroupResponse(group, user);
     }
 
-    public GroupMemberResponse joinGroup( Long groupId) {
+    public GroupMemberResponse joinGroup(Long groupId) {
         User user = userUtils.getCurrentUser();
 
         Optional<Group> optionalGroup = groupRepository.findById(groupId);
@@ -102,10 +112,10 @@ public class GroupService {
 
         Group group = optionalGroup.get();
         if (group.getGroupMembers().stream().anyMatch(groupMember -> groupMember.getUser().equals(user))) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT,"already_in_group");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "already_in_group");
         }
 
-        GroupMember groupMember = new GroupMember(user,group);
+        GroupMember groupMember = new GroupMember(user, group);
         groupMember.setValid(group.isPublic());
         groupMember.setGroup(group);
         groupMemberRepository.save(groupMember);
@@ -114,7 +124,7 @@ public class GroupService {
     }
 
     @Transactional
-    public boolean handleJoinRequest( Long targetUserId, Long groupId, boolean isAccepted) {
+    public boolean handleJoinRequest(Long targetUserId, Long groupId, boolean isAccepted) {
         User user = userUtils.getCurrentUser();
 
         Group group = getGroupByGroupIdOrThrow(groupId);
@@ -122,11 +132,11 @@ public class GroupService {
         rolesList.add(GroupRole.ADMIN);
         rolesList.add(GroupRole.MODERATOR);
 
-        if (!hasRequiredRoleInGroup(user, group,rolesList)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"unauthorized");
+        if (!hasRequiredRoleInGroup(user, group, rolesList)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
         }
 
-        GroupMember targetMember = getGroupMemberByUserAndGroup(userService.findUserByIdOrThrow(targetUserId),group);
+        GroupMember targetMember = getGroupMemberByUserAndGroup(userService.findUserByIdOrThrow(targetUserId), group);
 
         if (targetMember.isValid()) throw new ResponseStatusException(HttpStatus.CONFLICT, "already_in_group");
         if (isAccepted) {
@@ -143,7 +153,7 @@ public class GroupService {
         User user = userUtils.getCurrentUser();
 
         Group group = getGroupByGroupIdOrThrow(groupId);
-        Optional<GroupMember> groupMember = groupMemberRepository.getByUserAndGroup(user,group);
+        Optional<GroupMember> groupMember = groupMemberRepository.getByUserAndGroup(user, group);
 
         if (groupMember.isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT, "not_in_group");
 
@@ -159,18 +169,19 @@ public class GroupService {
                 getGroupByGroupIdOrThrow(groupId));
         if (groupMember.getGroupRole().equals(GroupRole.ADMIN)) {
             groupRepository.delete(groupMember.getGroup());
-        } else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"unauthorized");
+        } else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
     }
 
     public GroupMemberResponse setRoleOfMember(Long groupId, Long targetUserId, GroupRole groupRole) {
         Group group = getGroupByGroupIdOrThrow(groupId);
-        GroupMember user = getGroupMemberByUserAndGroup(userUtils.getCurrentUser(),group);
-        GroupMember targetUser = getGroupMemberByUserAndGroup(userService.findUserByIdOrThrow(targetUserId),group);
+        GroupMember user = getGroupMemberByUserAndGroup(userUtils.getCurrentUser(), group);
+        GroupMember targetUser = getGroupMemberByUserAndGroup(userService.findUserByIdOrThrow(targetUserId), group);
         if (user.equals(targetUser)) throw new ResponseStatusException(HttpStatus.CONFLICT, "cannot_set_own_role");
         if (user.getGroupRole() != GroupRole.ADMIN) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "admin_role_required");
         }
-        if (targetUser.getGroupRole() == groupRole) throw new ResponseStatusException(HttpStatus.CONFLICT,"already_has_role");
+        if (targetUser.getGroupRole() == groupRole)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "already_has_role");
         targetUser.setGroupRole(groupRole);
         groupMemberRepository.save(targetUser);
 
@@ -181,19 +192,19 @@ public class GroupService {
         GroupMember groupMember = getGroupMemberByUserAndGroup(
                 userUtils.getCurrentUser(),
                 getGroupByGroupIdOrThrow(groupId));
-        if (!groupMember.isValid()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"unauthorized");
+        if (!groupMember.isValid()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
         Vehicle vehicle = null;
         if (createPostDto.getVehicleId() != null) {
             vehicle = vehicleService.findOwnVehicleAndCheckOwnership(groupMember.getUser(), createPostDto.getVehicleId());
         }
 
         List<Image> imageList =
-        createPostDto.getPostImages().stream().map(postImage -> Image
-                 .builder()
-                 .index(createPostDto.getPostImages().indexOf(postImage))
-                 .url(postImage.getUrl())
-                 .deleteHash(postImage.getDeleteHash())
-                 .build()).toList();
+                createPostDto.getPostImages().stream().map(postImage -> Image
+                        .builder()
+                        .index(createPostDto.getPostImages().indexOf(postImage))
+                        .url(postImage.getUrl())
+                        .deleteHash(postImage.getDeleteHash())
+                        .build()).toList();
 
         Post tempPost = Post.builder()
                 .postType(PostType.GROUPPOST)
@@ -205,28 +216,29 @@ public class GroupService {
                 .build();
         postRepository.save(tempPost);
 
-        return new PostResponse(tempPost,groupMember.getUser());
+        return new PostResponse(tempPost, groupMember.getUser());
     }
 
     public GroupResponse getGroupById(Long groupId) {
         User user = userUtils.getCurrentUser();
         Group group = getGroupByGroupIdOrThrow(groupId);
-        return new GroupResponse(group,user);
+        return new GroupResponse(group, user);
     }
+
     @Transactional
     public List<GroupResponse> getGroupsOfUser() {
         User user = userUtils.getCurrentUser();
         List<GroupMember> groups = user.getGroups();
-        return groups.stream().map(groupMember -> new GroupResponse(groupMember.getGroup(),user)).toList();
+        return groups.stream().map(groupMember -> new GroupResponse(groupMember.getGroup(), user)).toList();
     }
 
     public List<PostResponse> getPostsByGroupId(Long groupId) {
         User user = userUtils.getCurrentUser();
         Group group = getGroupByGroupIdOrThrow(groupId);
-        if (!isUserInGroup(user,group)) {
+        if (!isUserInGroup(user, group)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not in group");
         }
-        return postRepository.findPostsByGroupMember_Group(group).stream().map(post -> new PostResponse(post,user)).toList();
+        return postRepository.findPostsByGroupMember_Group(group).stream().map(post -> new PostResponse(post, user)).toList();
 
     }
 
