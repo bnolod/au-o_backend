@@ -116,6 +116,7 @@ public class AuthenticationService {
     public void createTokenCookie(String token, HttpServletResponse response) {
         Cookie cookie = new Cookie("token",token);
         cookie.setHttpOnly(true);
+        cookie.setAttribute("SameSite", "Strict");
         cookie.setSecure(false);
         cookie.setPath("/");
         cookie.setMaxAge( 60 * 60 * 24);

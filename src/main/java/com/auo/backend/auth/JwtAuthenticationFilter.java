@@ -49,13 +49,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         String jwt = null;
         final String username;
 
-        System.out.println(authHeader);
+//        System.out.println(authHeader);
 
-        if(jwt == null || jwt.isEmpty()) {
-            if (authHeader!= null) {
-                jwt = authHeader.substring(7);
-            }
-        }
+//        if(jwt == null || jwt.isEmpty()) {
+//            if (authHeader!= null) {
+//                jwt = authHeader.substring(7);
+//            }
+//        }
 
         var tokenCookie = WebUtils.getCookie(request, "token");
         if (tokenCookie != null) {
@@ -67,7 +67,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             filterChain.doFilter(request,response);
             return;
         }
-        System.out.println(jwt);
 
         try{
             username = jwtService.extractUsername(jwt);
@@ -79,11 +78,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             cookie.setPath("/");
             cookie.setMaxAge(0);
             response.addCookie(cookie);
+
             filterChain.doFilter(request,response);
             return;
         }
         Optional<User> user = userRepository.findUserByUsername(username);
-
         if (user.isEmpty()) {
             filterChain.doFilter(request,response);
             return;
