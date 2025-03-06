@@ -4,6 +4,7 @@ import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -62,10 +63,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         System.out.println(jwt);
 
         try{
-        username = jwtService.extractUsername(jwt);
-        } catch (UsernameNotFoundException e) {
+            username = jwtService.extractUsername(jwt);
+        } catch (Exception e) {
+            //delete the mishandle cookie
+            Cookie cookie = new Cookie("token", null);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(false);
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
             filterChain.doFilter(request,response);
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "username not found");
+            return;
         }
         Optional<User> user = userRepository.findUserByUsername(username);
 
