@@ -17,7 +17,7 @@ public class UserUtils {
     public User getCurrentUser() throws ResponseStatusException {
         try {
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return userRepository.findUserById(user.getId()).orElseThrow();
+            return userRepository.findUserById(Long.valueOf( user.getId())).orElseThrow();
         } catch (Exception exception) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not signed in");
         }
