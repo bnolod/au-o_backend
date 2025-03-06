@@ -24,13 +24,13 @@ public class Comment {
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "post_id")
     @JsonBackReference
     private Post post;

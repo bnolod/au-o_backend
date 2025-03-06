@@ -23,12 +23,12 @@ public class GroupMember {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     @JsonBackReference
     private Group group;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JsonBackReference
     private User user;
 

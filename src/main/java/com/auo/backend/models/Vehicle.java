@@ -24,7 +24,7 @@ public class Vehicle {
     private Integer displacement;
     private Integer productionYear;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL)
