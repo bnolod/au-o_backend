@@ -1,6 +1,5 @@
 package com.auo.backend.services;
 
-import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.GenericOwnershipCheckerService;
 import com.auo.backend.configs.RateLimitProtection;
 import com.auo.backend.dto.create.AddCommentDto;
@@ -28,9 +27,6 @@ import java.util.*;
 @Service
 public class PostService {
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
-    private final AuthenticationService authenticationService;
-    private final PostImageRepository postImageRepository;
     private final CommentRepository commentRepository;
     private final GenericOwnershipCheckerService<User, Post> postOwnershipCheckerService;
     private final GenericOwnershipCheckerService<User, Comment> commentOwnershipCheckerService;
@@ -38,13 +34,13 @@ public class PostService {
     private final GenericReactionService<Post> postReactionService;
     private final GenericReactionService<Comment> commentReactionService;
     private final GenericReactionService<CommentReply> commentReplyReactionService;
-
+    private final UserUtils userUtils;
     private final VehicleService vehicleService;
     private final CommentReplyRepository commentReplyRepository;
 
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         Vehicle vehicle = null;
         if (createPostDto.getVehicleId() != null) {
             vehicle = vehicleService.findOwnVehicleAndCheckOwnership(user, createPostDto.getVehicleId());
@@ -76,7 +72,7 @@ public class PostService {
     }
 
     public PageResponse<PostResponse> getPostFeedOfUser(int page, LocalDateTime time) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         Pageable pageable = PageRequest.of(page, 10);
         Page<Post> posts = postRepository.findPostsForUserFeed(pageable, user.getId(), time);
 //        if (posts.isEmpty()) return null;
@@ -87,14 +83,14 @@ public class PostService {
     @Deprecated
     public List<PostResponse> getAllPosts() {
         List<Post> allPosts = this.postRepository.findAll();
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         return allPosts.stream().map(post -> new PostResponse(post, user)).toList();
     }
 
     public PostResponse getPostById(Long postId) {
         Optional<Post> post = postRepository.findPostById(postId);
         if (post.isPresent()) {
-            return new PostResponse(post.get(), UserUtils.getCurrentUser());
+            return new PostResponse(post.get(), userUtils.getCurrentUser());
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "post_not_found");
         }
@@ -102,7 +98,7 @@ public class PostService {
 
 
     public CommentResponse addCommentToPost( Long postId, AddCommentDto commentText) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
 
         Optional<Post> optionalPost = postRepository.findPostById(postId);
         if (optionalPost.isEmpty()) {
@@ -130,7 +126,7 @@ public class PostService {
      * talán működik, talán nem, majd teszt hétfőn
      */
     public void removeCommentFromPost( Long commentId) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "comment_not_found");
@@ -147,7 +143,7 @@ public class PostService {
 
     @Transactional
     public PostResponse updatePostOfUserById(Long postId, UpdatePostDto updatePostDto) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         Post post = findPostByIdOrThrow(postId);
 
         if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
@@ -173,7 +169,7 @@ public class PostService {
 
     @Transactional
     public PostResponse deletePostOfUserById(Long postId) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         Post post = findPostByIdOrThrow(postId);
         if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -197,7 +193,7 @@ public class PostService {
 
     @Transactional
     public CommentReplyResponse replyToComment(Long commentId, String text) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "comment_not_found");
@@ -216,7 +212,7 @@ public class PostService {
 
     @Transactional
     public CommentReplyResponse deleteReplyFromComment(Long commentReplyId) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         Optional<CommentReply> optionalCommentReply = commentReplyRepository.findById(commentReplyId);
         if (optionalCommentReply.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reply_not_found");

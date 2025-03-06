@@ -26,6 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RequestMapping("/api/v1/messages")
 public class PrivateMessagingController {
     private final UserRepository userRepository;
+    private final UserUtils userUtils;
     private final SimpMessagingTemplate messagingTemplate;
 
     // A 3D map: <username, <friendUsername, List<ChatMessage>>>
@@ -33,7 +34,7 @@ public class PrivateMessagingController {
 
     @GetMapping("/user/{username}")
     public List<ChatMessage> getMessagesWithUser(@PathVariable String username) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         var targetUser = userRepository.findUserByUsername(username);
         if (targetUser.isEmpty()) return null;
 

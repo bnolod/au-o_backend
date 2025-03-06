@@ -1,6 +1,5 @@
 package com.auo.backend.services;
 
-import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.GenericOwnershipCheckerService;
 import com.auo.backend.dto.create.CreateVehicleDto;
 import com.auo.backend.dto.update.UpdateVehicleDto;
@@ -21,12 +20,12 @@ import java.util.Optional;
 @Service
 public class VehicleService {
     private final UserService userService;
-    private final AuthenticationService authenticationService;
+    private final UserUtils userUtils;
     private final VehicleRepository vehicleRepository;
     private final GenericOwnershipCheckerService<User, Vehicle> vehicleOwnershipCheckerService;
 
     public VehicleResponse createVehicle( CreateVehicleDto dto) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         Vehicle vehicle = vehicleRepository.save(Vehicle.builder()
                 .type(dto.getType())
                 .model(dto.getModel())
@@ -41,7 +40,7 @@ public class VehicleService {
     }
 
     public List<VehicleResponse> getOwnVehicles() {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         return findVehiclesByUserId(user.getId()).stream().map(
                 vehicle -> new VehicleResponse(vehicle, user)
         ).toList();
@@ -54,7 +53,7 @@ public class VehicleService {
     }
 
     public VehicleResponse modifyOwnVehicleById( Long vehicleId, UpdateVehicleDto dto) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         Vehicle vehicle = findOwnVehicleAndCheckOwnership(user, vehicleId);
         vehicle = vehicleRepository.save(modifyVehicleByDto(vehicle, dto));
         return new VehicleResponse(vehicle, user);
@@ -66,7 +65,7 @@ public class VehicleService {
     }
 
     public void deleteVehicleByIdFromSelf(Long id) {
-        User user = UserUtils.getCurrentUser();
+        User user = userUtils.getCurrentUser();
         Vehicle vehicle = findOwnVehicleAndCheckOwnership(user, id);
         vehicleRepository.delete(vehicle);
     }
