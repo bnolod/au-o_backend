@@ -63,6 +63,12 @@ public class GroupController {
         return ResponseEntity.ok(groupService.joinGroup(groupId));
     }
 
+    @Operation(summary = "Get your member status", description = "Gets your member data from a group")
+    @GetMapping("/group/{groupId}/status")
+    public ResponseEntity<GroupMemberResponse> getOwnGroupMemberStatus(@PathVariable Long groupId) {
+        return ResponseEntity.ok(groupService.getOwnGroupMemberStatus(groupId));
+    }
+
     @PostMapping("/handleJoinRequest/{groupId}/{userId}/{accept}")
     public ResponseEntity<Boolean> handleJoinRequest(@PathVariable Long groupId,
                                                      @PathVariable Long userId,

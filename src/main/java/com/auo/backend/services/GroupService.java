@@ -232,6 +232,14 @@ public class GroupService {
         return groups.stream().map(groupMember -> new GroupResponse(groupMember.getGroup(), user)).toList();
     }
 
+    public GroupMemberResponse getOwnGroupMemberStatus(Long groupId) {
+        User user = userUtils.getCurrentUser();
+        Group group = getGroupByGroupIdOrThrow(groupId);
+        GroupMember groupMember = getGroupMemberByUserAndGroup(user, group);
+        return new GroupMemberResponse(groupMember);
+    }
+
+
     public List<PostResponse> getPostsByGroupId(Long groupId) {
         User user = userUtils.getCurrentUser();
         Group group = getGroupByGroupIdOrThrow(groupId);
