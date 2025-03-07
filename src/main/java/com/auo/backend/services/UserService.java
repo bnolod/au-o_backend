@@ -1,12 +1,12 @@
 package com.auo.backend.services;
 
-import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.ViewPermissionCheckerService;
 import com.auo.backend.dto.update.UpdateUserDto;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.PostResponse;
 import com.auo.backend.responses.UserResponse;
+import com.auo.backend.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,8 +23,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final AuthenticationService authenticationService;
-    private final ViewPermissionCheckerService viewPermissionCheckerService;
+    private final UserUtils userUtils;
 
 
     @Deprecated
@@ -32,9 +31,8 @@ public class UserService {
         return userRepository.findAll().stream().map(UserResponse::new).toList();
     }
 
-    public UserResponse updateSelf(UpdateUserDto updateUserDto, String token) {
-        User user = authenticationService.getUserFromToken(token);
-        System.out.println(user);
+    public UserResponse updateSelf(UpdateUserDto updateUserDto) {
+        User user = userUtils.getCurrentUser();
         if (updateUserDto.getNickname() != null)
             user.setNickname(updateUserDto.getNickname());
         if (updateUserDto.getBio() != null)
@@ -73,8 +71,8 @@ public class UserService {
         userRepository.delete(findUserByIdOrThrow(userId));
     }
 
-    public void flagSelfForDeletion(String token) {
-        User user = authenticationService.getUserFromToken(token);
+    public void flagSelfForDeletion() {
+        User user = userUtils.getCurrentUser();
         user.setDeleted(true);
         userRepository.save(user);
     }
@@ -112,8 +110,8 @@ public class UserService {
         return user.getFollowing().stream().map(UserResponse::new).toList();
     }
 
-    public void removeFollowerFromSelf(String token, Long targetUserId) {
-        User user = authenticationService.getUserFromToken(token);
+    public void removeFollowerFromSelf( Long targetUserId) {
+        User user = userUtils.getCurrentUser();
         User target = findUserByIdOrThrow(targetUserId);
         if (!doesUserFollow(user, target)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
@@ -122,8 +120,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void unfollowUser(String token, Long targetUserId) {
-        User user = authenticationService.getUserFromToken(token);
+    public void unfollowUser( Long targetUserId) {
+        User user = userUtils.getCurrentUser();
         User target = findUserByIdOrThrow(targetUserId);
         if (!doesUserFollow(user, target)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user_does_not_follow");
@@ -132,8 +130,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void followUserById(String token, Long targetUserId) {
-        User user = authenticationService.getUserFromToken(token);
+    public void followUserById( Long targetUserId) {
+        User user = userUtils.getCurrentUser();
             if (Objects.equals(user.getId(), targetUserId)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "can_not_follow_self");
             }
@@ -147,8 +145,8 @@ public class UserService {
 
     }
 
-    public List<PostResponse> getPostsOfUser(String token, Long targetUserId) {
-        User user = authenticationService.getUserFromToken(token);
+    public List<PostResponse> getPostsOfUser( Long targetUserId) {
+        User user = userUtils.getCurrentUser();
         User targetUser = findUserByIdOrThrow(targetUserId);
 
         if (ViewPermissionCheckerService.isAbleToViewProfile(user, targetUser)) {

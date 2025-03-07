@@ -1,6 +1,5 @@
 package com.auo.backend.services;
 
-import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.GenericOwnershipCheckerService;
 import com.auo.backend.configs.RateLimitProtection;
 import com.auo.backend.dto.create.AddCommentDto;
@@ -11,6 +10,7 @@ import com.auo.backend.enums.ReactionType;
 import com.auo.backend.models.*;
 import com.auo.backend.repositories.*;
 import com.auo.backend.responses.*;
+import com.auo.backend.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,9 +27,6 @@ import java.util.*;
 @Service
 public class PostService {
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
-    private final AuthenticationService authenticationService;
-    private final PostImageRepository postImageRepository;
     private final CommentRepository commentRepository;
     private final GenericOwnershipCheckerService<User, Post> postOwnershipCheckerService;
     private final GenericOwnershipCheckerService<User, Comment> commentOwnershipCheckerService;
@@ -37,13 +34,13 @@ public class PostService {
     private final GenericReactionService<Post> postReactionService;
     private final GenericReactionService<Comment> commentReactionService;
     private final GenericReactionService<CommentReply> commentReplyReactionService;
-
+    private final UserUtils userUtils;
     private final VehicleService vehicleService;
     private final CommentReplyRepository commentReplyRepository;
 
 
-    public PostResponse publishPostToProfile(CreatePostDto createPostDto, String token) {
-        User user = authenticationService.getUserFromToken(token);
+    public PostResponse publishPostToProfile(CreatePostDto createPostDto) {
+        User user = userUtils.getCurrentUser();
         Vehicle vehicle = null;
         if (createPostDto.getVehicleId() != null) {
             vehicle = vehicleService.findOwnVehicleAndCheckOwnership(user, createPostDto.getVehicleId());
@@ -74,8 +71,8 @@ public class PostService {
 
     }
 
-    public PageResponse<PostResponse> getPostFeedOfUser(String token, int page, LocalDateTime time) {
-        User user = authenticationService.getUserFromToken(token);
+    public PageResponse<PostResponse> getPostFeedOfUser(int page, LocalDateTime time) {
+        User user = userUtils.getCurrentUser();
         Pageable pageable = PageRequest.of(page, 10);
         Page<Post> posts = postRepository.findPostsForUserFeed(pageable, user.getId(), time);
 //        if (posts.isEmpty()) return null;
@@ -84,23 +81,24 @@ public class PostService {
 
 
     @Deprecated
-    public List<PostResponse> getAllPosts(String token) {
+    public List<PostResponse> getAllPosts() {
         List<Post> allPosts = this.postRepository.findAll();
-        return allPosts.stream().map(post -> new PostResponse(post, authenticationService.getUserFromToken(token))).toList();
+        User user = userUtils.getCurrentUser();
+        return allPosts.stream().map(post -> new PostResponse(post, user)).toList();
     }
 
-    public PostResponse getPostById(Long postId, String token) {
+    public PostResponse getPostById(Long postId) {
         Optional<Post> post = postRepository.findPostById(postId);
         if (post.isPresent()) {
-            return new PostResponse(post.get(), authenticationService.getUserFromToken(token));
+            return new PostResponse(post.get(), userUtils.getCurrentUser());
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "post_not_found");
         }
     }
 
 
-    public CommentResponse addCommentToPost(String token, Long postId, AddCommentDto commentText) {
-        User user = authenticationService.getUserFromToken(token);
+    public CommentResponse addCommentToPost( Long postId, AddCommentDto commentText) {
+        User user = userUtils.getCurrentUser();
 
         Optional<Post> optionalPost = postRepository.findPostById(postId);
         if (optionalPost.isEmpty()) {
@@ -127,8 +125,8 @@ public class PostService {
      * Úgy terveztem ezt a szart hogy a saját kommentet, vagy a saját posztod alatti összes kommentet ki tudd törölni
      * talán működik, talán nem, majd teszt hétfőn
      */
-    public void removeCommentFromPost(String token, Long commentId) {
-        User user = authenticationService.getUserFromToken(token);
+    public void removeCommentFromPost( Long commentId) {
+        User user = userUtils.getCurrentUser();
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "comment_not_found");
@@ -144,8 +142,8 @@ public class PostService {
 
 
     @Transactional
-    public PostResponse updatePostOfUserById(Long postId, String token, UpdatePostDto updatePostDto) {
-        User user = authenticationService.getUserFromToken(token);
+    public PostResponse updatePostOfUserById(Long postId, UpdatePostDto updatePostDto) {
+        User user = userUtils.getCurrentUser();
         Post post = findPostByIdOrThrow(postId);
 
         if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
@@ -170,8 +168,8 @@ public class PostService {
     }
 
     @Transactional
-    public PostResponse deletePostOfUserById(Long postId, String token) {
-        User user = authenticationService.getUserFromToken(token);
+    public PostResponse deletePostOfUserById(Long postId) {
+        User user = userUtils.getCurrentUser();
         Post post = findPostByIdOrThrow(postId);
         if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -183,9 +181,9 @@ public class PostService {
 
     @Transactional
     @RateLimitProtection
-    public AddOrRemoveReactionResponse addOrRemoveReaction(Long postId, ReactionType reactionType, String token) {
+    public AddOrRemoveReactionResponse addOrRemoveReaction(Long postId, ReactionType reactionType) {
         Post post = findPostByIdOrThrow(postId);
-        String reactionMessage = postReactionService.addOrRemoveReactionToItem(post, reactionType, token);
+        String reactionMessage = postReactionService.addOrRemoveReactionToItem(post, reactionType);
         postRepository.save(post);
         return AddOrRemoveReactionResponse.builder()
                 .message(reactionMessage)
@@ -194,8 +192,8 @@ public class PostService {
     }
 
     @Transactional
-    public CommentReplyResponse replyToComment(Long commentId, String token, String text) {
-        User user = authenticationService.getUserFromToken(token);
+    public CommentReplyResponse replyToComment(Long commentId, String text) {
+        User user = userUtils.getCurrentUser();
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         if (optionalComment.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "comment_not_found");
@@ -213,8 +211,8 @@ public class PostService {
     }
 
     @Transactional
-    public CommentReplyResponse deleteReplyFromComment(Long commentReplyId, String token) {
-        User user = authenticationService.getUserFromToken(token);
+    public CommentReplyResponse deleteReplyFromComment(Long commentReplyId) {
+        User user = userUtils.getCurrentUser();
         Optional<CommentReply> optionalCommentReply = commentReplyRepository.findById(commentReplyId);
         if (optionalCommentReply.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reply_not_found");
@@ -229,9 +227,9 @@ public class PostService {
 
     @Transactional
     @RateLimitProtection
-    public AddOrRemoveReactionResponse addOrRemoveReactionToComment(Long commentId, ReactionType reactionType, String token) {
+    public AddOrRemoveReactionResponse addOrRemoveReactionToComment(Long commentId, ReactionType reactionType) {
         Comment comment = findCommentByIdOrThrow(commentId);
-        String reactionMessage = commentReactionService.addOrRemoveReactionToItem(comment, reactionType, token);
+        String reactionMessage = commentReactionService.addOrRemoveReactionToItem(comment, reactionType);
         commentRepository.save(comment);
         return AddOrRemoveReactionResponse.builder()
                 .message(reactionMessage)
@@ -241,9 +239,9 @@ public class PostService {
 
     @RateLimitProtection
     @Transactional
-    public AddOrRemoveReactionResponse addOrRemoveReactionToReply(Long replyId, ReactionType reactionType, String token) {
+    public AddOrRemoveReactionResponse addOrRemoveReactionToReply(Long replyId, ReactionType reactionType) {
         CommentReply reply = findCommentReplyByIdOrThrow(replyId);
-        String reactionMessage = commentReplyReactionService.addOrRemoveReactionToItem(reply, reactionType, token);
+        String reactionMessage = commentReplyReactionService.addOrRemoveReactionToItem(reply, reactionType);
         commentReplyRepository.save(reply);
         return AddOrRemoveReactionResponse.builder()
                 .message(reactionMessage)

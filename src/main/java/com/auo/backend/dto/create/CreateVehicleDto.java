@@ -19,8 +19,8 @@ public class CreateVehicleDto {
     private String type;
 
     @NotBlank
-    @Max(9998)
-    @Min(0)
+    @Max(2000)
+    @Min(1)
     private Integer horsepower;
 
     @NotBlank

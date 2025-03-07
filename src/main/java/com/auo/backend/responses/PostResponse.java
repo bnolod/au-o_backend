@@ -46,7 +46,7 @@ public class PostResponse {
                     .collect(Collectors.groupingBy(Reaction::getReactionType, Collectors.counting()));
 
             this.reactedWith = post.getReactions().stream()
-                    .filter(reaction -> reaction.getUser().equals(currentUser))
+                    .filter(reaction -> reaction.getUser().getId().equals(currentUser.getId()))
                     .map(Reaction::getReactionType)
                     .findFirst()
                     .orElse(null);

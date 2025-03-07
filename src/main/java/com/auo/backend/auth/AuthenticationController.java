@@ -3,6 +3,7 @@ package com.auo.backend.auth;
 import com.auo.backend.dto.auth.UserLoginDto;
 import com.auo.backend.dto.auth.UserRegisterDto;
 import com.auo.backend.responses.UserResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,18 +35,23 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            HttpServletResponse response
-    ) {
-        return ResponseEntity.ok(authenticationService.authenticate(token, response));
+    public ResponseEntity<AuthenticationResponse> authenticate() {
+        return ResponseEntity.ok(authenticationService.authenticate( ));
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<UserResponse> profile(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token
-    ) {
-        return ResponseEntity.ok(authenticationService.profile(token));
+    public ResponseEntity<UserResponse> profile() {
+        return ResponseEntity.ok(authenticationService.profile());
+    }
+
+    @PostMapping("/logout")
+    public void logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
     }
 
 }

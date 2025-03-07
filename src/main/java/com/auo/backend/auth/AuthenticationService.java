@@ -6,6 +6,7 @@ import com.auo.backend.enums.UserRole;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.UserResponse;
+import com.auo.backend.utils.UserUtils;
 import com.auo.backend.validationServices.UserValidationService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,6 +28,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final UserValidationService userValidationService;
+    private final UserUtils userUtils;
 
     public AuthenticationResponse register(UserRegisterDto userRegisterDto, HttpServletResponse response) {
         if (!userValidationService.IsEmailValid(userRegisterDto.getEmail())) {
@@ -78,18 +80,17 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticate(String token,HttpServletResponse response) {
-        User user = getUserFromToken(token);
+    public AuthenticationResponse authenticate() {
+        User user = userUtils.getCurrentUser();
         var newToken = jwtService.generateToken(user);
-        createTokenCookie(newToken,response);
         return AuthenticationResponse.builder()
                 .token(newToken)
                 .build();
     }
 
 
-    public UserResponse profile(String token) {
-        User user = getUserFromToken(token);
+    public UserResponse profile() {
+        User user = userUtils.getCurrentUser();
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
@@ -101,6 +102,7 @@ public class AuthenticationService {
                 .build();
     }
 
+    @Deprecated
     public User getUserFromToken(String token) {
         String jwt = token.substring(7);
         String username = jwtService.extractUsername(jwt);
@@ -114,9 +116,10 @@ public class AuthenticationService {
     public void createTokenCookie(String token, HttpServletResponse response) {
         Cookie cookie = new Cookie("token",token);
         cookie.setHttpOnly(true);
+        cookie.setAttribute("SameSite", "Strict");
         cookie.setSecure(false);
-        cookie.setPath("*");
-        cookie.setMaxAge(1000 * 60 * 60 * 24);
+        cookie.setPath("/");
+        cookie.setMaxAge( 60 * 60 * 24);
         response.addCookie(cookie);
     }
 

@@ -1,6 +1,5 @@
 package com.auo.backend.services;
 
-import com.auo.backend.auth.AuthenticationService;
 import com.auo.backend.auth.GenericOwnershipCheckerService;
 import com.auo.backend.dto.create.CreateVehicleDto;
 import com.auo.backend.dto.update.UpdateVehicleDto;
@@ -8,6 +7,7 @@ import com.auo.backend.models.User;
 import com.auo.backend.models.Vehicle;
 import com.auo.backend.repositories.VehicleRepository;
 import com.auo.backend.responses.VehicleResponse;
+import com.auo.backend.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,12 +20,12 @@ import java.util.Optional;
 @Service
 public class VehicleService {
     private final UserService userService;
-    private final AuthenticationService authenticationService;
+    private final UserUtils userUtils;
     private final VehicleRepository vehicleRepository;
     private final GenericOwnershipCheckerService<User, Vehicle> vehicleOwnershipCheckerService;
 
-    public VehicleResponse createVehicle(String token, CreateVehicleDto dto) {
-        User user = authenticationService.getUserFromToken(token);
+    public VehicleResponse createVehicle( CreateVehicleDto dto) {
+        User user = userUtils.getCurrentUser();
         Vehicle vehicle = vehicleRepository.save(Vehicle.builder()
                 .type(dto.getType())
                 .model(dto.getModel())
@@ -39,8 +39,8 @@ public class VehicleService {
         return new VehicleResponse(vehicle, user);
     }
 
-    public List<VehicleResponse> getOwnVehicles(String token) {
-        User user = authenticationService.getUserFromToken(token);
+    public List<VehicleResponse> getOwnVehicles() {
+        User user = userUtils.getCurrentUser();
         return findVehiclesByUserId(user.getId()).stream().map(
                 vehicle -> new VehicleResponse(vehicle, user)
         ).toList();
@@ -52,8 +52,8 @@ public class VehicleService {
                 vehicle -> new VehicleResponse(vehicle, target)).toList();
     }
 
-    public VehicleResponse modifyOwnVehicleById(String token, Long vehicleId, UpdateVehicleDto dto) {
-        User user = authenticationService.getUserFromToken(token);
+    public VehicleResponse modifyOwnVehicleById( Long vehicleId, UpdateVehicleDto dto) {
+        User user = userUtils.getCurrentUser();
         Vehicle vehicle = findOwnVehicleAndCheckOwnership(user, vehicleId);
         vehicle = vehicleRepository.save(modifyVehicleByDto(vehicle, dto));
         return new VehicleResponse(vehicle, user);
@@ -64,8 +64,8 @@ public class VehicleService {
         return new VehicleResponse(vehicle, vehicle.getUser());
     }
 
-    public void deleteVehicleByIdFromSelf(String token, Long id) {
-        User user = authenticationService.getUserFromToken(token);
+    public void deleteVehicleByIdFromSelf(Long id) {
+        User user = userUtils.getCurrentUser();
         Vehicle vehicle = findOwnVehicleAndCheckOwnership(user, id);
         vehicleRepository.delete(vehicle);
     }

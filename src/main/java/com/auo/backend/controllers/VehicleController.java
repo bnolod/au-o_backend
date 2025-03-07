@@ -19,21 +19,19 @@ public class VehicleController {
     private final VehicleService vehicleService;
 
     @PostMapping("/vehicle/create")
-    public ResponseEntity<VehicleResponse> createVehicle(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                         @RequestBody CreateVehicleDto createVehicleDto) {
-        return ResponseEntity.ok(vehicleService.createVehicle(token, createVehicleDto));
+    public ResponseEntity<VehicleResponse> createVehicle(@RequestBody CreateVehicleDto createVehicleDto) {
+        return ResponseEntity.ok(vehicleService.createVehicle( createVehicleDto));
     }
 
     @GetMapping("/own")
-    public ResponseEntity<List<VehicleResponse>> getOwnVehicles(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return ResponseEntity.ok(vehicleService.getOwnVehicles(token));
+    public ResponseEntity<List<VehicleResponse>> getOwnVehicles() {
+        return ResponseEntity.ok(vehicleService.getOwnVehicles());
     }
 
     @PutMapping("/vehicle/{vehicleId}")
-    public ResponseEntity<VehicleResponse> modifyOwnVehicle(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                                            @PathVariable Long vehicleId,
+    public ResponseEntity<VehicleResponse> modifyOwnVehicle(@PathVariable Long vehicleId,
                                                             @RequestBody UpdateVehicleDto updateVehicleDto) {
-        return ResponseEntity.ok(vehicleService.modifyOwnVehicleById(token,vehicleId,updateVehicleDto));
+        return ResponseEntity.ok(vehicleService.modifyOwnVehicleById(vehicleId,updateVehicleDto));
     }
 
     @GetMapping("/user/{userId}/all")
@@ -47,8 +45,7 @@ public class VehicleController {
     }
 
     @DeleteMapping("/vehicle/{vehicleId}")
-    public void deleteOwnVehicleById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-                                     @PathVariable Long vehicleId) {
-        vehicleService.deleteVehicleByIdFromSelf(token, vehicleId);
+    public void deleteOwnVehicleById(@PathVariable Long vehicleId) {
+        vehicleService.deleteVehicleByIdFromSelf( vehicleId);
     }
 }

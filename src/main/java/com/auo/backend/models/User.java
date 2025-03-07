@@ -80,7 +80,11 @@ public class User implements UserDetails {
             orphanRemoval=true)
     private List<Reaction> reactions;
 
-
+//    @OneToMany(mappedBy = "sender", fetch = )
+//    private List<PrivateMessage> sentMessages;
+//
+//    @OneToMany(mappedBy = "recipient")
+//    private List<PrivateMessage> receivedMessages;
 
     @ManyToMany
     @JoinTable(
