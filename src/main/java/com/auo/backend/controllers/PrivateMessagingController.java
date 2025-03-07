@@ -1,10 +1,13 @@
 package com.auo.backend.controllers;
 
 import com.auo.backend.message.incoming.TargetedMessage;
-import com.auo.backend.message.outgoing.ChatMessage;
+import com.auo.backend.message.outgoing.PrivateMessageResponse;
+import com.auo.backend.models.PrivateMessage;
 import com.auo.backend.models.User;
+import com.auo.backend.repositories.PrivateMessageRepository;
 import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.utils.UserUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,63 +31,69 @@ public class PrivateMessagingController {
     private final UserRepository userRepository;
     private final UserUtils userUtils;
     private final SimpMessagingTemplate messagingTemplate;
+    private final PrivateMessageRepository pmRepository;
 
     // A 3D map: <username, <friendUsername, List<ChatMessage>>>
-    protected ConcurrentHashMap<String, ConcurrentHashMap<String, List<ChatMessage>>> userToMessagesMap = new ConcurrentHashMap<>();
+//    protected ConcurrentHashMap<String, ConcurrentHashMap<String, List<ChatMessage>>> userToMessagesMap = new ConcurrentHashMap<>();
 
     @GetMapping("/user/{username}")
-    public List<ChatMessage> getMessagesWithUser(@PathVariable String username) {
+    public List<PrivateMessageResponse> getMessagesWithUser(@PathVariable String username) {
         User user = userUtils.getCurrentUser();
         var targetUser = userRepository.findUserByUsername(username);
         if (targetUser.isEmpty()) return null;
 
-        // Check if the user has any messages with the target username
-        var userMessages = userToMessagesMap.get(user.getUsername());
-        if (userMessages == null) {
-            return new ArrayList<>();  // Return an empty list if no messages exist for the current user
-        }
-
-        // Retrieve the messages exchanged with the target user
-        List<ChatMessage> friendMessages = userMessages.get(username);
+        List<PrivateMessage> friendMessages = pmRepository.getBySenderIdAndRecipientId(user.getId(),targetUser.get().getId());
         if (friendMessages == null) {
             return new ArrayList<>();  // Return empty list if no messages with the specific friend
         }
 
-        return friendMessages;
+        var responselist = friendMessages.stream().map(PrivateMessageResponse::new).toList();
+        responselist.forEach(item -> {
+            System.out.println("messageobj: " + item.getUser().getUsername() + ": " + item.getMessage());
+        });
+        return responselist;
     }
 
     @MessageMapping("/chat/user/")
+    @Transactional
     public void sendMessageToUser(Principal principal, @Payload TargetedMessage message) {
         User user = null;
         if (principal instanceof UsernamePasswordAuthenticationToken auth) {
             user = (User) auth.getPrincipal();
         }
         assert user != null;
-        ChatMessage chatMessage = new ChatMessage(user, message.getMessage());
+        user = userRepository.findUserByUsername(user.getUsername()).orElseThrow();
+        User recipient = userRepository.findUserByUsername(message.getUsername()).orElseThrow();
+        PrivateMessage privateMessage = PrivateMessage.builder()
+                .message(message.getMessage())
+                .sender(user)
+                .recipient(recipient)
+                .build();
 
-        // Store the message in the 3D map
-        addMessageToUser(user.getUsername(), message.getUsername(), chatMessage);
-        addMessageToUser(message.getUsername(), user.getUsername(), chatMessage);
+        privateMessage = pmRepository.save(privateMessage);
+//        // Store the message in the 3D map
+//        addMessageToUser(user.getUsername(), message.getUsername(), chatMessage);
+//        addMessageToUser(message.getUsername(), user.getUsername(), chatMessage);
 
 
         // Spring will automatically handle sending messages to the correct WebSocket destinations for each user
         messagingTemplate.convertAndSendToUser(
-                message.getUsername(), "/queue/chat/" + user.getUsername(), chatMessage
+                message.getUsername(), "/queue/chat/" + user.getUsername(), new PrivateMessageResponse(privateMessage)
         );
         messagingTemplate.convertAndSendToUser(
-                user.getUsername(), "/queue/chat/" + message.getUsername(), chatMessage
+                user.getUsername(), "/queue/chat/" + message.getUsername(), new PrivateMessageResponse(privateMessage)
         );
     }
 
-    // Method to add a message to the 3D map
-    public void addMessageToUser(String username, String friendUsername, ChatMessage chatMessage) {
-        // Retrieve the user's messages map (username -> <friendUsername, List<ChatMessage>>)
-        ConcurrentHashMap<String, List<ChatMessage>> userMessages = userToMessagesMap.computeIfAbsent(username, k -> new ConcurrentHashMap<>());
-
-        // Retrieve the messages for the specific friend (friendUsername)
-        List<ChatMessage> friendMessages = userMessages.computeIfAbsent(friendUsername, k -> new CopyOnWriteArrayList<>());
-
-        // Add the new chat message to the friend's list of messages
-        friendMessages.add(chatMessage);
-    }
+//    // Method to add a message to the 3D map
+//    public void addMessageToUser(String username, String friendUsername, ChatMessage chatMessage) {
+//        // Retrieve the user's messages map (username -> <friendUsername, List<ChatMessage>>)
+//        ConcurrentHashMap<String, List<ChatMessage>> userMessages = userToMessagesMap.computeIfAbsent(username, k -> new ConcurrentHashMap<>());
+//
+//        // Retrieve the messages for the specific friend (friendUsername)
+//        List<ChatMessage> friendMessages = userMessages.computeIfAbsent(friendUsername, k -> new CopyOnWriteArrayList<>());
+//
+//        // Add the new chat message to the friend's list of messages
+//        friendMessages.add(chatMessage);
+//    }
 }
