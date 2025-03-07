@@ -1,7 +1,11 @@
 package com.auo.backend.controllers;
 
+import com.auo.backend.models.User;
+import com.auo.backend.repositories.PrivateMessageRepository;
 import com.auo.backend.repositories.UserRepository;
+import com.auo.backend.responses.LatestMessageResponse;
 import com.auo.backend.responses.UserResponse;
+import com.auo.backend.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -27,6 +31,8 @@ public class ActiveUsersController {
     private final SimpMessagingTemplate messagingTemplate;
     private final SimpUserRegistry userRegistry;
     private final UserRepository userRepository;
+    private final PrivateMessageRepository pmRepository;
+    private final UserUtils userUtils;
 
     public Set<String> activeUsersSet() {
         System.out.println(userRegistry.getUsers().stream().toList());
@@ -38,6 +44,23 @@ public class ActiveUsersController {
     @GetMapping("/all")
     public List<UserResponse> getActiveUsers() {
         return userRepository.findAllByUsernameIn(activeUsersSet()).stream().map(UserResponse::new).toList();
+    }
+
+    @GetMapping("/messagelist")
+    public List<LatestMessageResponse> getMessagesList() {
+        System.out.println("meghivva");
+        User user = userUtils.getCurrentUser();
+        return pmRepository.getLatestMessagesWithAllUsersMessagedWith(user.getId()).stream().map(message ->{
+            User msguser;
+            if (message.getSender().getUsername() != user.getUsername()) {
+                msguser = message.getSender();
+            } else {
+                msguser = message.getRecipient();
+            }
+            System.out.println(msguser + ": " + message.getMessage());
+            return new LatestMessageResponse(msguser, message,activeUsersSet().contains(msguser.getUsername()) );
+                }).toList();
+
     }
 
     private void broadcastActiveUsers() {
