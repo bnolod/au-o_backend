@@ -19,10 +19,19 @@ public interface PrivateMessageRepository extends JpaRepository<PrivateMessage, 
             "order by pm.date desc")
     List<PrivateMessage> getBySenderIdAndRecipientId(Long senderId, Long recipientId);
 
-    @Query(value = "SELECT * FROM app_private_messages pm " +
-            "WHERE (pm.sender_user_id = :userId OR pm.recipient_user_id = :userId) " +
-            "AND (pm.sender_user_id != pm.recipient_user_id )" +
-            "ORDER BY pm.date DESC LIMIT 1",
+    @Query(value = "SELECT pm.* FROM app_private_messages pm " +
+            "INNER JOIN ( " +
+            "    SELECT LEAST(sender_user_id, recipient_user_id) AS user1, " +
+            "           GREATEST(sender_user_id, recipient_user_id) AS user2, " +
+            "           MAX(date) AS latest_date " +
+            "    FROM app_private_messages " +
+            "    WHERE sender_user_id = :userId OR recipient_user_id = :userId " +
+            "    GROUP BY LEAST(sender_user_id, recipient_user_id), GREATEST(sender_user_id, recipient_user_id) " +
+            ") latest_messages " +
+            "ON ( (pm.sender_user_id = latest_messages.user1 AND pm.recipient_user_id = latest_messages.user2) " +
+            "     OR (pm.sender_user_id = latest_messages.user2 AND pm.recipient_user_id = latest_messages.user1) ) " +
+            "AND pm.date = latest_messages.latest_date " +
+            "ORDER BY pm.date DESC",
             nativeQuery = true)
     List<PrivateMessage> getLatestMessagesWithAllUsersMessagedWith(@Param("userId") Long userId);
 
