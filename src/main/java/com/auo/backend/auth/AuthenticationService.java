@@ -31,6 +31,9 @@ public class AuthenticationService {
     private final UserUtils userUtils;
 
     public AuthenticationResponse register(UserRegisterDto userRegisterDto, HttpServletResponse response) {
+        userRegisterDto.setUsername(userRegisterDto.getUsername().toLowerCase());
+        userRegisterDto.setEmail(userRegisterDto.getEmail().toLowerCase());
+
         if (!userValidationService.IsEmailValid(userRegisterDto.getEmail())) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "invalid_email_format");
         }
@@ -58,6 +61,8 @@ public class AuthenticationService {
 
     public AuthenticationResponse login(UserLoginDto userLoginDto, HttpServletResponse response) {
         Optional<User> optionalUser;
+        userLoginDto.setUsernameOrEmail(userLoginDto.getUsernameOrEmail().toLowerCase());
+
         if (userLoginDto.getUsernameOrEmail().contains("@")) {
             optionalUser = userRepository.findUserByEmail(userLoginDto.getUsernameOrEmail());
         }else {
