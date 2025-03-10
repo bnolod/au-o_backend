@@ -39,6 +39,7 @@ public class PostService {
     private final VehicleService vehicleService;
     private final CommentReplyRepository commentReplyRepository;
     private final UserRepository userRepository;
+    private final VehicleRepository vehicleRepository;
 
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto) {
@@ -80,8 +81,13 @@ public class PostService {
 //        if (posts.isEmpty()) return null;
         return PageResponse.of(posts.map(post -> new PostResponse(post, user)));
     }
+
     public List<PostResponse> getPostsByVehicleId(Long vehicleId) {
         User user = userUtils.getCurrentUser();
+        Vehicle vehicle = vehicleRepository.findById(vehicleId).orElseThrow();
+        if (!vehicle.getUser().isPublic() && !user.getFollowing().contains(vehicle.getUser())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "can not view post");
+        }
         List<Post> posts = postRepository.getPostsByVehicle_Id(vehicleId);
         return posts.stream().map(post -> new PostResponse(post, user)).collect(Collectors.toList());
     }
