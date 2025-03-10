@@ -89,6 +89,14 @@ public class PostService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "can not view post");
         }
         List<Post> posts = postRepository.getPostsByVehicle_Id(vehicleId);
+        posts.stream().filter(post -> {
+            if (post.getGroupMember() != null) {
+                if (!user.getGroups().stream().anyMatch(groupMember -> groupMember.getGroup() == post.getGroupMember().getGroup())) {
+                    return false;
+                }
+            }
+            return true;
+        });
         return posts.stream().map(post -> new PostResponse(post, user)).collect(Collectors.toList());
     }
 
