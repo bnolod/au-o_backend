@@ -79,19 +79,25 @@ public class UserController {
         userService.followUserById( userId);
     }
 
-    @DeleteMapping("user/{userId}/unfollow")
+    @DeleteMapping("/user/{userId}/unfollow")
     public void unfollowUser(@PathVariable Long userId) {
         userService.unfollowUser(userId);
     }
 
-    @DeleteMapping("user/{userId}/remove_follower")
+    @DeleteMapping("/user/{userId}/remove_follower")
     public void removeFollowerFromSelf(@PathVariable Long userId) {
         userService.removeFollowerFromSelf(userId);
     }
 
-    @GetMapping("user/{userId}/posts")
+    @GetMapping("/user/{userId}/posts")
     public ResponseEntity<List<PostResponse>> getPostsOfUser(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getPostsOfUser(userId));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserResponse>> searchForUsers(@RequestParam String search) {
+        System.out.println("Received search query: " + search);
+        return ResponseEntity.ok(userService.searchForUsers(search));
     }
 
 }

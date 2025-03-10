@@ -168,4 +168,12 @@ public class UserService {
     }
 
 
+    public List<UserResponse> searchForUsers(String search) {
+        String searchText = "%" + search + "%";
+//        List<User> users = userRepository.findUsersBySearch(searchText);
+
+        List<User> result = userRepository.findUsersBySearch(searchText);
+        result.forEach(System.out::println);
+        return result.stream().map(UserResponse::new).toList();
+    }
 }

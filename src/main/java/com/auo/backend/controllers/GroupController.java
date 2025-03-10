@@ -53,8 +53,14 @@ public class GroupController {
 
     @Operation(summary = "Get own groups", description = "Returns all groups where the user is a member.")
     @GetMapping("/own")
-    public ResponseEntity<List<GroupResponse>> getAllGroupsOfUser() {
-        return ResponseEntity.ok(groupService.getGroupsOfUser());
+    public ResponseEntity<List<GroupResponse>> getOwnGroups() {
+        return ResponseEntity.ok(groupService.getOwnGroups());
+    }
+    @Operation(summary = "Get own groups", description = "Returns all groups where the user is a member.")
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<GroupResponse>> getAllGroupsOfUser(@PathVariable Long userId) {
+        System.out.println(userId + "csoportjai");
+        return ResponseEntity.ok(groupService.getAllGroupsOfUser(userId));
     }
 
     @Operation(summary = "Join a group by id", description = "Joins or request to join a group, returns the member data.")

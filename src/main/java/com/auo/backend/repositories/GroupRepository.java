@@ -14,4 +14,5 @@ import java.util.UUID;
 public interface GroupRepository extends JpaRepository<Group, Long> {
     List<Group> findByGroupDescriptionContainingOrGroupAliasContainingOrGroupNameContaining (String string1, String string2, String string3);
 
+    List<Group> getGroupsByGroupMembers_User(User user);
 }
