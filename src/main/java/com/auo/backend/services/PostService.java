@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -37,6 +38,7 @@ public class PostService {
     private final UserUtils userUtils;
     private final VehicleService vehicleService;
     private final CommentReplyRepository commentReplyRepository;
+    private final UserRepository userRepository;
 
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto) {
@@ -78,7 +80,11 @@ public class PostService {
 //        if (posts.isEmpty()) return null;
         return PageResponse.of(posts.map(post -> new PostResponse(post, user)));
     }
-
+    public List<PostResponse> getPostsByVehicleId(Long vehicleId) {
+        User user = userUtils.getCurrentUser();
+        List<Post> posts = postRepository.getPostsByVehicle_Id(vehicleId);
+        return posts.stream().map(post -> new PostResponse(post, user)).collect(Collectors.toList());
+    }
 
     @Deprecated
     public List<PostResponse> getAllPosts() {
@@ -139,6 +145,7 @@ public class PostService {
         } else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
 
     }
+
 
 
     @Transactional
