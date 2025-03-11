@@ -35,6 +35,7 @@ public class PostResponse {
     private List<CommentResponse> comments;
     private ReactionType reactedWith;
     private VehicleResponse vehicle;
+    private boolean isFavorite;
 
 
     public PostResponse(Post post, User currentUser) {
@@ -75,6 +76,8 @@ public class PostResponse {
         } else {
             this.vehicle = new VehicleResponse(post.getVehicle(),null);
         }
+
+        this.isFavorite = currentUser.getFavoritePosts().stream().anyMatch(favPost -> favPost.getPost() == post);
     }
 
 }
