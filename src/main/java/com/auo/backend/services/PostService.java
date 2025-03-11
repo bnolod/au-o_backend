@@ -1,6 +1,7 @@
 package com.auo.backend.services;
 
 import com.auo.backend.auth.GenericOwnershipCheckerService;
+import com.auo.backend.auth.ViewPermissionCheckerService;
 import com.auo.backend.configs.RateLimitProtection;
 import com.auo.backend.dto.create.AddCommentDto;
 import com.auo.backend.dto.create.CreatePostDto;
@@ -40,6 +41,9 @@ public class PostService {
     private final CommentReplyRepository commentReplyRepository;
     private final UserRepository userRepository;
     private final VehicleRepository vehicleRepository;
+    private final ViewPermissionCheckerService viewPermissionCheckerService;
+    private final FavoritePostRepository favoritePostRepository;
+    private final UserService userService;
 
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto) {
@@ -288,5 +292,37 @@ public class PostService {
         Optional<CommentReply> optionalCommentReply = commentReplyRepository.findById(commentReplyId);
         if (optionalCommentReply.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reply_not_found");
         return optionalCommentReply.get();
+    }
+
+    public String favoritePost(Long postId) {
+        User user = userUtils.getCurrentUser();
+        Post post = findPostByIdOrThrow(postId);
+        Optional<FavoritePost> optional = favoritePostRepository.getFavoritePostByUserAndPost(user,post);
+        if (optional.isPresent()) {
+            favoritePostRepository.delete(optional.get());
+            return "removed";
+        }
+        if (ViewPermissionCheckerService.isAbleToViewPost(user,post)) {
+            FavoritePost favoritePost = FavoritePost.builder()
+                    .post(post)
+                    .user(user)
+                    .build();
+            user.getFavoritePosts().add(favoritePost);
+            userRepository.save(user);
+            return "added";
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
+        }
+    }
+
+    public List<PostResponse> getFavoritePostOfUserById(Long userId) {
+        User currUser = userUtils.getCurrentUser();
+        User targetUser = userService.findUserByIdOrThrow(userId);
+        if (ViewPermissionCheckerService.isAbleToViewProfile(currUser,targetUser)) {
+            return favoritePostRepository.getFavoritePostByUser(targetUser).stream()
+                    .map(favoritePost -> new PostResponse(favoritePost.getPost(),currUser)).toList();
+        } else {
+            return null;
+        }
     }
 }

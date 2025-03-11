@@ -86,6 +86,10 @@ public class User implements UserDetails {
 //    @OneToMany(mappedBy = "recipient")
 //    private List<PrivateMessage> receivedMessages;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
+            orphanRemoval=true)
+    private List<FavoritePost> favoritePosts;
+
     @ManyToMany
     @JoinTable(
             name = "user_followers",

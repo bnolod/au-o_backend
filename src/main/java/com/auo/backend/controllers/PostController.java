@@ -102,4 +102,14 @@ public class PostController {
         return ResponseEntity.ok(postService.deleteReplyFromComment(replyId));
     }
 
+    @PostMapping("favorite/{postId}")
+    public ResponseEntity<String> favoritePost(@PathVariable Long postId) {
+        return ResponseEntity.ok(postService.favoritePost(postId));
+    }
+
+    @GetMapping("favorites/user/{userId}")
+    public ResponseEntity<List<PostResponse>> getFavoritePostsOfUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(postService.getFavoritePostOfUserById(userId));
+    }
+
 }
