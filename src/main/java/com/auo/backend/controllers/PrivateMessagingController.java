@@ -6,6 +6,7 @@ import com.auo.backend.models.PrivateMessage;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.PrivateMessageRepository;
 import com.auo.backend.repositories.UserRepository;
+import com.auo.backend.responses.LatestMessageResponse;
 import com.auo.backend.utils.UserUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ public class PrivateMessagingController {
     private final UserUtils userUtils;
     private final SimpMessagingTemplate messagingTemplate;
     private final PrivateMessageRepository pmRepository;
+    private final ActiveUsersController activeUsersController;
 
     // A 3D map: <username, <friendUsername, List<ChatMessage>>>
 //    protected ConcurrentHashMap<String, ConcurrentHashMap<String, List<ChatMessage>>> userToMessagesMap = new ConcurrentHashMap<>();
@@ -83,6 +85,10 @@ public class PrivateMessagingController {
         messagingTemplate.convertAndSendToUser(
                 user.getUsername(), "/queue/chat/" + message.getUsername(), new PrivateMessageResponse(privateMessage)
         );
+        messagingTemplate.convertAndSendToUser(
+                message.getUsername(), "/queue/notifications/", new LatestMessageResponse
+                        (user, privateMessage ,activeUsersController.activeUsersSet().contains(message.getUsername())
+        ));
     }
 
 //    // Method to add a message to the 3D map
