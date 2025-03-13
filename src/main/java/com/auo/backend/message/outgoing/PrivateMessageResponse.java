@@ -9,10 +9,12 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class PrivateMessageResponse {
+    private Long id;
     private UserResponse user;
     private String message;
 
     public PrivateMessageResponse(PrivateMessage privateMessage) {
+        this.id = privateMessage.getId();
         this.user = new UserResponse(privateMessage.getSender());
         this.message = privateMessage.getMessage();
     }
