@@ -41,4 +41,7 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     Page<Post> findPostsForUserFeed(Pageable pageable, @Param("userId") Long userId, @Param("time") LocalDateTime time);
 
     List<Post> findPostsByGroupMember_Group(Group groupMemberGroup);
+
+
+    List<Post> getPostsByVehicle_Id(Long vehicleId);
 }

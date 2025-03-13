@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@ToString(exclude = {"posts","comments","replies","groups","reactions","following"})
+@ToString(exclude = {"posts","comments","replies","groups","reactions","following","favoritePosts"})
 @Table(name = "app_users")
 public class User implements UserDetails {
 
@@ -85,6 +85,10 @@ public class User implements UserDetails {
 //
 //    @OneToMany(mappedBy = "recipient")
 //    private List<PrivateMessage> receivedMessages;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
+            orphanRemoval=true)
+    private List<FavoritePost> favoritePosts;
 
     @ManyToMany
     @JoinTable(

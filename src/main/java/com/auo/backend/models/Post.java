@@ -69,6 +69,10 @@ public class Post {
     @ManyToOne
     private Vehicle vehicle;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,
+            orphanRemoval=true, fetch = FetchType.LAZY)
+    private List<FavoritePost> favoritePosts;
+
 
     @PrePersist
     protected void onCreate() {

@@ -225,12 +225,12 @@ public class GroupService {
         return new GroupResponse(group, user);
     }
 
-    @Transactional
-    public List<GroupResponse> getGroupsOfUser() {
-        User user = userUtils.getCurrentUser();
-        List<GroupMember> groups = user.getGroups();
-        return groups.stream().map(groupMember -> new GroupResponse(groupMember.getGroup(), user)).toList();
-    }
+//    @Transactional
+//    public List<GroupResponse> getGroupsOfUser() {
+//        User user = userUtils.getCurrentUser();
+//        List<GroupMember> groups = user.getGroups();
+//        return groups.stream().map(groupMember -> new GroupResponse(groupMember.getGroup(), user)).toList();
+//    }
 
     public GroupMemberResponse getOwnGroupMemberStatus(Long groupId) {
         User user = userUtils.getCurrentUser();
@@ -250,5 +250,19 @@ public class GroupService {
 
     }
 
+    public List<GroupResponse> getOwnGroups() {
+        User user = userUtils.getCurrentUser();
+        List<Group> groups =  groupRepository.getGroupsByGroupMembers_User(user);
+        return groups.stream().map(group -> new GroupResponse(group,user)).toList();
+    }
 
+
+    public List<GroupResponse> getAllGroupsOfUser(Long userId) {
+        User target = userService.findUserByIdOrThrow(userId);
+        User user = userUtils.getCurrentUser();
+        List<Group> groups = groupRepository.getGroupsByGroupMembers_User(target);
+        groups.forEach(System.out::println);
+        return groups.stream().map(group -> new GroupResponse(group,user)).toList();
+
+    }
 }
