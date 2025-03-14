@@ -12,10 +12,14 @@ public class PrivateMessageResponse {
     private Long id;
     private UserResponse user;
     private String message;
+    private String recipient;
 
     public PrivateMessageResponse(PrivateMessage privateMessage) {
         this.id = privateMessage.getId();
         this.user = new UserResponse(privateMessage.getSender());
         this.message = privateMessage.getMessage();
+        this.recipient = privateMessage.getRecipient().getUsername();
     }
+
+
 }
