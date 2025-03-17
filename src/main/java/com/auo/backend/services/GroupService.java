@@ -7,10 +7,12 @@ import com.auo.backend.enums.GroupRole;
 import com.auo.backend.enums.PostType;
 import com.auo.backend.models.*;
 import com.auo.backend.repositories.GroupMemberRepository;
+import com.auo.backend.repositories.GroupMessageRepository;
 import com.auo.backend.repositories.GroupRepository;
 import com.auo.backend.repositories.PostRepository;
 import com.auo.backend.responses.*;
 import com.auo.backend.utils.UserUtils;
+import com.auo.backend.websocketentity.IncomingMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,7 @@ public class GroupService {
     private final PostRepository postRepository;
     private final VehicleService vehicleService;
     private final UserUtils userUtils;
+    private final GroupMessageRepository groupMessageRepository;
 
     public List<Group> getAllGroups() {
         return groupRepository.findAll();
@@ -264,5 +267,26 @@ public class GroupService {
         groups.forEach(System.out::println);
         return groups.stream().map(group -> new GroupResponse(group,user)).toList();
 
+    }
+
+    public GroupMessage sendMessageToGroup(IncomingMessage incomingMessage, User user) {
+        Group group = getGroupByGroupIdOrThrow(incomingMessage.getGroupId());
+        GroupMessage groupMessage = GroupMessage.builder()
+                .message(incomingMessage.getMessage())
+                .user(user)
+                .group(group)
+                .build();
+        groupMessage = groupMessageRepository.save(groupMessage);
+        return groupMessage;
+    }
+
+    public List<GroupMessageResponse> getMessagesOfGroup(Long groupId) {
+        User user = userUtils.getCurrentUser();
+        Group group = getGroupByGroupIdOrThrow(groupId);
+
+        if (!isUserInGroup(user,group)) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"not in group");
+
+        var groupMessages = groupMessageRepository.getGroupMessagesByGroupOrderByTimeDesc(group);
+        return groupMessages.stream().map(GroupMessageResponse::ofMessage).toList();
     }
 }

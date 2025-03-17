@@ -127,5 +127,9 @@ public class GroupController {
         User user = userUtils.getCurrentUser();
         return ResponseEntity.ok(groupService.getGroupMembersByGroupId(user, groupId));
     }
+    @GetMapping("/group/{groupId}/messages")
+    public ResponseEntity<List<GroupMessageResponse>> getMessagesOfGroup(@PathVariable Long groupId) {
+        return ResponseEntity.ok(groupService.getMessagesOfGroup(groupId));
+    }
 
 }
