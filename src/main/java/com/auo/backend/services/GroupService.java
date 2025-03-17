@@ -289,4 +289,20 @@ public class GroupService {
         var groupMessages = groupMessageRepository.getGroupMessagesByGroupOrderByTimeDesc(group);
         return groupMessages.stream().map(GroupMessageResponse::ofMessage).toList();
     }
+
+    public List<GroupMemberResponse> getPendingMembers(Long groupId) {
+        Group group = getGroupByGroupIdOrThrow(groupId);
+        User user = userUtils.getCurrentUser();
+        List<GroupRole> rolesList = new ArrayList<>();
+        rolesList.add(GroupRole.ADMIN);
+        rolesList.add(GroupRole.MODERATOR);
+
+
+        if (hasRequiredRoleInGroup(user, group, rolesList)) {
+            return groupMemberRepository.getGroupMembersByGroupAndValidIsFalse(group)
+                    .stream().map(GroupMemberResponse::new).toList();
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
+        }
+    }
 }

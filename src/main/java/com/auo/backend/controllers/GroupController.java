@@ -132,4 +132,9 @@ public class GroupController {
         return ResponseEntity.ok(groupService.getMessagesOfGroup(groupId));
     }
 
+    @GetMapping("/group/{groupId}/pending")
+    public ResponseEntity<List<GroupMemberResponse>> getPendingMembers(@PathVariable Long groupId) {
+        return ResponseEntity.ok(groupService.getPendingMembers(groupId));
+    }
+
 }

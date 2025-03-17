@@ -14,4 +14,6 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> 
     Optional<GroupMember> getByUserAndGroup(User user, Group group);
 
     Optional<List<GroupMember>> getGroupMembersByGroup_Id(Long groupId);
+
+    List<GroupMember> getGroupMembersByGroupAndValidIsFalse(Group group);
 }
