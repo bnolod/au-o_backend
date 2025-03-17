@@ -43,6 +43,7 @@ public class GroupMember {
     @JsonManagedReference
     private List<Post> posts;
 
+    @NotNull
     private boolean isValid;
 
 

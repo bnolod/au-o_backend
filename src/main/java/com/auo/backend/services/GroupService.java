@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -299,7 +298,7 @@ public class GroupService {
 
 
         if (hasRequiredRoleInGroup(user, group, rolesList)) {
-            return groupMemberRepository.getGroupMembersByGroupAndValidIsFalse(group)
+            return groupMemberRepository.findInvalidGroupMembers(group)
                     .stream().map(GroupMemberResponse::new).toList();
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
