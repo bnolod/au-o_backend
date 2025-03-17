@@ -29,7 +29,7 @@ public class PostResponse {
     private PostType postType;
     private UserResponse user;
     private String location;
-    private Group group;
+    private GroupResponse group;
     private Integer relevance;
     private List<Image> images;
     private List<CommentResponse> comments;
@@ -59,7 +59,7 @@ public class PostResponse {
         this.location = post.getLocation();
 
         if (post.getGroupMember() != null) {
-            this.group = post.getGroupMember().getGroup();
+            this.group = new GroupResponse( post.getGroupMember().getGroup(), currentUser);
             this.user = new UserResponse(post.getGroupMember().getUser());
         } else {
             this.user = new UserResponse(post.getUser());
