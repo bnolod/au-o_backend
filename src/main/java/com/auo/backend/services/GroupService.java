@@ -7,10 +7,12 @@ import com.auo.backend.enums.GroupRole;
 import com.auo.backend.enums.PostType;
 import com.auo.backend.models.*;
 import com.auo.backend.repositories.GroupMemberRepository;
+import com.auo.backend.repositories.GroupMessageRepository;
 import com.auo.backend.repositories.GroupRepository;
 import com.auo.backend.repositories.PostRepository;
 import com.auo.backend.responses.*;
 import com.auo.backend.utils.UserUtils;
+import com.auo.backend.websocketentity.IncomingMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -34,6 +35,7 @@ public class GroupService {
     private final PostRepository postRepository;
     private final VehicleService vehicleService;
     private final UserUtils userUtils;
+    private final GroupMessageRepository groupMessageRepository;
 
     public List<Group> getAllGroups() {
         return groupRepository.findAll();
@@ -225,12 +227,12 @@ public class GroupService {
         return new GroupResponse(group, user);
     }
 
-    @Transactional
-    public List<GroupResponse> getGroupsOfUser() {
-        User user = userUtils.getCurrentUser();
-        List<GroupMember> groups = user.getGroups();
-        return groups.stream().map(groupMember -> new GroupResponse(groupMember.getGroup(), user)).toList();
-    }
+//    @Transactional
+//    public List<GroupResponse> getGroupsOfUser() {
+//        User user = userUtils.getCurrentUser();
+//        List<GroupMember> groups = user.getGroups();
+//        return groups.stream().map(groupMember -> new GroupResponse(groupMember.getGroup(), user)).toList();
+//    }
 
     public GroupMemberResponse getOwnGroupMemberStatus(Long groupId) {
         User user = userUtils.getCurrentUser();
@@ -250,5 +252,56 @@ public class GroupService {
 
     }
 
+    public List<GroupResponse> getOwnGroups() {
+        User user = userUtils.getCurrentUser();
+        List<Group> groups =  groupRepository.getGroupsByGroupMembers_User(user);
+        return groups.stream().map(group -> new GroupResponse(group,user)).toList();
+    }
 
+
+    public List<GroupResponse> getAllGroupsOfUser(Long userId) {
+        User target = userService.findUserByIdOrThrow(userId);
+        User user = userUtils.getCurrentUser();
+        List<Group> groups = groupRepository.getGroupsByGroupMembers_User(target);
+        groups.forEach(System.out::println);
+        return groups.stream().map(group -> new GroupResponse(group,user)).toList();
+
+    }
+
+    public GroupMessage sendMessageToGroup(IncomingMessage incomingMessage, User user) {
+        Group group = getGroupByGroupIdOrThrow(incomingMessage.getGroupId());
+        GroupMessage groupMessage = GroupMessage.builder()
+                .message(incomingMessage.getMessage())
+                .user(user)
+                .group(group)
+                .build();
+        groupMessage = groupMessageRepository.save(groupMessage);
+        return groupMessage;
+    }
+
+    public List<GroupMessageResponse> getMessagesOfGroup(Long groupId) {
+        User user = userUtils.getCurrentUser();
+        Group group = getGroupByGroupIdOrThrow(groupId);
+
+        if (!isUserInGroup(user,group)) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"not in group");
+
+        var groupMessages = groupMessageRepository.getGroupMessagesByGroupOrderByTimeDesc(group);
+        return groupMessages.stream().map(GroupMessageResponse::ofMessage).toList();
+    }
+
+    public List<GroupMemberResponse> getPendingMembers(Long groupId) {
+        Group group = getGroupByGroupIdOrThrow(groupId);
+        User user = userUtils.getCurrentUser();
+        List<GroupRole> rolesList = new ArrayList<>();
+        rolesList.add(GroupRole.ADMIN);
+        rolesList.add(GroupRole.MODERATOR);
+
+
+        if (hasRequiredRoleInGroup(user, group, rolesList)) {
+            return groupMemberRepository.findInvalidGroupMembers(group)
+                    .stream().map(GroupMemberResponse::new).toList();
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
+        }
+    }
 }

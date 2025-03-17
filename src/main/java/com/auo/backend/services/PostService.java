@@ -1,6 +1,7 @@
 package com.auo.backend.services;
 
 import com.auo.backend.auth.GenericOwnershipCheckerService;
+import com.auo.backend.auth.ViewPermissionCheckerService;
 import com.auo.backend.configs.RateLimitProtection;
 import com.auo.backend.dto.create.AddCommentDto;
 import com.auo.backend.dto.create.CreatePostDto;
@@ -22,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -37,6 +39,11 @@ public class PostService {
     private final UserUtils userUtils;
     private final VehicleService vehicleService;
     private final CommentReplyRepository commentReplyRepository;
+    private final UserRepository userRepository;
+    private final VehicleRepository vehicleRepository;
+    private final ViewPermissionCheckerService viewPermissionCheckerService;
+    private final FavoritePostRepository favoritePostRepository;
+    private final UserService userService;
 
 
     public PostResponse publishPostToProfile(CreatePostDto createPostDto) {
@@ -79,6 +86,23 @@ public class PostService {
         return PageResponse.of(posts.map(post -> new PostResponse(post, user)));
     }
 
+    public List<PostResponse> getPostsByVehicleId(Long vehicleId) {
+        User user = userUtils.getCurrentUser();
+        Vehicle vehicle = vehicleRepository.findById(vehicleId).orElseThrow();
+        if (!vehicle.getUser().isPublic() && !user.getFollowing().contains(vehicle.getUser())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "can not view post");
+        }
+        List<Post> posts = postRepository.getPostsByVehicle_Id(vehicleId);
+        posts.stream().filter(post -> {
+            if (post.getGroupMember() != null) {
+                if (!user.getGroups().stream().anyMatch(groupMember -> groupMember.getGroup() == post.getGroupMember().getGroup())) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        return posts.stream().map(post -> new PostResponse(post, user)).collect(Collectors.toList());
+    }
 
     @Deprecated
     public List<PostResponse> getAllPosts() {
@@ -139,6 +163,7 @@ public class PostService {
         } else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
 
     }
+
 
 
     @Transactional
@@ -267,5 +292,37 @@ public class PostService {
         Optional<CommentReply> optionalCommentReply = commentReplyRepository.findById(commentReplyId);
         if (optionalCommentReply.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "reply_not_found");
         return optionalCommentReply.get();
+    }
+
+    public String favoritePost(Long postId) {
+        User user = userUtils.getCurrentUser();
+        Post post = findPostByIdOrThrow(postId);
+        Optional<FavoritePost> optional = favoritePostRepository.getFavoritePostByUserAndPost(user,post);
+        if (optional.isPresent()) {
+            favoritePostRepository.delete(optional.get());
+            return "removed";
+        }
+        if (ViewPermissionCheckerService.isAbleToViewPost(user,post)) {
+            FavoritePost favoritePost = FavoritePost.builder()
+                    .post(post)
+                    .user(user)
+                    .build();
+            user.getFavoritePosts().add(favoritePost);
+            userRepository.save(user);
+            return "added";
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
+        }
+    }
+
+    public List<PostResponse> getFavoritePostOfUserById(Long userId) {
+        User currUser = userUtils.getCurrentUser();
+        User targetUser = userService.findUserByIdOrThrow(userId);
+        if (ViewPermissionCheckerService.isAbleToViewProfile(currUser,targetUser)) {
+            return favoritePostRepository.getFavoritePostByUser(targetUser).stream()
+                    .map(favoritePost -> new PostResponse(favoritePost.getPost(),currUser)).toList();
+        } else {
+            return null;
+        }
     }
 }

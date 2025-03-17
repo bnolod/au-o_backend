@@ -3,7 +3,6 @@ package com.auo.backend.models;
 
 
 import com.auo.backend.enums.UserRole;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@ToString(exclude = {"posts","comments","replies","groups","reactions","following"})
+@ToString(exclude = {"posts","comments","replies","groups","reactions","following","favoritePosts"})
 @Table(name = "app_users")
 public class User implements UserDetails {
 
@@ -86,6 +85,10 @@ public class User implements UserDetails {
 //    @OneToMany(mappedBy = "recipient")
 //    private List<PrivateMessage> receivedMessages;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
+            orphanRemoval=true)
+    private List<FavoritePost> favoritePosts;
+
     @ManyToMany
     @JoinTable(
             name = "user_followers",
@@ -97,6 +100,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Vehicle> vehicles;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    protected List<GroupMessage> groupMessages;
 
     @NotNull
     private boolean isDeleted;

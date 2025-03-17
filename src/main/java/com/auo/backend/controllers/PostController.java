@@ -42,6 +42,11 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostFeedOfUser(page,time));
     }
 
+    @GetMapping("/vehicle/{vehicleId}")
+    public ResponseEntity<List<PostResponse>> getPostsByVehicleId(@PathVariable Long vehicleId) {
+        return ResponseEntity.ok(postService.getPostsByVehicleId(vehicleId));
+    }
+
     @GetMapping("/post/{postId}")
     public ResponseEntity<PostResponse> getOnePostById(@PathVariable Long postId) {
         return ResponseEntity.ok(this.postService.getPostById(postId));
@@ -95,6 +100,16 @@ public class PostController {
     @DeleteMapping("post/comment/reply/{replyId}")
     public ResponseEntity<CommentReplyResponse> deleteReplyFromComment(@PathVariable Long replyId) {
         return ResponseEntity.ok(postService.deleteReplyFromComment(replyId));
+    }
+
+    @PostMapping("favorite/{postId}")
+    public ResponseEntity<String> favoritePost(@PathVariable Long postId) {
+        return ResponseEntity.ok(postService.favoritePost(postId));
+    }
+
+    @GetMapping("favorites/user/{userId}")
+    public ResponseEntity<List<PostResponse>> getFavoritePostsOfUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(postService.getFavoritePostOfUserById(userId));
     }
 
 }

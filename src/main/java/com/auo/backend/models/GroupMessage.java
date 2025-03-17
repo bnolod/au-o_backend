@@ -7,36 +7,32 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "app_private_messages")
-public class PrivateMessage {
+@Table(name = "app_group_messages")
+public class GroupMessage {
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sender_user_id")
-    private User sender;
+    private Group group;
 
     @ManyToOne
-    @JoinColumn(name = "recipient_user_id")
-    private User recipient;
-
+    private User user;
 
     private String message;
 
-    private Date date;
+    private LocalDateTime time;
 
     @PrePersist
     protected void onCreate() {
-        if (date == null) {
-            this.date = new Date();
+        if (time == null) {
+            time = LocalDateTime.now();
         }
     }
 }

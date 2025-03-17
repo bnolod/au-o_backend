@@ -19,6 +19,7 @@ import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -52,7 +53,7 @@ public class ActiveUsersController {
         User user = userUtils.getCurrentUser();
         return pmRepository.getLatestMessagesWithAllUsersMessagedWith(user.getId()).stream().map(message ->{
             User msguser;
-            if (message.getSender().getUsername() != user.getUsername()) {
+            if (!Objects.equals(message.getSender().getUsername(), user.getUsername())) {
                 msguser = message.getSender();
             } else {
                 msguser = message.getRecipient();

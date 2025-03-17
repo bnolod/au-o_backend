@@ -53,8 +53,14 @@ public class GroupController {
 
     @Operation(summary = "Get own groups", description = "Returns all groups where the user is a member.")
     @GetMapping("/own")
-    public ResponseEntity<List<GroupResponse>> getAllGroupsOfUser() {
-        return ResponseEntity.ok(groupService.getGroupsOfUser());
+    public ResponseEntity<List<GroupResponse>> getOwnGroups() {
+        return ResponseEntity.ok(groupService.getOwnGroups());
+    }
+    @Operation(summary = "Get own groups", description = "Returns all groups where the user is a member.")
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<GroupResponse>> getAllGroupsOfUser(@PathVariable Long userId) {
+        System.out.println(userId + "csoportjai");
+        return ResponseEntity.ok(groupService.getAllGroupsOfUser(userId));
     }
 
     @Operation(summary = "Join a group by id", description = "Joins or request to join a group, returns the member data.")
@@ -120,6 +126,15 @@ public class GroupController {
     public ResponseEntity<GroupMemberListResponse> getMembersByGroupId (@PathVariable Long groupId) {
         User user = userUtils.getCurrentUser();
         return ResponseEntity.ok(groupService.getGroupMembersByGroupId(user, groupId));
+    }
+    @GetMapping("/group/{groupId}/messages")
+    public ResponseEntity<List<GroupMessageResponse>> getMessagesOfGroup(@PathVariable Long groupId) {
+        return ResponseEntity.ok(groupService.getMessagesOfGroup(groupId));
+    }
+
+    @GetMapping("/group/{groupId}/pending")
+    public ResponseEntity<List<GroupMemberResponse>> getPendingMembers(@PathVariable Long groupId) {
+        return ResponseEntity.ok(groupService.getPendingMembers(groupId));
     }
 
 }
