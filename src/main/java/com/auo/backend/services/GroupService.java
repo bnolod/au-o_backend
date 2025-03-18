@@ -157,10 +157,16 @@ public class GroupService {
         Group group = getGroupByGroupIdOrThrow(groupId);
         Optional<GroupMember> groupMember = groupMemberRepository.getByUserAndGroup(user, group);
 
+        System.out.println(groupMember.get().getGroupRole());
         if (groupMember.isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT, "not_in_group");
 
         if (group.getGroupMembers().stream().anyMatch(member -> member.getGroupRole().equals(GroupRole.ADMIN) && member.getUser() != user)) {
             groupMemberRepository.delete(groupMember.get());
+            return;
+        }
+        if (!groupMember.get().getGroupRole().equals(GroupRole.ADMIN) ) {
+            groupMemberRepository.delete(groupMember.get());
+            return;
         }
         throw new ResponseStatusException(HttpStatus.CONFLICT, "cannot leave group if you are the only admin");
     }
