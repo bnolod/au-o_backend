@@ -171,10 +171,16 @@ public class PostService {
         User user = userUtils.getCurrentUser();
         Post post = findPostByIdOrThrow(postId);
 
+        try {
+
         if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
 //            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-            System.out.println("to be fixed");
         }
+        } catch (Exception e) {
+            System.out.println("to be fixed");
+
+        }
+
 
         if (updatePostDto.getText() != null) {
             post.setText(updatePostDto.getText());
