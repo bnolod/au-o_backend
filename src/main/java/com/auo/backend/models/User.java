@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@ToString(exclude = {"posts","comments","replies","groups","reactions","following","favoritePosts"})
+@ToString(exclude = {"posts","comments","replies","groups","reactions","following","favoritePosts", "sentMessages","receivedMessages"})
 @Table(name = "app_users")
 public class User implements UserDetails {
 
@@ -105,6 +105,12 @@ public class User implements UserDetails {
 
     @NotNull
     private boolean isDeleted;
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    protected List<PrivateMessage> sentMessages;
+
+    @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
+    protected List<PrivateMessage> receivedMessages;
 
     @PrePersist
     protected void onCreate() {

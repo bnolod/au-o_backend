@@ -28,7 +28,6 @@ public class PrivateMessage {
     @JoinColumn(name = "recipient_user_id")
     private User recipient;
 
-
     private String message;
 
     private Date date;
