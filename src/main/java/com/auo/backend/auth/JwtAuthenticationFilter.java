@@ -49,19 +49,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         String jwt = null;
         final String username;
 
-//        System.out.println(authHeader);
+        System.out.println(authHeader);
 
-//        if(jwt == null || jwt.isEmpty()) {
-//            if (authHeader!= null) {
-//                jwt = authHeader.substring(7);
-//            }
-//        }
+
 
         var tokenCookie = WebUtils.getCookie(request, "token");
         if (tokenCookie != null) {
             jwt = tokenCookie.getValue();
         }
 
+        if(jwt == null || jwt.isEmpty()) {
+            if (authHeader!= null) {
+                jwt = authHeader.substring(7);
+            }
+        }
 
         if (jwt == null || jwt.isEmpty()) {
             filterChain.doFilter(request,response);
