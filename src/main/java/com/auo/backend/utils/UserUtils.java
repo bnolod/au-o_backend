@@ -17,7 +17,11 @@ public class UserUtils {
     public User getCurrentUser() throws ResponseStatusException {
         try {
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return userRepository.findUserById(user.getId()).orElseThrow();
+            User currUser = userRepository.findUserById(user.getId()).orElseThrow();
+            if (currUser.isDeleted()) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "DELETED USER");
+            }
+            return currUser;
         } catch (Exception exception) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not signed in");
         }

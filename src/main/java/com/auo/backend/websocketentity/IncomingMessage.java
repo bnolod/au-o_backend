@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class IncomingMessage {
     private String message;
+    private Long groupId;
 }

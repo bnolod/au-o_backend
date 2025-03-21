@@ -1,8 +1,11 @@
 package com.auo.backend.controllers;
 
+import com.auo.backend.models.GroupMessage;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.UserRepository;
+import com.auo.backend.responses.GroupMessageResponse;
 import com.auo.backend.responses.UserResponse;
+import com.auo.backend.services.GroupService;
 import com.auo.backend.services.UserService;
 import com.auo.backend.websocketentity.IncomingMessage;
 import com.auo.backend.websocketentity.OutgoingMessage;
@@ -26,17 +29,21 @@ import java.util.Optional;
 public class GroupWebSocketController {
     private final UserService userService;
     private final UserRepository userRepository;
+    private final GroupService groupService;
 
-    @MessageMapping("/group/{groupId}")  // Correct the path mapping to include the groupId
-    @SendTo("/topic/group/{groupId}")  // Correctly use groupId in SendTo
-    public OutgoingMessage testMessage(@Payload IncomingMessage incomingMessage,
-                                       Principal principal) {
+    @MessageMapping("/group/{groupId}")
+    @SendTo("/topic/group/{groupId}")
+    public GroupMessageResponse testMessage(@Payload IncomingMessage incomingMessage,
+                                            Principal principal) {
+
         User user = null;
         if (principal instanceof UsernamePasswordAuthenticationToken auth) {
             user = (User) auth.getPrincipal();
         }
-        if (user == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "nem nem nem oké");
-        return new OutgoingMessage(incomingMessage.getMessage(), new UserResponse(user));
+        if (user == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid user");
+
+        GroupMessage savedMessage = groupService.sendMessageToGroup(incomingMessage,user);
+        return GroupMessageResponse.ofMessage(savedMessage);
     }
 
 

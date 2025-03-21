@@ -171,9 +171,17 @@ public class PostService {
         User user = userUtils.getCurrentUser();
         Post post = findPostByIdOrThrow(postId);
 
-        if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
+
+        if (post.getPostType() == PostType.USERPOST) {
+            if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            if (!post.getGroupMember().getUser().equals(user)) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            }
         }
+
 
         if (updatePostDto.getText() != null) {
             post.setText(updatePostDto.getText());
@@ -196,10 +204,16 @@ public class PostService {
     public PostResponse deletePostOfUserById(Long postId) {
         User user = userUtils.getCurrentUser();
         Post post = findPostByIdOrThrow(postId);
-        if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-
+        if (post.getPostType() == PostType.USERPOST) {
+            if (postOwnershipCheckerService.isNotOwnerOf(user, post)) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            if (!post.getGroupMember().getUser().equals(user)) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            }
         }
+
         postRepository.delete(post);
         return new PostResponse(post, user);
     }

@@ -9,11 +9,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -47,6 +45,9 @@ public class Group {
             orphanRemoval=true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<GroupMember> groupMembers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    protected List<GroupMessage> groupMessages;
 
     @PrePersist
     protected void onCreate() {

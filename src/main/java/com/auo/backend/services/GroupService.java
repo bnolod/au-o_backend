@@ -7,10 +7,12 @@ import com.auo.backend.enums.GroupRole;
 import com.auo.backend.enums.PostType;
 import com.auo.backend.models.*;
 import com.auo.backend.repositories.GroupMemberRepository;
+import com.auo.backend.repositories.GroupMessageRepository;
 import com.auo.backend.repositories.GroupRepository;
 import com.auo.backend.repositories.PostRepository;
 import com.auo.backend.responses.*;
 import com.auo.backend.utils.UserUtils;
+import com.auo.backend.websocketentity.IncomingMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -34,6 +35,7 @@ public class GroupService {
     private final PostRepository postRepository;
     private final VehicleService vehicleService;
     private final UserUtils userUtils;
+    private final GroupMessageRepository groupMessageRepository;
 
     public List<Group> getAllGroups() {
         return groupRepository.findAll();
@@ -155,10 +157,16 @@ public class GroupService {
         Group group = getGroupByGroupIdOrThrow(groupId);
         Optional<GroupMember> groupMember = groupMemberRepository.getByUserAndGroup(user, group);
 
+        System.out.println(groupMember.get().getGroupRole());
         if (groupMember.isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT, "not_in_group");
 
         if (group.getGroupMembers().stream().anyMatch(member -> member.getGroupRole().equals(GroupRole.ADMIN) && member.getUser() != user)) {
             groupMemberRepository.delete(groupMember.get());
+            return;
+        }
+        if (!groupMember.get().getGroupRole().equals(GroupRole.ADMIN) ) {
+            groupMemberRepository.delete(groupMember.get());
+            return;
         }
         throw new ResponseStatusException(HttpStatus.CONFLICT, "cannot leave group if you are the only admin");
     }
@@ -264,5 +272,42 @@ public class GroupService {
         groups.forEach(System.out::println);
         return groups.stream().map(group -> new GroupResponse(group,user)).toList();
 
+    }
+
+    public GroupMessage sendMessageToGroup(IncomingMessage incomingMessage, User user) {
+        Group group = getGroupByGroupIdOrThrow(incomingMessage.getGroupId());
+        GroupMessage groupMessage = GroupMessage.builder()
+                .message(incomingMessage.getMessage())
+                .user(user)
+                .group(group)
+                .build();
+        groupMessage = groupMessageRepository.save(groupMessage);
+        return groupMessage;
+    }
+
+    public List<GroupMessageResponse> getMessagesOfGroup(Long groupId) {
+        User user = userUtils.getCurrentUser();
+        Group group = getGroupByGroupIdOrThrow(groupId);
+
+        if (!isUserInGroup(user,group)) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"not in group");
+
+        var groupMessages = groupMessageRepository.getGroupMessagesByGroupOrderByTimeDesc(group);
+        return groupMessages.stream().map(GroupMessageResponse::ofMessage).toList();
+    }
+
+    public List<GroupMemberResponse> getPendingMembers(Long groupId) {
+        Group group = getGroupByGroupIdOrThrow(groupId);
+        User user = userUtils.getCurrentUser();
+        List<GroupRole> rolesList = new ArrayList<>();
+        rolesList.add(GroupRole.ADMIN);
+        rolesList.add(GroupRole.MODERATOR);
+
+
+        if (hasRequiredRoleInGroup(user, group, rolesList)) {
+            return groupMemberRepository.findInvalidGroupMembers(group)
+                    .stream().map(GroupMemberResponse::new).toList();
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
+        }
     }
 }

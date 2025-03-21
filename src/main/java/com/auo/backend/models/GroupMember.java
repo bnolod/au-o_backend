@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@ToString(exclude = {"user","group"})
+@ToString(exclude = {"user","group","posts"})
 @Table(name = "app_group_members")
 public class GroupMember {
     @Id
@@ -43,6 +43,7 @@ public class GroupMember {
     @JsonManagedReference
     private List<Post> posts;
 
+    @NotNull
     private boolean isValid;
 
 

@@ -9,6 +9,7 @@ import com.auo.backend.repositories.UserRepository;
 import com.auo.backend.responses.LatestMessageResponse;
 import com.auo.backend.utils.UserUtils;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -58,7 +59,7 @@ public class PrivateMessagingController {
 
     @MessageMapping("/chat/user/")
     @Transactional
-    public void sendMessageToUser(Principal principal, @Payload TargetedMessage message) {
+    public void sendMessageToUser(Principal principal, @Payload @Valid TargetedMessage message) {
         User user = null;
         if (principal instanceof UsernamePasswordAuthenticationToken auth) {
             user = (User) auth.getPrincipal();
@@ -89,7 +90,11 @@ public class PrivateMessagingController {
                 message.getUsername(), "/queue/notifications/", new LatestMessageResponse
                         (user, privateMessage ,activeUsersController.activeUsersSet().contains(message.getUsername())
         ));
-    }
+        messagingTemplate.convertAndSendToUser(
+                user.getUsername(), "/queue/notifications/", new LatestMessageResponse
+                        (user, privateMessage ,activeUsersController.activeUsersSet().contains(message.getUsername())
+                        ));
+        }
 
 //    // Method to add a message to the 3D map
 //    public void addMessageToUser(String username, String friendUsername, ChatMessage chatMessage) {
