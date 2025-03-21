@@ -17,7 +17,10 @@
 > POSTGRES_USER : postgres
 > 
 > POSTGRES_PASSWORD : password
-     
+
+
+## Database Dump
+ebben a github repóban, [ITT](https://github.com/bnolod/au-o_backend/blob/main/projectdump.sql) található
 
 # API
 
