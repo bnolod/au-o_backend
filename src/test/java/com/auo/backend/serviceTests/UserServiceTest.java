@@ -185,16 +185,14 @@ public class UserServiceTest {
 
         ResponseStatusException exception = assertThrows(ResponseStatusException.class,
                 () -> userService.followUserById(1L));
+
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
     }
 
     @Test
     void shouldReturnEmptyPosts_whenGettingPostsOfUserWithNoPosts() {
         lenient().when(userUtils.getCurrentUser()).thenReturn(testUser);
-
         lenient().when(userRepository.findUserById(2L)).thenReturn(Optional.of(secondaryTestUser));
-//        lenient().when(ViewPermissionCheckerService.isAbleToViewProfile(testUser,secondaryTestUser))
-//                .thenReturn(true);
 
         var result = userService.getPostsOfUser(2L);
 
