@@ -1,0 +1,115 @@
+package com.auo.backend.serviceTests;
+
+import com.auo.backend.auth.GenericOwnershipCheckerService;
+import com.auo.backend.dto.create.CreatePostDto;
+import com.auo.backend.dto.create.ImageDto;
+import com.auo.backend.enums.PostType;
+import com.auo.backend.models.Comment;
+import com.auo.backend.models.CommentReply;
+import com.auo.backend.models.Post;
+import com.auo.backend.models.User;
+import com.auo.backend.repositories.*;
+import com.auo.backend.responses.PostResponse;
+import com.auo.backend.responses.UserResponse;
+import com.auo.backend.services.GenericReactionService;
+import com.auo.backend.services.PostService;
+import com.auo.backend.services.UserService;
+import com.auo.backend.utils.UserUtils;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class PostServiceTest {
+
+    @Mock
+    private PostRepository postRepository;
+    @Mock
+    private CommentRepository commentRepository;
+    @Mock
+    private CommentReplyRepository commentReplyRepository;
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private VehicleRepository vehicleRepository;
+
+    @Mock
+    private UserUtils userUtils;
+
+    @Mock
+    private GenericOwnershipCheckerService<User, Post> postOwnershipCheckerService;
+    @Mock
+    private  GenericOwnershipCheckerService<User, Comment> commentOwnershipCheckerService;
+    @Mock
+    private  GenericOwnershipCheckerService<User, CommentReply> commentReplyOwnershipCheckerService;
+    @Mock
+    private GenericReactionService<Post> postReactionService;
+    @Mock
+    private  GenericReactionService<Comment> commentReactionService;
+    @Mock
+    private  GenericReactionService<CommentReply> commentReplyReactionService;
+    @Mock
+    private UserService userService;
+
+
+
+
+    @InjectMocks
+    private PostService postService;
+
+    private User testUser;
+
+    @BeforeEach
+    void setup() {
+        testUser = new User();
+        testUser.setUsername("testUsername");
+        testUser.setNickname("testNickname");
+        testUser.setId(1L);
+        testUser.setDeleted(false);
+        testUser.setEmail("teszt@gmail.com");
+        testUser.setFollowing(new ArrayList<>());
+        testUser.setPosts(new ArrayList<>());
+        testUser.setFavoritePosts(new ArrayList<>());
+
+    }
+
+    @Test
+    void shouldReturnPostResponseOfCreatedPost_whenCreatingPostToProfile() {
+        lenient().when(userUtils.getCurrentUser()).thenReturn(testUser);
+        ImageDto imageDto = new ImageDto();
+        imageDto.setUrl("http://example.com/test.png");
+
+        CreatePostDto createPostDto = new CreatePostDto();
+        createPostDto.setText("Test Post");
+        createPostDto.setLocation("Test Location");
+        createPostDto.setPostImages(List.of(imageDto));
+
+        when(postRepository.save(any())).thenAnswer(invocation -> {
+            Post post = invocation.getArgument(0);
+            post.setId(1L);
+            return post;
+        });
+
+        var result = postService.publishPostToProfile(createPostDto);
+
+        assertEquals(1L,result.getPostId());
+        assertEquals(new UserResponse(testUser),result.getUser());
+        assertEquals(imageDto.getUrl(),result.getImages().get(0).getUrl());
+
+    }
+
+
+}

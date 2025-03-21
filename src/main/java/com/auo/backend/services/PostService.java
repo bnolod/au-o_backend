@@ -72,7 +72,6 @@ public class PostService {
                 .vehicle(vehicle)
                 .build();
         Post post = postRepository.save(tempPost);
-        System.out.println("post.getImages() = " + post.getImages());
 
         return new PostResponse(post, user);
 

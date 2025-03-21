@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserServiceTest {
 
     @Mock
@@ -32,6 +31,8 @@ public class UserServiceTest {
 
     @Mock
     private UserUtils userUtils;
+
+
 
     @InjectMocks
     private UserService userService;
