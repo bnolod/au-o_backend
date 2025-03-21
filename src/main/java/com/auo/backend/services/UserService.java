@@ -46,7 +46,7 @@ public class UserService {
 
     }
 
-
+    @Deprecated
     public void createUser(User user) {
         Optional<User> userByEmail = userRepository.findUserByEmail(user.getEmail());
         if (userByEmail.isPresent()) {
