@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.lenient;
@@ -142,7 +143,10 @@ public class PostServiceTest {
         var result = postService.addCommentToPost(1L,dto);
 
         assertEquals(1L,result.getId());
-
+        assertNotNull(result);
     }
+
+    
+
 
 }
