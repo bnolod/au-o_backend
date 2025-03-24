@@ -19,14 +19,22 @@
 > POSTGRES_PASSWORD : password
 
 
-## Database Dump
-ebben a github repóban, [ITT](https://github.com/bnolod/au-o_backend/blob/main/projectdump.sql) található
+
+## 🚮 Database Dump
+Ebben a github repóban, [ITT](https://github.com/bnolod/au-o_backend/blob/main/projectdump.sql) található
 
 # API
 
-Az api tesztelése [Postman](https://www.postman.com/)-en keresztül történik.
-
+Az api manuális tesztelése [Postman](https://www.postman.com/)-en keresztül történik.
 A collection [itt](https://github.com/bnolod/au-o_backend/blob/main/Au_o%20backend.postman_collection.json) található meg.
 
-Ez megfelel az API dokumentálásának és használati útmutatójának is.
 
+## Swagger API dokumentáció
+`http://localhost:8080/swagger-ui/index.html#/` URL-en elérhető, szerver futása közben.
+
+
+# Tesztelés
+
+- Automatizált egységtesztek
+  - `src/test`
+  - 100% pass
