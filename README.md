@@ -30,7 +30,10 @@ A collection [itt](https://github.com/bnolod/au-o_backend/blob/main/Au_o%20backe
 
 
 ## Swagger API dokumentáció
-`http://localhost:8080/swagger-ui/index.html#/` URL-en elérhető, szerver futása közben.
+```
+http://localhost:8080/swagger-ui/index.html#/
+```
+URL-en elérhető, szerver futása közben.
 
 
 # Tesztelés
