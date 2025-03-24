@@ -30,7 +30,6 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
-    private final GenericOwnershipCheckerService<User, Group> groupOwnershipCheckerService;
     private final UserService userService;
     private final PostRepository postRepository;
     private final VehicleService vehicleService;
@@ -76,10 +75,15 @@ public class GroupService {
     public GroupResponse createGroup(CreateGroupDto createGroupDto) {
         User user = userUtils.getCurrentUser();
         StringBuilder groupAlias = new StringBuilder();
+        if (createGroupDto.getAlias() == null) {
+
         for (Character c : createGroupDto.getName().toCharArray()) {
             if (Character.isUpperCase(c) && groupAlias.length() < 10) {
                 groupAlias.append(c);
             }
+        }
+        } else {
+            groupAlias.append(createGroupDto.getAlias());
         }
         if (groupAlias.isEmpty()) {
             groupAlias.append(createGroupDto.getName(), 0, 6);
@@ -87,7 +91,7 @@ public class GroupService {
 
         Group group = Group.builder()
                 .groupName(createGroupDto.getName())
-                .groupAlias(createGroupDto.getAlias().trim().equals("") ? String.valueOf(groupAlias) : createGroupDto.getAlias())
+                .groupAlias(String.valueOf(groupAlias))
                 .groupDescription(createGroupDto.getDescription())
                 .bannerImageURL(createGroupDto.getBannerImage())
                 .groupMembers(new ArrayList<>())

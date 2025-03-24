@@ -74,6 +74,7 @@ public class UserServiceTest {
 
 
     @Test
+    @DisplayName("Should return updated user when user is edited")
     void shouldReturnUpdatedUser_whenUserIsEdited() {
         UpdateUserDto dto = new UpdateUserDto();
         dto.setBio("editedBio");
@@ -90,6 +91,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("should return UserResponse entity when getting existing user by id")
     void shouldReturnUserResponse_whenGettingExistingUserById() {
         lenient().when(userUtils.getCurrentUser()).thenReturn(testUser);
         lenient().when(userRepository.findUserById(1L)).thenReturn(Optional.of(testUser));
@@ -99,6 +101,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should throw exception when getting not existing user by id")
     void shouldThrowException_whenGettingNotExistingUserById() {
         lenient().when(userRepository.findUserById(5L)).thenReturn(Optional.empty());
         ResponseStatusException exception = assertThrows(ResponseStatusException.class,
@@ -108,6 +111,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should set isDeleted flag when deleting user")
     void shouldFlagUserDeleted_whenDeletingUser() {
         lenient().when(userUtils.getCurrentUser()).thenReturn(testUser);
         userService.flagSelfForDeletion();
@@ -115,12 +119,14 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should return null when followers are empty")
     void shouldReturnNull_whenFollowersEmpty() {
         lenient().when(userRepository.findUserById(1L)).thenReturn(Optional.of(testUser));
         assertNull(userService.getFollowersByUserId(testUser.getId()));
     }
 
     @Test
+    @DisplayName("Should return followers when followers are not empty")
     void shouldReturnFollowers_whenFollowersNotEmpty() {
         secondaryTestUser.getFollowing().add(testUser);
         lenient().when(userRepository.findUserById(1L)).thenReturn(Optional.of(testUser));
@@ -133,6 +139,7 @@ public class UserServiceTest {
 
 
     @Test
+    @DisplayName("Should return empty array when following is empty")
     void shouldReturnEmptyArray_whenFollowingEmpty() {
         lenient().when(userRepository.findUserById(1L)).thenReturn(Optional.of(testUser));
 
@@ -140,6 +147,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should return following when following is not empty")
     void shouldReturnFollowing_whenFollowingNotEmpty() {
         testUser.getFollowing().add(secondaryTestUser);
         lenient().when(userRepository.findUserById(1L)).thenReturn(Optional.of(testUser));
@@ -152,6 +160,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should throw exception when removing follower from self")
     void shouldThrowException_whenRemovingFollowerFromSelf() {
         lenient().when(userRepository.findUserById(1L)).thenReturn(Optional.of(testUser));
         when(userUtils.getCurrentUser()).thenReturn(testUser);
@@ -163,6 +172,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should throw exception when unfollowing not followed user")
     void shouldThrowException_whenUnfollowingNotFollowedUser() {
         lenient().when(userUtils.getCurrentUser()).thenReturn(testUser);
         lenient().when(userRepository.findUserById(1L)).thenReturn(Optional.of(testUser));
@@ -174,6 +184,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should throw exception when following self")
     void shouldThrowException_whenFollowingSelf() {
         lenient().when(userUtils.getCurrentUser()).thenReturn(testUser);
         lenient().when(userRepository.findUserById(1L)).thenReturn(Optional.of(testUser));
@@ -185,6 +196,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Should return empty array when getting posts of user with no posts")
     void shouldReturnEmptyPosts_whenGettingPostsOfUserWithNoPosts() {
         lenient().when(userUtils.getCurrentUser()).thenReturn(testUser);
         lenient().when(userRepository.findUserById(2L)).thenReturn(Optional.of(secondaryTestUser));
