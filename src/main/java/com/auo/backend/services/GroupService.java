@@ -40,7 +40,7 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
-    private Group getGroupByGroupIdOrThrow(Long groupId) {
+    public Group getGroupByGroupIdOrThrow(Long groupId) {
         Optional<Group> group = groupRepository.findById(groupId);
         if (group.isPresent()) return group.get();
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "group_not_found");
@@ -237,20 +237,12 @@ public class GroupService {
         return new GroupResponse(group, user);
     }
 
-//    @Transactional
-//    public List<GroupResponse> getGroupsOfUser() {
-//        User user = userUtils.getCurrentUser();
-//        List<GroupMember> groups = user.getGroups();
-//        return groups.stream().map(groupMember -> new GroupResponse(groupMember.getGroup(), user)).toList();
-//    }
-
     public GroupMemberResponse getOwnGroupMemberStatus(Long groupId) {
         User user = userUtils.getCurrentUser();
         Group group = getGroupByGroupIdOrThrow(groupId);
         GroupMember groupMember = getGroupMemberByUserAndGroup(user, group);
         return new GroupMemberResponse(groupMember);
     }
-
 
     public List<PostResponse> getPostsByGroupId(Long groupId) {
         User user = userUtils.getCurrentUser();

@@ -4,7 +4,6 @@ import com.auo.backend.dto.create.CreateGroupDto;
 import com.auo.backend.enums.GroupRole;
 import com.auo.backend.models.Group;
 import com.auo.backend.models.GroupMember;
-import com.auo.backend.models.Post;
 import com.auo.backend.models.User;
 import com.auo.backend.repositories.GroupMemberRepository;
 import com.auo.backend.repositories.GroupMessageRepository;
@@ -21,6 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -110,6 +111,12 @@ public class GroupServiceTests {
             group.setId(2L);
             return group;
         });
+
+        lenient().when(groupMemberRepository.save(any())).thenAnswer(invocation -> {
+            GroupMember member = invocation.getArgument(0);
+            member.setId(2L);
+            return member;
+        });
     }
 
 
@@ -145,6 +152,92 @@ public class GroupServiceTests {
 
         assertNotNull(result);
     }
+
+    @Test
+    @DisplayName("Should generate alias fron group name when group name contains uppercase letters")
+    void should_generate_alias_fron_group_name_when_group_name_contains_uppercase_letters() {
+        lenient().when(userUtils.getCurrentUser()).thenReturn(testUser);
+        CreateGroupDto dto = new CreateGroupDto();
+        dto.setPublic(true);
+        dto.setName("Test Est St T group");
+        dto.setDescription("Test description");
+        dto.setBannerImage("https://example.com/test.png");
+
+        var result = groupService.createGroup(dto);
+
+        assertEquals("TEST",result.getAlias());
+    }
+
+    @Test
+    @DisplayName("Should generate alias from groups name when it does not contain uppercase letters")
+    void should_generate_alias_from_groups_name_when_it_does_not_contain_uppercase_letters() {
+        lenient().when(userUtils.getCurrentUser()).thenReturn(testUser);
+        CreateGroupDto dto = new CreateGroupDto();
+        dto.setPublic(true);
+        dto.setName("test group");
+        dto.setDescription("Test description");
+        dto.setBannerImage("https://example.com/test.png");
+
+        var result = groupService.createGroup(dto);
+        assertEquals("test g",result.getAlias());
+    }
+
+    @Test
+    @DisplayName("Should throw error when already member of group")
+    void should_throw_error_when_already_member_of_group() {
+        lenient().when(userUtils.getCurrentUser()).thenReturn(testUser);
+
+        var res = assertThrows(ResponseStatusException.class,()-> {
+            groupService.joinGroup(1L);
+        });
+
+        assertEquals(HttpStatus.CONFLICT,res.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Should successfully join group when not member of group")
+    void should_successfully_join_group_when_not_member_of_group() {
+        lenient().when(userUtils.getCurrentUser()).thenReturn(secondaryTestUser);
+        assertNotNull(groupService.joinGroup(1L));
+    }
+
+    @Test
+    @DisplayName("Should throw exception when trying to leave group when user is the only admin")
+    void should_throw_exception_when_trying_to_leave_group_when_user_is_the_only_admin() {
+        lenient().when(userUtils.getCurrentUser()).thenReturn(testUser);
+        lenient().when(groupMemberRepository.getByUserAndGroup(testUser, testGroup)).thenReturn(Optional.ofNullable(testGroupMember));
+
+        var result = assertThrows(ResponseStatusException.class,()-> {
+            groupService.leaveGroup(1l);
+        });
+        assertEquals(HttpStatus.CONFLICT,result.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Should successfully delete group when user is admin")
+    void should_successfully_delete_group_when_user_is_admin() {
+        when(userUtils.getCurrentUser()).thenReturn(testUser);
+        lenient().when(groupMemberRepository.getByUserAndGroup(testUser,testGroup)).thenReturn(Optional.ofNullable(testGroupMember));
+
+        groupService.deleteGroup(1L);
+
+        verify(groupRepository, times(1)).delete(testGroup);
+    }
+
+    @Test
+    @DisplayName("Should throw error when trying to delete group without admin role")
+    void should_throw_error_when_trying_to_delete_group_without_admin_role() {
+        when(userUtils.getCurrentUser()).thenReturn(testUser);
+        testGroupMember.setGroupRole(GroupRole.MEMBER);
+        lenient().when(groupMemberRepository.getByUserAndGroup(testUser,testGroup)).thenReturn(Optional.ofNullable(testGroupMember));
+
+        var result = assertThrows(ResponseStatusException.class,() ->
+            groupService.deleteGroup(1L)
+        );
+        assertEquals(HttpStatus.UNAUTHORIZED,result.getStatusCode());
+    }
+
+
 
 
 
