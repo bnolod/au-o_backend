@@ -63,6 +63,7 @@ public class UserRepositoryTest {
         Assertions.assertThat(savedUser.getReactions()).isNotNull();
         Assertions.assertThat(savedUser.getReplies()).isNotNull();
         Assertions.assertThat(savedUser.getId()).isGreaterThan(0L);
+
     }
 
     @Test()

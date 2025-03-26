@@ -30,7 +30,6 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
-    private final GenericOwnershipCheckerService<User, Group> groupOwnershipCheckerService;
     private final UserService userService;
     private final PostRepository postRepository;
     private final VehicleService vehicleService;
@@ -41,7 +40,7 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
-    private Group getGroupByGroupIdOrThrow(Long groupId) {
+    public Group getGroupByGroupIdOrThrow(Long groupId) {
         Optional<Group> group = groupRepository.findById(groupId);
         if (group.isPresent()) return group.get();
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "group_not_found");
@@ -76,10 +75,15 @@ public class GroupService {
     public GroupResponse createGroup(CreateGroupDto createGroupDto) {
         User user = userUtils.getCurrentUser();
         StringBuilder groupAlias = new StringBuilder();
+        if (createGroupDto.getAlias() == null) {
+
         for (Character c : createGroupDto.getName().toCharArray()) {
             if (Character.isUpperCase(c) && groupAlias.length() < 10) {
                 groupAlias.append(c);
             }
+        }
+        } else {
+            groupAlias.append(createGroupDto.getAlias());
         }
         if (groupAlias.isEmpty()) {
             groupAlias.append(createGroupDto.getName(), 0, 6);
@@ -87,7 +91,7 @@ public class GroupService {
 
         Group group = Group.builder()
                 .groupName(createGroupDto.getName())
-                .groupAlias(createGroupDto.getAlias().trim().equals("") ? String.valueOf(groupAlias) : createGroupDto.getAlias())
+                .groupAlias(String.valueOf(groupAlias))
                 .groupDescription(createGroupDto.getDescription())
                 .bannerImageURL(createGroupDto.getBannerImage())
                 .groupMembers(new ArrayList<>())
@@ -233,20 +237,12 @@ public class GroupService {
         return new GroupResponse(group, user);
     }
 
-//    @Transactional
-//    public List<GroupResponse> getGroupsOfUser() {
-//        User user = userUtils.getCurrentUser();
-//        List<GroupMember> groups = user.getGroups();
-//        return groups.stream().map(groupMember -> new GroupResponse(groupMember.getGroup(), user)).toList();
-//    }
-
     public GroupMemberResponse getOwnGroupMemberStatus(Long groupId) {
         User user = userUtils.getCurrentUser();
         Group group = getGroupByGroupIdOrThrow(groupId);
         GroupMember groupMember = getGroupMemberByUserAndGroup(user, group);
         return new GroupMemberResponse(groupMember);
     }
-
 
     public List<PostResponse> getPostsByGroupId(Long groupId) {
         User user = userUtils.getCurrentUser();
