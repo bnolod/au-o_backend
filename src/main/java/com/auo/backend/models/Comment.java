@@ -17,7 +17,9 @@ import java.util.List;
 @Entity
 @ToString(exclude = {"post"})
 //@EqualsAndHashCode(exclude = "user")
-@Table(name = "app_comments")
+@Table(name = "app_comments", indexes = {
+        @Index(name = "index_comment_post",columnList = "post_id")
+})
 public class Comment {
     @Id
     @GeneratedValue

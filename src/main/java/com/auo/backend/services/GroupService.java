@@ -297,6 +297,8 @@ public class GroupService {
         List<GroupRole> rolesList = new ArrayList<>();
         rolesList.add(GroupRole.ADMIN);
         rolesList.add(GroupRole.MODERATOR);
+        
+
 
 
         if (hasRequiredRoleInGroup(user, group, rolesList)) {
@@ -306,4 +308,6 @@ public class GroupService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "unauthorized");
         }
     }
+
+    //TODO: Implement ezt meg azt
 }

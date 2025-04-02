@@ -11,7 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @ToString(exclude = {"user"})
-@Table(name = "app_user_vehicles")
+@Table(name = "app_user_vehicles", indexes = {
+        @Index(name = "index_vehicle_user", columnList = "user_id")
+})
 public class Vehicle {
     @Id
     @GeneratedValue

@@ -14,7 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "app_private_messages")
+@Table(name = "app_private_messages", indexes = {
+        @Index(name = "index_private_message_sender_user",columnList = "sender_user_id"),
+        @Index(name = "index_private_message_recipient_user",columnList = "recipient_user_id")
+})
 public class PrivateMessage {
     @Id
     @GeneratedValue

@@ -11,7 +11,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString(exclude = {"user","group"})
 @Entity
-@Table(name = "app_group_messages")
+@Table(name = "app_group_messages", indexes = {
+        @Index(name = "index_group_message_group",columnList = "group_id")
+})
 public class GroupMessage {
     @Id
     @GeneratedValue
