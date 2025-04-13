@@ -15,7 +15,9 @@ import java.util.List;
 @AllArgsConstructor
 @ToString(exclude = {"user","parent"})
 @Entity
-@Table(name = "app_comment_replies")
+@Table(name = "app_comment_replies", indexes = {
+        @Index(name = "index_reply_comment", columnList = "comment_id")
+})
 public class CommentReply {
     @Id
     @GeneratedValue

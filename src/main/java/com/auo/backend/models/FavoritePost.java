@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "app_favorite_posts")
+@Table(name = "app_favorite_posts", indexes = {
+        @Index(name = "index_favpost_user", columnList = "user_id")
+})
 public class FavoritePost {
     @Id
     @GeneratedValue

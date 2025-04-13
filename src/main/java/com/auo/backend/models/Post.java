@@ -19,7 +19,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Entity
 @ToString(exclude = "user")
 @EqualsAndHashCode(exclude = "user")
-@Table(name = "app_posts")
+@Table(name = "app_posts", indexes = {
+        @Index(name = "index_post_user",columnList = "user_id"),
+        @Index(name = "index_post_vehicle", columnList = "vehicle_id"),
+        @Index(name = "index_post_post_type", columnList = "post_type"),
+        @Index(name = "index_post_group_member",columnList = "group_member_id")
+})
 public class Post {
     @Id
     @GeneratedValue()

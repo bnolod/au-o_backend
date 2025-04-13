@@ -16,7 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 @ToString(exclude = {"groupMembers","groupMessages"})
 @Entity
-@Table(name = "app_group")
+@Table(name = "app_group", indexes = {
+        @Index(name = "index_group_name",columnList = "group_name")
+})
 public class Group {
     @Id
     @GeneratedValue

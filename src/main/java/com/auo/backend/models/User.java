@@ -21,7 +21,11 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @ToString(exclude = {"posts","comments","replies","groups","reactions","following","favoritePosts", "sentMessages","receivedMessages"})
-@Table(name = "app_users")
+@Table(name = "app_users", indexes = {
+        @Index(name = "index_user_username", columnList = "username", unique = true),
+        @Index(name = "index_user_email",columnList = "email",unique = true),
+        @Index(name = "index_user_nickname",columnList = "nickname")
+})
 public class User implements UserDetails {
 
 

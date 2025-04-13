@@ -17,7 +17,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @ToString(exclude = {"user","group","posts"})
-@Table(name = "app_group_members")
+@Table(name = "app_group_members", indexes = {
+        @Index(name = "index_gm_user",columnList = "user_id"),
+        @Index(name = "index_gm_group",columnList = "group_id")
+})
 public class GroupMember {
     @Id
     @GeneratedValue
