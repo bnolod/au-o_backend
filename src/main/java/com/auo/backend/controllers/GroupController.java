@@ -103,6 +103,14 @@ public class GroupController {
         return ResponseEntity.ok(groupService.setRoleOfMember(userId,groupId,groupRole));
     }
 
+    @Operation(summary = "Update group by id", description = "Updates a group by id if the user has permission.")
+    @PutMapping("/group/{groupId}")
+    public ResponseEntity<GroupResponse> updateGroup(
+            @PathVariable Long groupId,
+            @Valid @RequestBody CreateGroupDto createGroupDto) {
+        return ResponseEntity.ok(groupService.updateGroup(groupId, createGroupDto));
+    }
+
     
     //
     // post to group
