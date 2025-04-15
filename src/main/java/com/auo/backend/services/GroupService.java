@@ -200,6 +200,23 @@ public class GroupService {
         return new GroupMemberResponse(targetUser);
     }
 
+    public GroupResponse updateGroup(Long groupId, CreateGroupDto createGroupDto) {
+        Group group = getGroupByGroupIdOrThrow(groupId);
+        GroupMember groupMember = getGroupMemberByUserAndGroup(
+                userUtils.getCurrentUser(),
+                group);
+        if (groupMember.getGroupRole() != GroupRole.ADMIN) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "admin_role_required");
+        }
+        group.setGroupName(createGroupDto.getName());
+        group.setGroupDescription(createGroupDto.getDescription());
+        group.setGroupAlias(createGroupDto.getAlias());
+        //group.setBannerImageURL(createGroupDto.getBannerImage());
+        group.setPublic(createGroupDto.isPublic());
+        groupRepository.save(group);
+        return new GroupResponse(group, userUtils.getCurrentUser());
+    }
+
     public PostResponse addPostToGroup(Long groupId, CreatePostDto createPostDto) {
         GroupMember groupMember = getGroupMemberByUserAndGroup(
                 userUtils.getCurrentUser(),

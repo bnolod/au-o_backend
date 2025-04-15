@@ -3,8 +3,8 @@
 		"_postman_id": "aa3dbb5d-df61-4222-a030-aab63667cee4",
 		"name": "Au_o backend",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "37001763",
-		"_collection_link": "https://auo-dev.postman.co/workspace/auo-dev-Workspace~cf0f3cb2-83f0-4499-86e9-06c399e77d5b/collection/40973202-aa3dbb5d-df61-4222-a030-aab63667cee4?action=share&source=collection_link&creator=37001763"
+		"_exporter_id": "40973202",
+		"_collection_link": "https://auo-dev.postman.co/workspace/auo-dev-Workspace~cf0f3cb2-83f0-4499-86e9-06c399e77d5b/collection/40973202-aa3dbb5d-df61-4222-a030-aab63667cee4?action=share&source=collection_link&creator=40973202"
 	},
 	"item": [
 		{
@@ -374,7 +374,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"usernameOrEmail\":\"felhnev1\",\r\n    \"password\":\"erosjelszo\"\r\n}",
+							"raw": "{\r\n    \"usernameOrEmail\":\"felhnev12\",\r\n    \"password\":\"Jelszo123!\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -422,7 +422,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"felhnev1\",\r\n    \"nickname\": \"petykes\",\r\n    \"email\": \"email@pelda.hu\",\r\n    \"dateOfBirth\": \"2001-09-11\",\r\n    \"password\": \"erosjelszo\"\r\n}",
+							"raw": "{\r\n    \"username\": \"felhnev12\",\r\n    \"nickname\": \"petykes\",\r\n    \"email\": \"email@email.hu\",\r\n    \"dateOfBirth\": \"2001-09-11\",\r\n    \"password\": \"Jelszo123!\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -491,7 +491,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{BearerToken}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -548,6 +548,35 @@
 								"users",
 								"user",
 								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{apiUrl}}/api/v1/users/search?search=u",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"search"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "u"
+								}
 							]
 						}
 					},
@@ -632,7 +661,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{apiUrl}}/api/v1/posts/feed?page=0&time=2025-02-20T09:34:16.0203393",
+									"raw": "{{apiUrl}}/api/v1/posts/feed?page=0&time=2025-02-22T09:34:16.0203393",
 									"host": [
 										"{{apiUrl}}"
 									],
@@ -649,7 +678,7 @@
 										},
 										{
 											"key": "time",
-											"value": "2025-02-20T09:34:16.0203393"
+											"value": "2025-02-22T09:34:16.0203393"
 										}
 									]
 								}
@@ -695,6 +724,86 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Get posts by vehicle",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{BearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/v1/posts/vehicle/1",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"posts",
+										"vehicle",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Favorite post by id 1",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/v1/posts/favorite/1",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"posts",
+										"favorite",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get favorite posts by user id",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/v1/posts/favorites/user/52",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"posts",
+										"favorites",
+										"user",
+										"52"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -718,7 +827,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"text\": \"hello nestjs\",\r\n    \"postImages\": [\r\n        {\r\n            \"url\": \"placeholder.png\",\r\n            \"deleteHash\": \"deleteHash\"\r\n        },\r\n        {\r\n            \"url\": \"placeholder.png\",\r\n            \"deleteHash\": \"deleteHash\"\r\n        }\r\n    ],\r\n    \"location\": \"tunyogmatolcs\",\r\n    \"vehicleId\":1\r\n}",
+									"raw": "{\r\n    \"text\": \"hello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjello nestjs\",\r\n    \"postImages\": [\r\n        {\r\n            \"url\": \"https://www.spar.hu/content/dam/sparhuwebsite/eletmod/zgy/zgy-kepek7.jpg/_jcr_content/renditions/responsive.665.499.noborder.f366774fcfdf048e.jpg\",\r\n            \"deleteHash\": \"deleteHash\"\r\n        },\r\n        {\r\n            \"url\": \"https://www.spar.hu/content/dam/sparhuwebsite/eletmod/zgy/zgy-kepek7.jpg/_jcr_content/renditions/responsive.665.499.noborder.f366774fcfdf048e.jpg\",\r\n            \"deleteHash\": \"deleteHash\"\r\n        }\r\n    ],\r\n    \"location\": \"tunyogmatolcs\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -795,7 +904,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"text\": \"Helló csoport poszt\",\r\n    \"postImages\": [\r\n        {\r\n            \"url\": \"placeholder.png\",\r\n            \"deleteHash\": \"deleteHash\"\r\n        },\r\n        {\r\n            \"url\": \"placeholder.png\",\r\n            \"deleteHash\": \"deleteHash\"\r\n        }\r\n    ],\r\n    \"location\": \"Ózd\",\r\n    \"vehicleId\":1\r\n}",
+									"raw": "{\r\n    \"text\": \"Helló csoport poszt\",\r\n    \"postImages\": [\r\n        {\r\n            \"url\": \"placeholder.png\",\r\n            \"deleteHash\": \"deleteHash\"\r\n        },\r\n        {\r\n            \"url\": \"placeholder.png\",\r\n            \"deleteHash\": \"deleteHash\"\r\n        }\r\n    ],\r\n    \"location\": \"Helyszín\",\r\n    \"vehicleId\":1\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -803,7 +912,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{apiUrl}}/api/v1/groups/group/2/post",
+									"raw": "{{apiUrl}}/api/v1/groups/group/52/post",
 									"host": [
 										"{{apiUrl}}"
 									],
@@ -812,7 +921,7 @@
 										"v1",
 										"groups",
 										"group",
-										"2",
+										"52",
 										"post"
 									]
 								}
@@ -1028,7 +1137,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "{{apiUrl}}/api/v1/groups/1/join",
+									"raw": "{{apiUrl}}/api/v1/groups/group/203/join",
 									"host": [
 										"{{apiUrl}}"
 									],
@@ -1036,7 +1145,8 @@
 										"api",
 										"v1",
 										"groups",
-										"1",
+										"group",
+										"203",
 										"join"
 									]
 								}
@@ -1073,6 +1183,107 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "handle join req",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{BearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/v1/groups/handleJoinRequest/353/502/false",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"groups",
+										"handleJoinRequest",
+										"353",
+										"502",
+										"false"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get group members by group ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{BearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/v1/groups/group/1/members",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"groups",
+										"group",
+										"1",
+										"members"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get group member status",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get pending users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/v1/groups/group/1/pending",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"groups",
+										"group",
+										"1",
+										"pending"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -1087,7 +1298,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{BearerToken}}",
+											"value": "",
 											"type": "string"
 										}
 									]
@@ -1096,7 +1307,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\" : \"CSeles Elnevezésű CSoport\",\r\n    \"description\" : \"Üdv helló csoport jaj de jó\",\r\n    \"bannerImage\" : \"https://polomania.hu/images/designs/tn3/bgcolor/Petike-baba-44070.jpg\", //omittable\r\n    \"alias\": \"TESZT\" //omittable, ha nincs megadva automatikusan lesz kiadva\r\n}",
+									"raw": "{\r\n    \"name\" : \"publikus teszt csoport\",\r\n    \"description\" : \"Üdv helló csoport jaj de jó\",\r\n    \"bannerImage\" : \"https://polomania.hu/images/designs/tn3/bgcolor/Petike-baba-44070.jpg\", //omittable\r\n    \"alias\": \"TESZT\", //omittable, ha nincs megadva automatikusan lesz kiadva\r\n    \"public\":true\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1204,6 +1415,63 @@
 										"v1",
 										"groups",
 										"own"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all posts",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{BearerToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/v1/groups/group/52/posts",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"groups",
+										"group",
+										"52",
+										"posts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get messages of group by id",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/api/v1/groups/group/1/messages",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"groups",
+										"group",
+										"1",
+										"messages"
 									]
 								}
 							},
@@ -1494,6 +1762,10 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "events",
+			"item": []
 		}
 	],
 	"event": [
@@ -1526,6 +1798,11 @@
 		},
 		{
 			"key": "BearerToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "csrfToken",
 			"value": "",
 			"type": "string"
 		}
