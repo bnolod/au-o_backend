@@ -1,0 +1,2659 @@
+{
+	"id": "e6dc60a8-0a5f-4293-a2dd-84c5fff13afd",
+	"name": "Au_o backend",
+	"timestamp": "2025-04-15T23:28:51.023Z",
+	"collection_id": "40973202-aa3dbb5d-df61-4222-a030-aab63667cee4",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 278,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2025-04-15T23:28:45.598Z",
+	"totalFail": 32,
+	"results": [
+		{
+			"id": "664cf282-356a-4796-a2e6-7f62a998ba21",
+			"name": "get following of user by id (1)",
+			"url": "http://localhost:8080/api/v1/users/user/1/following",
+			"time": 21,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response content type is application/json": true,
+				"Response body is an empty array": false,
+				"Verify the response array has the expected number of elements": false,
+				"The response array should be an array": true,
+				"Each item in the array should be an object": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response content type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response body is an empty array": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Verify the response array has the expected number of elements": {
+					"pass": 0,
+					"fail": 1
+				},
+				"The response array should be an array": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Each item in the array should be an object": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				21
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response content type is application/json": true,
+					"Response body is an empty array": false,
+					"Verify the response array has the expected number of elements": false,
+					"The response array should be an array": true,
+					"Each item in the array should be an object": true
+				}
+			]
+		},
+		{
+			"id": "c52ba698-df69-40e5-8376-bf2209386093",
+			"name": "get followers of user (id 1)",
+			"url": "http://localhost:8080/api/v1/users/user/3/followers",
+			"time": 15,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type header is application/json": true,
+				"Response body is an empty array": false,
+				"Response array should have the expected length": false,
+				"Response body is in the correct format": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response body is an empty array": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response array should have the expected length": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Response body is in the correct format": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type header is application/json": true,
+					"Response body is an empty array": false,
+					"Response array should have the expected length": false,
+					"Response body is in the correct format": true
+				}
+			]
+		},
+		{
+			"id": "770cfec0-813f-442f-a025-1a0e6f74ca94",
+			"name": "follow user by id (2)",
+			"url": "http://localhost:8080/api/v1/users/user/3/follow",
+			"time": 16,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Response status code is 409": true,
+				"Content-Type header is application/json": true,
+				"Status field is present in the response": true,
+				"Message field is present in the response": true,
+				"Status value is 0": false
+			},
+			"testPassFailCounts": {
+				"Response status code is 409": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status field is present in the response": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message field is present in the response": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status value is 0": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Response status code is 409": true,
+					"Content-Type header is application/json": true,
+					"Status field is present in the response": true,
+					"Message field is present in the response": true,
+					"Status value is 0": false
+				}
+			]
+		},
+		{
+			"id": "c17b4dc4-6c05-45dc-b470-1740974e6ba3",
+			"name": "Unfollow user (id 2)",
+			"url": "http://localhost:8080/api/v1/users/user/2/unfollow",
+			"time": 13,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Response status code is 400": true,
+				"Content-Type is application/json": true,
+				"Status field should exist and not be empty": false,
+				"Message field should exist and be a non-empty string": true,
+				"Message field is a non-empty string": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status field should exist and not be empty": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Message field should exist and be a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message field is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Response status code is 400": true,
+					"Content-Type is application/json": true,
+					"Status field should exist and not be empty": false,
+					"Message field should exist and be a non-empty string": true,
+					"Message field is a non-empty string": true
+				}
+			]
+		},
+		{
+			"id": "6c92a6f5-f5c9-4248-98fa-2173660079d4",
+			"name": "Remove follower from self (id 2)",
+			"url": "http://localhost:8080/api/v1/users/user/1/remove_follower",
+			"time": 16,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Response status code is 400": true,
+				"Content-Type is application/json": true,
+				"Status field exists and is truthy": true,
+				"Message field should exist and not be empty": true,
+				"Message field should not be empty": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status field exists and is truthy": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message field should exist and not be empty": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message field should not be empty": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Response status code is 400": true,
+					"Content-Type is application/json": true,
+					"Status field exists and is truthy": true,
+					"Message field should exist and not be empty": true,
+					"Message field should not be empty": true
+				}
+			]
+		},
+		{
+			"id": "8a3ab0c4-ed9e-4db0-a031-b27801fb04be",
+			"name": "Add user // test request",
+			"url": "http://localhost:8080/api/v1/users/user",
+			"time": 19,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				19
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "50e5361c-f52d-4873-8f51-3636b6315518",
+			"name": "Get all users // test request",
+			"url": "http://localhost:8080/api/v1/users/all",
+			"time": 11,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response has the required fields": true,
+				"DateOfSignup is in a valid date format": true,
+				"Bio and profileImg fields are either null or non-empty strings": true,
+				"Public and deleted fields should be boolean values": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields": {
+					"pass": 1,
+					"fail": 0
+				},
+				"DateOfSignup is in a valid date format": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Bio and profileImg fields are either null or non-empty strings": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Public and deleted fields should be boolean values": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response has the required fields": true,
+					"DateOfSignup is in a valid date format": true,
+					"Bio and profileImg fields are either null or non-empty strings": true,
+					"Public and deleted fields should be boolean values": true
+				}
+			]
+		},
+		{
+			"id": "924d9861-386b-438f-8867-caee9bf19ce4",
+			"name": "Get one user by id (id 1)",
+			"url": "http://localhost:8080/api/v1/users/user/1",
+			"time": 11,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type is application/json": true,
+				"Validate the user object": false,
+				"Date of signup is in a valid date format": true,
+				"Bio and profileImg are either null or non-empty strings": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the user object": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Date of signup is in a valid date format": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Bio and profileImg are either null or non-empty strings": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type is application/json": true,
+					"Validate the user object": false,
+					"Date of signup is in a valid date format": true,
+					"Bio and profileImg are either null or non-empty strings": true
+				}
+			]
+		},
+		{
+			"id": "949e48f8-384e-4dc6-a89d-9e491522dd07",
+			"name": "Delete by id (id 1) // test request",
+			"url": "http://localhost:8080/api/v1/users/user/1",
+			"time": 9,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				9
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "c5a3664c-cbfa-4bce-9cfd-f246f662e6ca",
+			"name": "Update user by id (id 1)",
+			"url": "http://localhost:8080/api/v1/users/user/update/1",
+			"time": 17,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				17
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "2788c0b4-6bd6-4e0e-87bf-957128047044",
+			"name": "Login to user",
+			"url": "http://localhost:8080/api/v1/auth/login",
+			"time": 12,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Response status code is 401": true,
+				"Response has the required fields - status and message": false,
+				"Message should be null": true,
+				"Content-Type is application/json": true,
+				"Response body is not empty": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 401": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Message should be null": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response body is not empty": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Response status code is 401": true,
+					"Response has the required fields - status and message": false,
+					"Message should be null": true,
+					"Content-Type is application/json": true,
+					"Response body is not empty": true
+				}
+			]
+		},
+		{
+			"id": "b7e10a1f-3661-4b69-81d5-a82dd9ddb974",
+			"name": "Register user",
+			"url": "http://localhost:8080/api/v1/auth/register",
+			"time": 14,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Response status code is 409": true,
+				"Response has the required fields - status and message": true,
+				"Message is a non-empty string": true,
+				"Content-Type header is application/json": true,
+				"Status field is a non-negative integer": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 409": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status field is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Response status code is 409": true,
+					"Response has the required fields - status and message": true,
+					"Message is a non-empty string": true,
+					"Content-Type header is application/json": true,
+					"Status field is a non-negative integer": true
+				}
+			]
+		},
+		{
+			"id": "3e6e6c6a-73ed-4e6c-9736-0944fe094d12",
+			"name": "Authenticate user",
+			"url": "http://localhost:8080/api/v1/auth/authenticate",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response has the required fields": true,
+				"Token is a non-empty string": true,
+				"Content type is application/json": true,
+				"Response time is less than 200ms": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Token is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response time is less than 200ms": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response has the required fields": true,
+					"Token is a non-empty string": true,
+					"Content type is application/json": true,
+					"Response time is less than 200ms": true
+				}
+			]
+		},
+		{
+			"id": "cc63fe56-7d51-4dcd-82bb-c2b45074baec",
+			"name": "See own profile",
+			"url": "http://localhost:8080/api/v1/auth/profile",
+			"time": 11,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type header is application/json": true,
+				"Validate the user object": false,
+				"Date of Signup is in a valid date format": true,
+				"Deleted field is set to true": false
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the user object": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Date of Signup is in a valid date format": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Deleted field is set to true": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				11
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type header is application/json": true,
+					"Validate the user object": false,
+					"Date of Signup is in a valid date format": true,
+					"Deleted field is set to true": false
+				}
+			]
+		},
+		{
+			"id": "bb7361e3-a890-4ec0-bd45-faa3ce1d1f3f",
+			"name": "Update self",
+			"url": "http://localhost:8080/api/v1/users/user/update",
+			"time": 20,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content type is application/json": true,
+				"Validate the user object": true,
+				"Date of Signup is in a valid date format": true,
+				"Deleted field should be boolean": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the user object": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Date of Signup is in a valid date format": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Deleted field should be boolean": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content type is application/json": true,
+					"Validate the user object": true,
+					"Date of Signup is in a valid date format": true,
+					"Deleted field should be boolean": true
+				}
+			]
+		},
+		{
+			"id": "6ccc3285-d28d-4ecf-98d0-11ad81ca6a52",
+			"name": "search",
+			"url": "http://localhost:8080/api/v1/users/search?search=u",
+			"time": 20,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response has the required fields": true,
+				"Bio and profileImg fields are either null or non-empty": true,
+				"Date of signup is in a valid date format": true,
+				"Id is a non-negative integer": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Bio and profileImg fields are either null or non-empty": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Date of signup is in a valid date format": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Id is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response has the required fields": true,
+					"Bio and profileImg fields are either null or non-empty": true,
+					"Date of signup is in a valid date format": true,
+					"Id is a non-negative integer": true
+				}
+			]
+		},
+		{
+			"id": "ee83f227-991d-4cdc-a046-0ef79a78b661",
+			"name": "Delete post of user by ID (1)",
+			"url": "http://localhost:8080/api/v1/posts/post/1",
+			"time": 18,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Response status code is 401": true,
+				"Response has the required fields - status and message": true,
+				"Status is a non-negative integer": true,
+				"Verify Content-Type is application/json": true,
+				"Ensure that the message field is either null or a non-empty string": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 401": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Verify Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Ensure that the message field is either null or a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Response status code is 401": true,
+					"Response has the required fields - status and message": true,
+					"Status is a non-negative integer": true,
+					"Verify Content-Type is application/json": true,
+					"Ensure that the message field is either null or a non-empty string": true
+				}
+			]
+		},
+		{
+			"id": "37df5ff3-29c4-4ce5-b8a5-f02bdb288470",
+			"name": "Get post by ID",
+			"url": "http://localhost:8080/api/v1/posts/post/1",
+			"time": 27,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response has the required fields": true,
+				"User object contains required fields": true,
+				"Images array should contain at least one element": true,
+				"Verify the presence and content of reactionTypeMap object": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields": {
+					"pass": 1,
+					"fail": 0
+				},
+				"User object contains required fields": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Images array should contain at least one element": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Verify the presence and content of reactionTypeMap object": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				27
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response has the required fields": true,
+					"User object contains required fields": true,
+					"Images array should contain at least one element": true,
+					"Verify the presence and content of reactionTypeMap object": true
+				}
+			]
+		},
+		{
+			"id": "bec18688-51da-4c21-9dc5-fc07a107936e",
+			"name": "Get feed page 1",
+			"url": "http://localhost:8080/api/v1/posts/feed?page=0&time=2025-02-22T09:34:16.0203393",
+			"time": 14,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type header is application/json": true,
+				"Response contains the 'content' array": true,
+				"Verify that pageNumber, pageSize, totalElements, and totalPages are present in the response": true,
+				"Page number, page size, total elements, and total pages are non-negative integers": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response contains the 'content' array": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Verify that pageNumber, pageSize, totalElements, and totalPages are present in the response": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Page number, page size, total elements, and total pages are non-negative integers": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type header is application/json": true,
+					"Response contains the 'content' array": true,
+					"Verify that pageNumber, pageSize, totalElements, and totalPages are present in the response": true,
+					"Page number, page size, total elements, and total pages are non-negative integers": true
+				}
+			]
+		},
+		{
+			"id": "c87d6d86-8fe5-43c9-b6c8-22f059aa1928",
+			"name": "Update post by ID (1)",
+			"url": "http://localhost:8080/api/v1/posts/post/1",
+			"time": 18,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				18
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "0a82df98-cace-4794-b145-52f394611648",
+			"name": "Get posts by vehicle",
+			"url": "http://localhost:8080/api/v1/posts/vehicle/1",
+			"time": 27,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type header is application/json": true,
+				"User object should be valid": true,
+				"Images array is present and contains expected number of elements": false,
+				"Validate the vehicle object properties": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"User object should be valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Images array is present and contains expected number of elements": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Validate the vehicle object properties": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				27
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type header is application/json": true,
+					"User object should be valid": true,
+					"Images array is present and contains expected number of elements": false,
+					"Validate the vehicle object properties": true
+				}
+			]
+		},
+		{
+			"id": "d4d1fff3-1856-44a5-b61d-047e8e9b3f8b",
+			"name": "Favorite post by id 1",
+			"url": "http://localhost:8080/api/v1/posts/favorite/1",
+			"time": 28,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				28
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "76f9495a-b789-4a20-8535-d315e0010280",
+			"name": "Get favorite posts by user id",
+			"url": "http://localhost:8080/api/v1/posts/favorites/user/52",
+			"time": 17,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response has the correct Content-Type header": true,
+				"Response body is an array": true,
+				"Response body is empty": true,
+				"User ID is correctly included in the request URL": false
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the correct Content-Type header": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response body is an array": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response body is empty": {
+					"pass": 1,
+					"fail": 0
+				},
+				"User ID is correctly included in the request URL": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response has the correct Content-Type header": true,
+					"Response body is an array": true,
+					"Response body is empty": true,
+					"User ID is correctly included in the request URL": false
+				}
+			]
+		},
+		{
+			"id": "e4b8d3d0-1181-4c11-8a1d-4535eed13b90",
+			"name": "Create post to own profile",
+			"url": "http://localhost:8080/api/v1/posts/post/user",
+			"time": 13,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Response status code is 400": true,
+				"Response has the required fields": true,
+				"Text is a non-empty string": true,
+				"Content-Type header is application/json": true,
+				"Response body is in a valid JSON format": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Text is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response body is in a valid JSON format": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Response status code is 400": true,
+					"Response has the required fields": true,
+					"Text is a non-empty string": true,
+					"Content-Type header is application/json": true,
+					"Response body is in a valid JSON format": true
+				}
+			]
+		},
+		{
+			"id": "1d73f892-347c-4576-b29b-20c95b96ca0b",
+			"name": "Get all posts of user id 1",
+			"url": "http://localhost:8080/api/v1/users/user/1/posts",
+			"time": 19,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response has the correct Content-Type header": true,
+				"Response body is an array": true,
+				"Response body is empty": true,
+				"Validate the endpoint URL is correct": false
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the correct Content-Type header": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response body is an array": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response body is empty": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the endpoint URL is correct": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				19
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response has the correct Content-Type header": true,
+					"Response body is an array": true,
+					"Response body is empty": true,
+					"Validate the endpoint URL is correct": false
+				}
+			]
+		},
+		{
+			"id": "6c3a052a-81c8-4fc1-9b8d-49d1931e9e64",
+			"name": "Create Post to Group",
+			"url": "http://localhost:8080/api/v1/groups/group/52/post",
+			"time": 21,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Response status code is 400": true,
+				"Content-Type header is application/json": true,
+				"PostImages array is present and contains expected number of elements": false,
+				"Url in postImages[0] and postImages[1] is a non-empty string": false,
+				"PostImages[0] URL format is valid": false,
+				"PostImages[1] URL format is valid": false
+			},
+			"testPassFailCounts": {
+				"Response status code is 400": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"PostImages array is present and contains expected number of elements": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Url in postImages[0] and postImages[1] is a non-empty string": {
+					"pass": 0,
+					"fail": 1
+				},
+				"PostImages[0] URL format is valid": {
+					"pass": 0,
+					"fail": 1
+				},
+				"PostImages[1] URL format is valid": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				21
+			],
+			"allTests": [
+				{
+					"Response status code is 400": true,
+					"Content-Type header is application/json": true,
+					"PostImages array is present and contains expected number of elements": false,
+					"Url in postImages[0] and postImages[1] is a non-empty string": false,
+					"PostImages[0] URL format is valid": false,
+					"PostImages[1] URL format is valid": false
+				}
+			]
+		},
+		{
+			"id": "99cbe2c1-2bc6-44c1-89b0-5f3b6271597f",
+			"name": "get all posts // test request",
+			"url": "http://localhost:8080/api/v1/posts/all",
+			"time": 73,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Response has the required fields": true,
+				"Username is a non-empty string": true,
+				"Images array is present and contains expected number of elements": false,
+				"Validate that the 'FIRE' reaction count is a non-negative integer": false
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Username is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Images array is present and contains expected number of elements": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Validate that the 'FIRE' reaction count is a non-negative integer": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				73
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Response has the required fields": true,
+					"Username is a non-empty string": true,
+					"Images array is present and contains expected number of elements": false,
+					"Validate that the 'FIRE' reaction count is a non-negative integer": false
+				}
+			]
+		},
+		{
+			"id": "91a4b7d1-932b-4b74-9473-bd1891d459ce",
+			"name": "Add comment to post (id 1)",
+			"url": "http://localhost:8080/api/v1/posts/post/1/comment",
+			"time": 22,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type is application/json": true,
+				"User object should exist and have required properties": true,
+				"Text field should not be empty": true,
+				"Replies, reactionTypeMap, and reactedWith should be null if not present": false
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"User object should exist and have required properties": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Text field should not be empty": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Replies, reactionTypeMap, and reactedWith should be null if not present": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				22
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type is application/json": true,
+					"User object should exist and have required properties": true,
+					"Text field should not be empty": true,
+					"Replies, reactionTypeMap, and reactedWith should be null if not present": false
+				}
+			]
+		},
+		{
+			"id": "2678b6cd-a6ce-4a89-b61f-c1b7b7e83693",
+			"name": "Delete comment from post (id 1)",
+			"url": "http://localhost:8080/api/v1/posts/post/comment/1",
+			"time": 14,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Response status code is 404": true,
+				"Response has the required fields - status and message": true,
+				"Status is a non-negative integer": true,
+				"Message is a non-empty string": true,
+				"Content-Type header is application/json": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Response status code is 404": true,
+					"Response has the required fields - status and message": true,
+					"Status is a non-negative integer": true,
+					"Message is a non-empty string": true,
+					"Content-Type header is application/json": true
+				}
+			]
+		},
+		{
+			"id": "0d85e62a-ab09-4cc4-8a5b-adb580955749",
+			"name": "Reply to comment (id 1)",
+			"url": "http://localhost:8080/api/v1/posts/post/comment/1/reply",
+			"time": 27,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Response status code is 404": true,
+				"Response has the required fields - status and message": true,
+				"Status is a non-negative integer": true,
+				"Message is a non-empty string": true,
+				"Content-Type header is application/json": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				27
+			],
+			"allTests": [
+				{
+					"Response status code is 404": true,
+					"Response has the required fields - status and message": true,
+					"Status is a non-negative integer": true,
+					"Message is a non-empty string": true,
+					"Content-Type header is application/json": true
+				}
+			]
+		},
+		{
+			"id": "4f42de12-281b-4a0b-ad4b-276c432cb01f",
+			"name": "Delete reply by id 1",
+			"url": "http://localhost:8080/api/v1/posts/post/comment/reply/1",
+			"time": 17,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Response status code is 404": true,
+				"Content-Type is application/json": true,
+				"Response has the required fields - status and message": true,
+				"Status is a non-negative integer": true,
+				"Message is a non-empty string": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				17
+			],
+			"allTests": [
+				{
+					"Response status code is 404": true,
+					"Content-Type is application/json": true,
+					"Response has the required fields - status and message": true,
+					"Status is a non-negative integer": true,
+					"Message is a non-empty string": true
+				}
+			]
+		},
+		{
+			"id": "9a8cb67f-fe48-4986-9a0f-94749b9a856f",
+			"name": "Join Group by ID",
+			"url": "http://localhost:8080/api/v1/groups/group/203/join",
+			"time": 23,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Response status code is 404": true,
+				"Content-Type header is application/json": true,
+				"Response body has the 'status' field": true,
+				"Response body has the 'message' field": true,
+				"Message is a non-empty string": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response body has the 'status' field": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response body has the 'message' field": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				23
+			],
+			"allTests": [
+				{
+					"Response status code is 404": true,
+					"Content-Type header is application/json": true,
+					"Response body has the 'status' field": true,
+					"Response body has the 'message' field": true,
+					"Message is a non-empty string": true
+				}
+			]
+		},
+		{
+			"id": "5bed1d0f-d6ac-4238-b6b6-be1e43611d2a",
+			"name": "Leave Group by ID",
+			"url": "http://localhost:8080/api/v1/groups/group/1/leave",
+			"time": 43,
+			"responseCode": {
+				"code": 403,
+				"name": "Forbidden"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				43
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "dd3cdb0a-f3d6-4d63-af53-53caa6948acb",
+			"name": "handle join req",
+			"url": "http://localhost:8080/api/v1/groups/handleJoinRequest/353/502/false",
+			"time": 15,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Response status code is 404": true,
+				"Response has the required fields - status and message": true,
+				"Status is a non-negative integer": true,
+				"Message is a non-empty string": true,
+				"Content-Type header is application/json": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				15
+			],
+			"allTests": [
+				{
+					"Response status code is 404": true,
+					"Response has the required fields - status and message": true,
+					"Status is a non-negative integer": true,
+					"Message is a non-empty string": true,
+					"Content-Type header is application/json": true
+				}
+			]
+		},
+		{
+			"id": "9b32107a-912a-48cd-b7e0-fb390873a88e",
+			"name": "Get group members by group ID",
+			"url": "http://localhost:8080/api/v1/groups/group/1/members",
+			"time": 16,
+			"responseCode": {
+				"code": 409,
+				"name": "Conflict"
+			},
+			"tests": {
+				"Response status code is 409": true,
+				"Content-Type header is application/json": true,
+				"Response has the required fields - status and message": true,
+				"Status is a non-negative integer": true,
+				"Message is a non-empty string": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 409": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Response status code is 409": true,
+					"Content-Type header is application/json": true,
+					"Response has the required fields - status and message": true,
+					"Status is a non-negative integer": true,
+					"Message is a non-empty string": true
+				}
+			]
+		},
+		{
+			"id": "4d9d5926-8baf-4127-aee8-80500ebf59fc",
+			"name": "Get pending users",
+			"url": "http://localhost:8080/api/v1/groups/group/1/pending",
+			"time": 13,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Response status code is 401": true,
+				"Response body has the required fields - status and message": true,
+				"Status is a non-negative integer": true,
+				"Message is a non-empty string": true,
+				"Content-Type header is application/json": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 401": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response body has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Response status code is 401": true,
+					"Response body has the required fields - status and message": true,
+					"Status is a non-negative integer": true,
+					"Message is a non-empty string": true,
+					"Content-Type header is application/json": true
+				}
+			]
+		},
+		{
+			"id": "69bb73e4-f06c-4c62-82f6-2d55c10e6bc8",
+			"name": "Create group",
+			"url": "http://localhost:8080/api/v1/groups/group",
+			"time": 18,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type header is application/json": true,
+				"Id is a non-negative integer": true,
+				"Name, alias, description, bannerImage, and creationDate are non-empty strings": true,
+				"Member count is a non-negative integer": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Id is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Name, alias, description, bannerImage, and creationDate are non-empty strings": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Member count is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type header is application/json": true,
+					"Id is a non-negative integer": true,
+					"Name, alias, description, bannerImage, and creationDate are non-empty strings": true,
+					"Member count is a non-negative integer": true
+				}
+			]
+		},
+		{
+			"id": "6938852f-67a2-4d27-8a43-bd70b05ca5ce",
+			"name": "Delete group by ID (1)",
+			"url": "http://localhost:8080/api/v1/groups/group/1",
+			"time": 26,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Response status code is 404": true,
+				"Response has the required fields - status and message": true,
+				"Status is a non-negative integer": true,
+				"Message is a non-empty string": true,
+				"Content-Type header is application/json": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				26
+			],
+			"allTests": [
+				{
+					"Response status code is 404": true,
+					"Response has the required fields - status and message": true,
+					"Status is a non-negative integer": true,
+					"Message is a non-empty string": true,
+					"Content-Type header is application/json": true
+				}
+			]
+		},
+		{
+			"id": "66d4390a-ea50-4a72-97d2-1d9a9004ce05",
+			"name": "Get all groups // test request",
+			"url": "http://localhost:8080/api/v1/groups/all",
+			"time": 37,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content type is application/json": true,
+				"Validate the group object": true,
+				"Name, alias, description, bannerImage, and creationDate are non-empty strings": false,
+				"MemberCount is a non-negative integer": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the group object": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Name, alias, description, bannerImage, and creationDate are non-empty strings": {
+					"pass": 0,
+					"fail": 1
+				},
+				"MemberCount is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				37
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content type is application/json": true,
+					"Validate the group object": true,
+					"Name, alias, description, bannerImage, and creationDate are non-empty strings": false,
+					"MemberCount is a non-negative integer": true
+				}
+			]
+		},
+		{
+			"id": "8e7dfb9c-a3e4-4243-bde4-68185c0e16f3",
+			"name": "Get own groups",
+			"url": "http://localhost:8080/api/v1/groups/own",
+			"time": 14,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type header is application/json": true,
+				"Validate the structure of the response object": true,
+				"Id is a non-negative integer": true,
+				"Name is a non-empty string": true,
+				"Description is a string": true,
+				"MemberCount is a non-negative integer": true,
+				"CreationDate is a valid date format": false,
+				"Public, member, and validMember fields are boolean values": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the structure of the response object": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Id is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Name is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Description is a string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"MemberCount is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"CreationDate is a valid date format": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Public, member, and validMember fields are boolean values": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type header is application/json": true,
+					"Validate the structure of the response object": true,
+					"Id is a non-negative integer": true,
+					"Name is a non-empty string": true,
+					"Description is a string": true,
+					"MemberCount is a non-negative integer": true,
+					"CreationDate is a valid date format": false,
+					"Public, member, and validMember fields are boolean values": true
+				}
+			]
+		},
+		{
+			"id": "00d64ccc-e32c-4019-b492-873370a4dcce",
+			"name": "Get all posts",
+			"url": "http://localhost:8080/api/v1/groups/group/52/posts",
+			"time": 14,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Response status code is 401": true,
+				"Response has the required fields - status and message": true,
+				"Status is a non-empty string": false,
+				"Message is a non-empty string": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 401": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-empty string": {
+					"pass": 0,
+					"fail": 1
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				14
+			],
+			"allTests": [
+				{
+					"Response status code is 401": true,
+					"Response has the required fields - status and message": true,
+					"Status is a non-empty string": false,
+					"Message is a non-empty string": true
+				}
+			]
+		},
+		{
+			"id": "8e15cb1d-f6e4-4f03-aead-bfa3d8b7a03f",
+			"name": "get messages of group by id",
+			"url": "http://localhost:8080/api/v1/groups/group/1/messages",
+			"time": 13,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Response status code is 401": true,
+				"Response has the required fields - status and message": true,
+				"Status is a non-negative integer": true,
+				"Message is a non-empty string": true,
+				"Content-Type header is application/json": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 401": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				13
+			],
+			"allTests": [
+				{
+					"Response status code is 401": true,
+					"Response has the required fields - status and message": true,
+					"Status is a non-negative integer": true,
+					"Message is a non-empty string": true,
+					"Content-Type header is application/json": true
+				}
+			]
+		},
+		{
+			"id": "b2c849d2-fc4d-4aa1-afce-6f050abf52e4",
+			"name": "updateGroup",
+			"url": "http://localhost:8080/api/v1/groups/group/52",
+			"time": 18,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Response status code is 404": true,
+				"Response has the required fields - status and message": true,
+				"Status is a non-negative integer": true,
+				"Message is a non-empty string": true,
+				"Content-Type header is set to application/json": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is set to application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Response status code is 404": true,
+					"Response has the required fields - status and message": true,
+					"Status is a non-negative integer": true,
+					"Message is a non-empty string": true,
+					"Content-Type header is set to application/json": true
+				}
+			]
+		},
+		{
+			"id": "eca9f4f1-fab4-4dcb-a929-faaeafb340a2",
+			"name": "Create Vehicle",
+			"url": "http://localhost:8080/api/v1/vehicles/vehicle/create",
+			"time": 20,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type header is application/json": true,
+				"Validate the vehicle object": true,
+				"Horsepower is a non-negative integer": true,
+				"Owner object should have required properties": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the vehicle object": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Horsepower is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Owner object should have required properties": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type header is application/json": true,
+					"Validate the vehicle object": true,
+					"Horsepower is a non-negative integer": true,
+					"Owner object should have required properties": true
+				}
+			]
+		},
+		{
+			"id": "c68eb6e1-5418-4211-b666-99896600a10e",
+			"name": "Get Own Vehicles",
+			"url": "http://localhost:8080/api/v1/vehicles/own",
+			"time": 24,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type header is application/json": true,
+				"Validate the structure of the 'vehicles' array": true,
+				"Owner object should exist in the response": true,
+				"Horsepower, displacement, and productionYear are non-negative integers": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the structure of the 'vehicles' array": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Owner object should exist in the response": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Horsepower, displacement, and productionYear are non-negative integers": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				24
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type header is application/json": true,
+					"Validate the structure of the 'vehicles' array": true,
+					"Owner object should exist in the response": true,
+					"Horsepower, displacement, and productionYear are non-negative integers": true
+				}
+			]
+		},
+		{
+			"id": "9e7d9339-f584-4c50-9b6c-f4dac2c402d6",
+			"name": "Update own vehicle by ID (1)",
+			"url": "http://localhost:8080/api/v1/vehicles/vehicle/1",
+			"time": 20,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Response status code is 401": true,
+				"Response has the required fields - status and message": true,
+				"Status is a non-negative integer": true,
+				"Message is a non-empty string": true,
+				"Content-Type header is application/json": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 401": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				20
+			],
+			"allTests": [
+				{
+					"Response status code is 401": true,
+					"Response has the required fields - status and message": true,
+					"Status is a non-negative integer": true,
+					"Message is a non-empty string": true,
+					"Content-Type header is application/json": true
+				}
+			]
+		},
+		{
+			"id": "2a251c9d-fd6f-4646-987a-2cc53e5a5f71",
+			"name": "Get all vehicles of user by ID (1)",
+			"url": "http://localhost:8080/api/v1/vehicles/user/1/all",
+			"time": 12,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content type is application/json": true,
+				"Id field is a non-negative integer": true,
+				"Manufacturer, model, type, and description fields are non-empty strings": true,
+				"Validate the owner object with non-empty username, nickname, and dateOfSignup fields": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Id field is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Manufacturer, model, type, and description fields are non-empty strings": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Validate the owner object with non-empty username, nickname, and dateOfSignup fields": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				12
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content type is application/json": true,
+					"Id field is a non-negative integer": true,
+					"Manufacturer, model, type, and description fields are non-empty strings": true,
+					"Validate the owner object with non-empty username, nickname, and dateOfSignup fields": true
+				}
+			]
+		},
+		{
+			"id": "aaa64eea-6a91-44d6-b9f4-3362e38e07bd",
+			"name": "Delete Vehicle by ID",
+			"url": "http://localhost:8080/api/v1/vehicles/vehicle/1",
+			"time": 24,
+			"responseCode": {
+				"code": 401,
+				"name": "Unauthorized"
+			},
+			"tests": {
+				"Response status code is 401": true,
+				"Response has the required fields - status and message": true,
+				"Message is a non-empty string": true,
+				"Content-Type header is application/json": true,
+				"Verify that the status field is a non-negative integer": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 401": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Verify that the status field is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				24
+			],
+			"allTests": [
+				{
+					"Response status code is 401": true,
+					"Response has the required fields - status and message": true,
+					"Message is a non-empty string": true,
+					"Content-Type header is application/json": true,
+					"Verify that the status field is a non-negative integer": true
+				}
+			]
+		},
+		{
+			"id": "34d84143-d449-4293-b024-c52a4ed87944",
+			"name": "React to POST of ID 1 with 🔥",
+			"url": "http://localhost:8080/api/v1/posts/post/1/addOrRemoveReaction/FIRE",
+			"time": 24,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Response status code is 200": true,
+				"Content-Type header is application/json": true,
+				"Response has the required fields - reactionType and message": true,
+				"ReactionType is a non-empty string": true,
+				"Message is a non-empty string": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - reactionType and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"ReactionType is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				24
+			],
+			"allTests": [
+				{
+					"Response status code is 200": true,
+					"Content-Type header is application/json": true,
+					"Response has the required fields - reactionType and message": true,
+					"ReactionType is a non-empty string": true,
+					"Message is a non-empty string": true
+				}
+			]
+		},
+		{
+			"id": "4de6f3bd-45c7-458f-a29f-b74dda223a5f",
+			"name": "React to COMMENT of ID 1 with 🔥",
+			"url": "http://localhost:8080/api/v1/posts/comment/1/addOrRemoveReaction/FIRE",
+			"time": 21,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Response status code is 404": true,
+				"Content-Type is application/json": true,
+				"Status field is present in the response": true,
+				"Message field is present in the response": true,
+				"Status field value is a number": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type is application/json": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status field is present in the response": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message field is present in the response": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status field value is a number": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				21
+			],
+			"allTests": [
+				{
+					"Response status code is 404": true,
+					"Content-Type is application/json": true,
+					"Status field is present in the response": true,
+					"Message field is present in the response": true,
+					"Status field value is a number": true
+				}
+			]
+		},
+		{
+			"id": "9b40b3a7-7a93-4704-a99b-e131778ec72f",
+			"name": "React to REPLY of ID 1 with 🔥",
+			"url": "http://localhost:8080/api/v1/posts/reply/1/addOrRemoveReaction/FIRE",
+			"time": 16,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Response status code is 404": true,
+				"Response has the required fields - status and message": true,
+				"Status is a non-negative integer": true,
+				"Message is a non-empty string": true,
+				"Content-Type header is application/json": true
+			},
+			"testPassFailCounts": {
+				"Response status code is 404": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Response has the required fields - status and message": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Status is a non-negative integer": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Message is a non-empty string": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Content-Type header is application/json": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				16
+			],
+			"allTests": [
+				{
+					"Response status code is 404": true,
+					"Response has the required fields - status and message": true,
+					"Status is a non-negative integer": true,
+					"Message is a non-empty string": true,
+					"Content-Type header is application/json": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 1003,
+	"collection": {
+		"requests": [
+			{
+				"id": "664cf282-356a-4796-a2e6-7f62a998ba21",
+				"method": "GET"
+			},
+			{
+				"id": "c52ba698-df69-40e5-8376-bf2209386093",
+				"method": "GET"
+			},
+			{
+				"id": "770cfec0-813f-442f-a025-1a0e6f74ca94",
+				"method": "POST"
+			},
+			{
+				"id": "c17b4dc4-6c05-45dc-b470-1740974e6ba3",
+				"method": "DELETE"
+			},
+			{
+				"id": "6c92a6f5-f5c9-4248-98fa-2173660079d4",
+				"method": "DELETE"
+			},
+			{
+				"id": "8a3ab0c4-ed9e-4db0-a031-b27801fb04be",
+				"method": "POST"
+			},
+			{
+				"id": "50e5361c-f52d-4873-8f51-3636b6315518",
+				"method": "GET"
+			},
+			{
+				"id": "924d9861-386b-438f-8867-caee9bf19ce4",
+				"method": "GET"
+			},
+			{
+				"id": "949e48f8-384e-4dc6-a89d-9e491522dd07",
+				"method": "DELETE"
+			},
+			{
+				"id": "c5a3664c-cbfa-4bce-9cfd-f246f662e6ca",
+				"method": "PUT"
+			},
+			{
+				"id": "2788c0b4-6bd6-4e0e-87bf-957128047044",
+				"method": "POST"
+			},
+			{
+				"id": "b7e10a1f-3661-4b69-81d5-a82dd9ddb974",
+				"method": "POST"
+			},
+			{
+				"id": "3e6e6c6a-73ed-4e6c-9736-0944fe094d12",
+				"method": "POST"
+			},
+			{
+				"id": "cc63fe56-7d51-4dcd-82bb-c2b45074baec",
+				"method": "GET"
+			},
+			{
+				"id": "bb7361e3-a890-4ec0-bd45-faa3ce1d1f3f",
+				"method": "PUT"
+			},
+			{
+				"id": "6ccc3285-d28d-4ecf-98d0-11ad81ca6a52",
+				"method": "GET"
+			},
+			{
+				"id": "ee83f227-991d-4cdc-a046-0ef79a78b661",
+				"method": "DELETE"
+			},
+			{
+				"id": "37df5ff3-29c4-4ce5-b8a5-f02bdb288470",
+				"method": "GET"
+			},
+			{
+				"id": "bec18688-51da-4c21-9dc5-fc07a107936e",
+				"method": "GET"
+			},
+			{
+				"id": "c87d6d86-8fe5-43c9-b6c8-22f059aa1928",
+				"method": "PUT"
+			},
+			{
+				"id": "0a82df98-cace-4794-b145-52f394611648",
+				"method": "GET"
+			},
+			{
+				"id": "d4d1fff3-1856-44a5-b61d-047e8e9b3f8b",
+				"method": "POST"
+			},
+			{
+				"id": "76f9495a-b789-4a20-8535-d315e0010280",
+				"method": "GET"
+			},
+			{
+				"id": "e4b8d3d0-1181-4c11-8a1d-4535eed13b90",
+				"method": "POST"
+			},
+			{
+				"id": "1d73f892-347c-4576-b29b-20c95b96ca0b",
+				"method": "GET"
+			},
+			{
+				"id": "6c3a052a-81c8-4fc1-9b8d-49d1931e9e64",
+				"method": "POST"
+			},
+			{
+				"id": "99cbe2c1-2bc6-44c1-89b0-5f3b6271597f",
+				"method": "GET"
+			},
+			{
+				"id": "91a4b7d1-932b-4b74-9473-bd1891d459ce",
+				"method": "POST"
+			},
+			{
+				"id": "2678b6cd-a6ce-4a89-b61f-c1b7b7e83693",
+				"method": "DELETE"
+			},
+			{
+				"id": "0d85e62a-ab09-4cc4-8a5b-adb580955749",
+				"method": "POST"
+			},
+			{
+				"id": "4f42de12-281b-4a0b-ad4b-276c432cb01f",
+				"method": "DELETE"
+			},
+			{
+				"id": "9a8cb67f-fe48-4986-9a0f-94749b9a856f",
+				"method": "POST"
+			},
+			{
+				"id": "5bed1d0f-d6ac-4238-b6b6-be1e43611d2a",
+				"method": "POST"
+			},
+			{
+				"id": "dd3cdb0a-f3d6-4d63-af53-53caa6948acb",
+				"method": "POST"
+			},
+			{
+				"id": "9b32107a-912a-48cd-b7e0-fb390873a88e",
+				"method": "GET"
+			},
+			{
+				"id": "4d9d5926-8baf-4127-aee8-80500ebf59fc",
+				"method": "GET"
+			},
+			{
+				"id": "69bb73e4-f06c-4c62-82f6-2d55c10e6bc8",
+				"method": "POST"
+			},
+			{
+				"id": "6938852f-67a2-4d27-8a43-bd70b05ca5ce",
+				"method": "DELETE"
+			},
+			{
+				"id": "66d4390a-ea50-4a72-97d2-1d9a9004ce05",
+				"method": "GET"
+			},
+			{
+				"id": "8e7dfb9c-a3e4-4243-bde4-68185c0e16f3",
+				"method": "GET"
+			},
+			{
+				"id": "00d64ccc-e32c-4019-b492-873370a4dcce",
+				"method": "GET"
+			},
+			{
+				"id": "8e15cb1d-f6e4-4f03-aead-bfa3d8b7a03f",
+				"method": "GET"
+			},
+			{
+				"id": "b2c849d2-fc4d-4aa1-afce-6f050abf52e4",
+				"method": "PUT"
+			},
+			{
+				"id": "eca9f4f1-fab4-4dcb-a929-faaeafb340a2",
+				"method": "POST"
+			},
+			{
+				"id": "c68eb6e1-5418-4211-b666-99896600a10e",
+				"method": "GET"
+			},
+			{
+				"id": "9e7d9339-f584-4c50-9b6c-f4dac2c402d6",
+				"method": "PUT"
+			},
+			{
+				"id": "2a251c9d-fd6f-4646-987a-2cc53e5a5f71",
+				"method": "GET"
+			},
+			{
+				"id": "aaa64eea-6a91-44d6-b9f4-3362e38e07bd",
+				"method": "DELETE"
+			},
+			{
+				"id": "34d84143-d449-4293-b024-c52a4ed87944",
+				"method": "POST"
+			},
+			{
+				"id": "4de6f3bd-45c7-458f-a29f-b74dda223a5f",
+				"method": "POST"
+			},
+			{
+				"id": "9b40b3a7-7a93-4704-a99b-e131778ec72f",
+				"method": "POST"
+			}
+		]
+	}
+}
