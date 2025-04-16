@@ -21,7 +21,9 @@
 
 
 ## 🚮 Database Dump
-Ebben a github repóban, [ITT](https://github.com/bnolod/au-o_backend/blob/main/projectdump.sql) található
+Ebben a GitHub repóban, [ITT](https://github.com/bnolod/au-o_backend/blob/main/projectdump.sql) található.
+
+[Adatbázis-modell (tervezett és végleges)](https://www.figma.com/design/ZMLoquJGEDi3lEhLdslQ9c/DB?node-id=0-1&t=TieU6GhKptEArDWm-1)
 
 # API
 
@@ -41,3 +43,8 @@ URL-en elérhető, szerver futása közben.
 - Automatizált egységtesztek
   - `src/test`
   - 100% pass
+- API tesztek
+  - manuális tesztek
+  - generált tesztek
+    - Az automatikusan legenerált teszteseteket az előre megírt Postman kollekcióból generáltuk egy eszköz segítségével. 
+    - A generált tesztek pass arányai különbözhetnek az adatbázis állapotától függően.
